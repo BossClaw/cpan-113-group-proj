@@ -1,16 +1,16 @@
-// container is the #game_screen div
+// gameScreen is the #game_screen div
 export class Enemy {
-  constructor(container, hp = 1, speed = 1, damage = 1) {
+  constructor(gameScreen, hp = 1, speed = 1, damage = 1) {
     this.outerClass = 'enemy'
     this.innerClass = 'enemy-sprit'
     this.innerColor = 'red' // for testing
     this.hp = hp;
     this.speed = speed;
     this.damage = damage;
-    this.container = container;
+    this.gameScreen = gameScreen;
     this.width = 40;
     this.height = 40;
-    this.x = container.offsetWidth;
+    this.x = gameScreen.offsetWidth;
     this.y = 100; // default vertical position
 
     // Outer div (for position)
@@ -32,7 +32,7 @@ export class Enemy {
 
     // put it togeher
     this.outer.appendChild(this.inner);
-    this.container.appendChild(this.outer);
+    this.gameScreen.appendChild(this.outer);
 
     // bind methods just in case
     this.move = this.move.bind(this)
@@ -55,7 +55,7 @@ export class Enemy {
   }
   destroy() {
     console.log(`Enemy destroyed`)
-    this.container.removeChild(this.outer);
+    this.gameScreen.removeChild(this.outer);
   }
   attack() {
     console.log(`Enemy attack casuse ${this.damage} damage`)
