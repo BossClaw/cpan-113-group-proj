@@ -1,0 +1,43 @@
+#game_screen {
+  width: 360px;
+  height: 160px;
+  overflow: hidden;
+  margin-inline: auto;
+  margin-block: 4em;
+  background-image: url('bg.png'); /* placeholder */
+}
+
+/* Smallest (270px) */
+@media (max-width: 270px) {
+  #game_screen {
+    transform: scale(0.5, 0.5);
+  }
+}
+
+/* Small (540px) */
+@media (min-width: 271px) and (max-width: 540px) {
+  #game_screen {
+    transform: scale(1.2, 1.2);
+  }
+}
+
+/* Medium (960px) */
+@media (min-width: 541px) and (max-width: 960px) {
+  #game_screen {
+    transform: scale(1.5, 1.5);
+  }
+}
+
+/* Large (1440px) */
+@media (min-width: 961px) and (max-width: 1440px) {
+  #game_screen {
+    transform: scale(2.2, 2.2);
+  }
+}
+
+/* Extra Large (Above 1440px) */
+@media (min-width: 1441px) {
+  #game_screen {
+    transform: scale(3, 3);
+  }
+}
