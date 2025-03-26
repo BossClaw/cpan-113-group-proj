@@ -46,6 +46,9 @@ export class Game {
     this.points = 0
     this.baseHp = 3
     this.fireWallHp = 1
+    this.fireWallLocationX = '100px'
+    this.fireWall = null
+
     // enemy related
     this.enemyArray = [] // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
     this.enemyCount = getLevelState(level).enemyCount
@@ -58,6 +61,7 @@ export class Game {
   }
   // Setup enemies at the beginning
   setup() {
+    // spawn enemy
     for (let i = 0; i < this.enemyCount; i++) {
       const enemy = new Enemy(this.gameScreen, 1, this.levelEnemySpeed); // level 1
       const div = enemy.spawn()
@@ -65,6 +69,18 @@ export class Game {
       this.enemyArray.push(enemy);
       console.log('enemy spawn')
     }
+
+    // spawn player
+    //
+
+    // spawn fireWall
+    const fireWall = document.createElement('div')
+    fireWall.classList.add('firewall')
+    fireWall.style.height = this.gameScreen.offsetHeight + 'px'
+    fireWall.style.left = this.fireWallLocationX
+    this.gameScreen.appendChild(fireWall);
+    this.fireWall = fireWall
+
     console.log('Initial Enemies:', this.enemyArray);
   }
 
@@ -93,8 +109,25 @@ export class Game {
     // check for collision
     for (let i = 0; i < this.enemyArray.length - 1; i++) {
       const enemy = this.enemyArray[i]
-      if (!enemy) return
-      const distance = enemy.div.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left
+      const enemyX = enemy.div.getBoundingClientRect().left
+      const baseX = this.gameScreen.getBoundingClientRect().left
+
+      // enemy reaching firewall
+      if (this.fireWall) {
+        const fireWallX = this.fireWall.getBoundingClientRect().left
+        let distance = enemyX - fireWallX
+        if (distance <= 0) {
+          this.fireWallHp -= enemy.attack()
+          console.log('fireWall', this.fireWall)
+          if (this.fireWallHp <= 0) {
+            this.fireWall.remove()
+            this.fireWall = null
+          }
+        }
+      }
+
+      // enemy reaching base
+      let distance = enemyX - baseX
       if (distance <= 0) {
         this.baseHp -= enemy.attack()
         console.log('baseHP', this.baseHp)
@@ -102,12 +135,6 @@ export class Game {
       }
     }
 
-    this.enemyArray.forEach(enemy => {
-      const distance = enemy.div.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left
-      if (distance <= 0) {
-        // enemy.attack()
-      }
-    })
 
     // show enemy info
     this.enemyArray.forEach(e => {

@@ -67,7 +67,6 @@ export class Enemy {
     this.defaultMovementDuration = 5
     this.actualMovementDuratrion = this.defaultMovementDuration / this.speed
 
-
     // testing info
     this.enemyInfo = null
 
@@ -127,13 +126,13 @@ export class Enemy {
   }
   attack() {
     console.log(`Enemy attack casuse ${this.damage} damage`)
+    this.destroy()
     return this.damage
   }
   destroy() {
     console.log(`Enemy destroyed`)
-    this.gameScreen.removeChild(this.outer);
+    this.outerDiv.remove()
   }
-
 }
 
 
