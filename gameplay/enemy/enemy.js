@@ -1,10 +1,48 @@
+const enemyList = [
+  {
+    name: 'error',
+    hp: 1,
+    damage: 1,
+    speed: 1.5,
+    color: 'red'
+  },
+  {
+    name: 'bug',
+    hp: 1,
+    damage: 1,
+    speed: 1,
+    color: 'blue'
+  },
+  {
+    name: 'overflow',
+    hp: 5,
+    damage: 2,
+    speed: 1,
+    color: 'green'
+  },
+  {
+    name: 'infinite-loop',
+    hp: 20,
+    damage: 2,
+    speed: 1,
+    color: 'black'
+  }
+]
+
+function getEnemyFromList(level) {
+  if (level < 0) level = 0
+  if (level >= enemyList.length) level = enemyList.length - 1
+  return enemyList[level]
+}
+
+
 // gameScreen is the #game_screen div
 export class Enemy {
-  constructor(gameScreen, hp = 1, speed = 1, damage = 1) {
+  constructor(gameScreen, level,) {
     this.outerClass = 'enemy'
     this.innerClass = 'enemy-sprit'
     this.innerColor = 'red' // for testing
-    this.hp = hp;
+    this.hp = enemyList(level);
     this.speed = speed;
     this.damage = damage;
     this.gameScreen = gameScreen;
@@ -62,3 +100,7 @@ export class Enemy {
     return this.damage
   }
 }
+
+
+
+

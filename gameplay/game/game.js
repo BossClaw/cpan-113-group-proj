@@ -1,4 +1,6 @@
 import { Enemy } from "../enemy/enemy.js";
+
+// Get level state
 function getLevelState(level = 1) {
   if (level < 1) level = 1
   // base 
@@ -22,7 +24,7 @@ function getLevelState(level = 1) {
 }
 
 export class Game {
-  constructor(gameScreen, level = 0, speedMotifier = 1) {
+  constructor(gameScreen, level = 1, speedMotifier = 1) {
     // #game_screen div
     this.gameScreen = gameScreen
     // player related
@@ -30,9 +32,14 @@ export class Game {
     this.baseHp = 10
     this.fireWallHp = 3
     // enemy related
-    this.enemyCount = enemyCount
-    this.speed = speed
+    this.enemyCount = getLevelState(level).enemyCount
+    this.ememySpeed = getLevelState(level).ememySpeed
   }
 }
 
-console.log(getLevelState(3))
+
+// Testing
+document.addEventListener('DOMContentLoaded', () => {
+  const game = new Game(null, 2)
+  console.log(game)
+})
