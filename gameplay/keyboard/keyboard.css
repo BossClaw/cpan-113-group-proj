@@ -1,0 +1,38 @@
+
+
+
+
+.keys {
+display: flex;
+list-style: none;
+justify-content: center;
+margin: 0px;
+}
+
+.keys img{
+width: 20px;
+height: 20px;
+padding: 1px;
+transition: 0.1s;
+}
+
+.caps img{
+width: 50px;
+}
+
+.med img {
+width: 30px;
+}
+
+.space img{
+width: 200px;
+}
+
+.enter img{
+width: 40px;
+}
+
+.Shift img{
+width: 50px;
+}
+
