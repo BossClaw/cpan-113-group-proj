@@ -32,20 +32,20 @@ const difficultSpeedModifer = {
   'hardcore': 2,
 }
 
-
 export class Game {
   constructor(gameScreen, level = 1, difficulty = 'easy') {
     // #game_screen div
     this.gameScreen = gameScreen
 
     // game status
+    this.isGame = false
     this.lastTimestamp = 0;
     this.spawnTimer = 0;
 
     // player related
     this.points = 0
-    this.baseHp = 10
-    this.fireWallHp = 3
+    this.baseHp = 3
+    this.fireWallHp = 1
     // enemy related
     this.enemyArray = [] // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
     this.enemyCount = getLevelState(level).enemyCount
@@ -60,7 +60,8 @@ export class Game {
   setup() {
     for (let i = 0; i < this.enemyCount; i++) {
       const enemy = new Enemy(this.gameScreen, 1, this.levelEnemySpeed); // level 1
-      enemy.spawn()
+      const div = enemy.spawn()
+      enemy.div = div
       this.enemyArray.push(enemy);
       console.log('enemy spawn')
     }
@@ -69,6 +70,8 @@ export class Game {
 
   // Main game loop
   update(timestamp) {
+    if (!this.isGame) return
+
     // timestamp is from requestAnimationFrame, its the time since game start
     if (!this.lastTimestamp) this.lastTimestamp = timestamp;
     // delta time is time since last frame
@@ -86,11 +89,51 @@ export class Game {
       }
       this.spawnTimer = 0; // reset spawn timer
     }
+
+    // check for collision
+    for (let i = 0; i < this.enemyArray.length - 1; i++) {
+      const enemy = this.enemyArray[i]
+      if (!enemy) return
+      const distance = enemy.div.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left
+      if (distance <= 0) {
+        this.baseHp -= enemy.attack()
+        console.log('baseHP', this.baseHp)
+        this.enemyArray.splice(i, 1)
+      }
+    }
+
+    this.enemyArray.forEach(enemy => {
+      const distance = enemy.div.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left
+      if (distance <= 0) {
+        // enemy.attack()
+      }
+    })
+
+    // show enemy info
+    this.enemyArray.forEach(e => {
+      e.updateInfo()
+    })
+
+    // check game over
+    if (this.enemyArray.length === 0) {
+      console.log('You win')
+      this.isGame = false
+    }
+
+    if (this.baseHp <= 0) {
+      console.log('You lose')
+      this.isGame = false
+    }
+
     requestAnimationFrame(this.update);
   }
   start() {
     this.setup();
+    this.isGame = true
     requestAnimationFrame(this.update);
+  }
+  checkCollision() {
+
   }
 }
 
@@ -99,8 +142,7 @@ export class Game {
 document.addEventListener('DOMContentLoaded', () => {
   // #game_screen
   const gameScreen = document.querySelector('#game_screen')
-  const game = new Game(gameScreen, 6, 'normal')
+  const game = new Game(gameScreen, 1, 'easy')
   console.log('game', game)
   game.start()
-
 })

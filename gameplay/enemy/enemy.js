@@ -68,6 +68,9 @@ export class Enemy {
     this.actualMovementDuratrion = this.defaultMovementDuration / this.speed
 
 
+    // testing info
+    this.enemyInfo = null
+
     // bind methods just in case
     this.spawn = this.spawn.bind(this)
     this.move = this.move.bind(this)
@@ -98,6 +101,18 @@ export class Enemy {
     // put it on screen
     this.outerDiv.appendChild(this.innerDiv);
     this.gameScreen.appendChild(this.outerDiv);
+
+
+    // show left x
+    this.enemyInfo = document.createElement('div')
+    this.enemyInfo.classList.add('enemyInfo')
+    this.innerDiv.appendChild(this.enemyInfo)
+    this.enemyInfo.innerText = this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left;
+
+    return this.outerDiv
+  }
+  updateInfo() {
+    this.enemyInfo.innerText = this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left;
   }
   move() {
     this.outerDiv.classList.add('move')
@@ -110,14 +125,15 @@ export class Enemy {
       this.destroy()
     }
   }
-  destroy() {
-    console.log(`Enemy destroyed`)
-    this.gameScreen.removeChild(this.outer);
-  }
   attack() {
     console.log(`Enemy attack casuse ${this.damage} damage`)
     return this.damage
   }
+  destroy() {
+    console.log(`Enemy destroyed`)
+    this.gameScreen.removeChild(this.outer);
+  }
+
 }
 
 
