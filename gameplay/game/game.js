@@ -25,8 +25,16 @@ function getLevelState(level = 1) {
   }
 }
 
+const difficultSpeedModifer = {
+  'easy': 0.5,
+  'normal': 1,
+  'hard': 1.5,
+  'hardcore': 2,
+}
+
+
 export class Game {
-  constructor(gameScreen, level = 1, speedMotifier = 1) {
+  constructor(gameScreen, level = 1, difficulty = 'easy') {
     // #game_screen div
     this.gameScreen = gameScreen
 
@@ -41,7 +49,7 @@ export class Game {
     // enemy related
     this.enemyArray = [] // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
     this.enemyCount = getLevelState(level).enemyCount
-    this.ememySpeed = getLevelState(level).ememySpeed * speedMotifier
+    this.levelEnemySpeed = getLevelState(level).ememySpeed * difficultSpeedModifer[difficulty]
     this.enemySpawnTime = getLevelState(level).ememySpawnTime
 
     // bind methods just in case
@@ -51,7 +59,7 @@ export class Game {
   // Setup enemies at the beginning
   setup() {
     for (let i = 0; i < this.enemyCount; i++) {
-      const enemy = new Enemy(this.gameScreen, 1); // level 1
+      const enemy = new Enemy(this.gameScreen, 1, this.levelEnemySpeed); // level 1
       enemy.spawn()
       this.enemyArray.push(enemy);
       console.log('enemy spawn')
@@ -91,7 +99,8 @@ export class Game {
 document.addEventListener('DOMContentLoaded', () => {
   // #game_screen
   const gameScreen = document.querySelector('#game_screen')
-  const game = new Game(gameScreen, 2)
+  const game = new Game(gameScreen, 6, 'normal')
+  console.log('game', game)
   game.start()
 
 })
