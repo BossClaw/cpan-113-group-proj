@@ -1,7 +1,4 @@
 
-
-
-
 .keys {
 display: flex;
 list-style: none;
@@ -17,7 +14,7 @@ transition: 0.1s;
 }
 
 .caps img{
-width: 50px;
+width: 40px;
 }
 
 .med img {
@@ -36,3 +33,6 @@ width: 40px;
 width: 50px;
 }
 
+.active{
+    scale: 0.9;
+  }
