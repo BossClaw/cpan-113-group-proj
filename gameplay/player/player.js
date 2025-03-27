@@ -33,14 +33,18 @@ export class Player {
     // location/styles
     this.outerClass = 'player'
     this.innerClass = 'player-sprit'
-    this.outerDiv = null
-    this.innerDiv = null
     this.width = '32px'
     this.height = '32px';
+
+    // divs
+    this.outerDiv = null
+    this.innerDiv = null
+    this.missedDiv = null
 
     // states
     this.gunDamage = getGun(gun).damage
     this.gunSound = getGun(gun).sound
+
 
     // (testing)
     this.playerInfo = null
@@ -65,10 +69,16 @@ export class Player {
     // Create inner div
     this.innerDiv = document.createElement('div');
     this.innerDiv.classList.add(this.innerClass);
+    this.outerDiv.appendChild(this.innerDiv);
+
+    // create misss-div
+    this.missedDiv = document.createElement('div')
+    this.missedDiv.classList.add('missed-div')
+    this.outerDiv.appendChild(this.missedDiv)
 
     // put it on screen
-    this.outerDiv.appendChild(this.innerDiv);
     gameScreen.appendChild(this.outerDiv);
+
 
     // (testing) show player gun damage
     this.playerInfo = document.createElement('div')
@@ -84,5 +94,15 @@ export class Player {
   attack() {
     console.log(`Player attack cause ${this.gunDamage}`)
     return this.gunDamage
+  }
+  missed() {
+    console.log(`Player missed`)
+    const message = document.createElement('div')
+    message.classList.add('missed')
+    message.innerText = 'missed'
+    this.missedDiv.appendChild(message)
+    setTimeout(() => {
+      message.remove()
+    }, 1000)
   }
 }

@@ -17,3 +17,27 @@
   color: white;
   font-size: 0.5rem;
 }
+
+.missed-div {
+  position: relative;
+  top: -40px;
+  width: 50px;
+  font-size: 0.5rem;
+}
+
+.missed {
+  position: absolute;
+  color: white;
+  animation: missed 0.7s forwards;
+}
+
+@keyframes missed {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-15px);
+    opacity: 0;
+  }
+}

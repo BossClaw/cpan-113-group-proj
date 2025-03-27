@@ -75,9 +75,12 @@ export class Game {
   pauss() {
     // pasuss the game
   }
-  playerAttack(missed = false) {
-    if (missed) {
+  onPlayerAttack(e, isHit = true) {
+    if (!this.isGame) return
+    if (e.repeat) return;
+    if (!isHit) {
       // missing the shot
+      this.player.missed()
       return
     }
 
@@ -208,13 +211,16 @@ export class Game {
     // next frame
     requestAnimationFrame(this.update);
   }
-  updateGameStats() {
-    this.gameView.displayGameStats({
+  getGameStats() {
+    return {
       baseHP: this.baseHP,
       firewallHP: this.firewallHP,
       points: this.points,
       enemy: `${this.enemyLeft} / ${this.enemyCount}`
-    })
+    }
+  }
+  updateGameStats() {
+    this.gameView.displayGameStats(this.getGameStats())
   }
   checkEnemyLeft() {
     {
@@ -275,10 +281,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === null) return
     // correct
     if (e.key === 'a') {
-      game.playerAttack()
+      game.onPlayerAttack(e)
       keyDiv.innerText = 'shoot'
 
     } else {
+      game.onPlayerAttack(e, false)
       keyDiv.innerText = 'missed'
     }
   })
