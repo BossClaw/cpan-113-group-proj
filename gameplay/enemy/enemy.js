@@ -130,6 +130,9 @@ export class Enemy {
   move() {
     this.outerDiv.classList.add('move')
   }
+  getLocationX() {
+    return this.outerDiv.getBoundingClientRect().left
+  }
   takeDamage(amount) {
     console.log(`Enemy took damage: ${amount}`)
     this.hp -= amount;

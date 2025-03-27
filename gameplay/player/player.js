@@ -79,6 +79,9 @@ export class Player {
 
     return this.outerDiv
   }
+  getLocationX() {
+    return this.outerDiv.getBoundingClientRect().left
+  }
   attack() {
     console.log(`Player attack cause ${this.gunDamage}`)
     return this.gunDamage

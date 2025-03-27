@@ -88,8 +88,8 @@ export class Game {
     // find enemy
     this.enemyArray.forEach(enemy => {
       if (!enemy.isAlive) return
-      const enemyX = enemy.div.getBoundingClientRect().left
-      const currentDistance = enemyX - this.player.div.getBoundingClientRect().left
+      const enemyX = enemy.getLocationX()
+      const currentDistance = enemyX - this.player.getLocationX()
       if (distance > currentDistance) {
         distance = currentDistance
         target = enemy
@@ -109,14 +109,12 @@ export class Game {
       alert('Missing player instance in game constructure')
       return
     }
-    const playerDiv = this.player.spawn(this.gameScreen)
-    this.player.div = playerDiv
+    this.player.spawn(this.gameScreen)
 
     // spawn enemy
     for (let i = 0; i < this.enemyCount; i++) {
       const enemy = new Enemy(this.gameScreen, 1, this.levelEnemySpeed); // level 1
-      const enemyDiv = enemy.spawn(this.gameScreen)
-      enemy.div = enemyDiv
+      enemy.spawn(this.gameScreen)
       this.enemyArray.push(enemy);
       console.log('enemy spawn')
     }
@@ -161,7 +159,7 @@ export class Game {
     for (let i = 0; i < this.enemyArray.length - 1; i++) {
       const enemy = this.enemyArray[i]
       if (!enemy.isAlive) continue
-      const enemyX = enemy.div.getBoundingClientRect().left
+      const enemyX = enemy.getLocationX()
       const baseX = this.gameScreen.getBoundingClientRect().left
 
       // enemy reaching firewall
