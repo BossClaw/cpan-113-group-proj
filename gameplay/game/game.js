@@ -35,7 +35,7 @@ const difficultSpeedModifer = {
 }
 
 export class Game {
-  constructor(gameScreen, level = 1, difficulty = 'easy', player) {
+  constructor(gameScreen, level = 1, difficulty = 'easy', playerObject = null) {
     // #game_screen div
     this.gameScreen = gameScreen
 
@@ -45,7 +45,8 @@ export class Game {
     this.spawnTimer = 0;
 
     // player related
-    this.player = player
+    this.playerObject = playerObject
+    this.player = null
     this.points = 0
     this.baseHP = 3
     this.firewallHP = 1
@@ -75,12 +76,20 @@ export class Game {
   pauss() {
     // pasuss the game
   }
-  onPlayerAttack(e, isHit = true) {
+  onPlayerAttack(isHit = true) {
     if (!this.isGame) return
-    if (e.repeat) return;
     if (!isHit) {
       // missing the shot
       this.player.missed()
+      // spawn new enemy (level: 0 the "error") 
+      const enemy = new Enemy(this.gameScreen, 0, this.levelEnemySpeed)
+      enemy.spawn()
+      console.log("new enemy:", enemy)
+      this.enemyArray.push(enemy)
+      this.enemyCount++
+      this.enemyLeft++
+      // spawned enemy move rightaway
+      enemy.move()
       return
     }
 
@@ -126,6 +135,13 @@ export class Game {
     this.updateGameStats()
 
     // spawn player
+    if (this.playerObject) {
+      const gun = this.playerObject.gun
+      const hat = this.playerObject.hat
+      this.player = new Player(this.gameScreen, gun, hat)
+    } else {
+      this.player = new Player(this.gameScreen)
+    }
     this.player.spawn(this.gameScreen)
 
     // spawn enemy
@@ -258,38 +274,28 @@ export class Game {
 document.addEventListener('DOMContentLoaded', () => {
   // get #game_screen
   const gameScreen = document.querySelector('#game_screen')
-  // create player
-  const player = new Player(gameScreen)
   // create game
-  const game = new Game(gameScreen, 10, 'normal', player)
+  const game = new Game(gameScreen, 10, 'normal')
   console.log('game', game)
   game.start()
 
 
-  // (testing) showing player attack
-  const keyDiv = document.createElement('div')
-  const body = document.querySelector('body')
-  body.appendChild(keyDiv)
-  keyDiv.style.position = 'absolute';
-  keyDiv.style.width = '100px'
-  keyDiv.style.backgroundColor = 'red'
-  keyDiv.style.top = '100px'
-
   // (testing) trigger player attack
-  document.addEventListener('keyup', e => {
-    console.log('Key released:', e.key); // <- add this for debugging
-    if (e.key === null) return
-    // correct
-    if (e.key === 'a') {
-      game.onPlayerAttack(e)
-      keyDiv.innerText = 'shoot'
+  // using setTimout to avoid it becoming called right away, it cause onPlayerAttack to already auto trigger on game start
+  setTimeout(() => {
+    document.addEventListener('keyup', (e) => {
+      console.log('Key released:', e.key); // <- add this for debugging
+      if ((e.metaKey && e.key === 'r') || (e.ctrlKey && e.key === 'r')) return;
+      if (e.key === null) return
+      // correct
+      if (e.key === 'a') {
+        game.onPlayerAttack()
 
-    } else {
-      game.onPlayerAttack(e, false)
-      keyDiv.innerText = 'missed'
-    }
-  })
-
+      } else {
+        game.onPlayerAttack(false)
+      }
+    })
+  }, 500)
 })
 
 

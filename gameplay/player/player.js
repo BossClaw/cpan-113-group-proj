@@ -29,7 +29,9 @@ function getGun(gun = 'debugger') {
 }
 
 export class Player {
-  constructor(gun = null, hat = null) {
+  constructor(gameScreen, gun = null, hat = null) {
+    this.gameScreen = gameScreen
+
     // location/styles
     this.outerClass = 'player'
     this.innerClass = 'player-sprit'
@@ -49,8 +51,8 @@ export class Player {
     // (testing)
     this.playerInfo = null
   }
-  spawn(gameScreen) {
-    if (!gameScreen) {
+  spawn() {
+    if (!this.gameScreen) {
       console.error('Player spawn missing gameScreen param')
       return
     }
@@ -77,7 +79,7 @@ export class Player {
     this.outerDiv.appendChild(this.missedDiv)
 
     // put it on screen
-    gameScreen.appendChild(this.outerDiv);
+    this.gameScreen.appendChild(this.outerDiv);
 
 
     // (testing) show player gun damage

@@ -3,7 +3,7 @@ const enemyList = [
     name: 'error',
     hp: 1,
     damage: 1,
-    speed: 1.5,
+    speed: 1,
     color: 'red',
     size: '16',
   },
@@ -41,13 +41,10 @@ function getEnemyData(level) {
 }
 
 
-
-
 // gameScreen is the #game_screen div 
 // speed is calculated by game's difficult, game's level and enemy's own speed
 export class Enemy {
   static nextId = 1
-
   constructor(gameScreen, enemyLevel = 1, gameSpeed = 1) {
     // id
     this.id = Enemy.nextId++
@@ -84,14 +81,10 @@ export class Enemy {
     this.destroy = this.destroy.bind(this)
     this.attack = this.attack.bind(this)
   }
-  spawn(gameScreen) {
-    if (!gameScreen) {
-      console.error('Enemy spawn missing gameScreen param')
-      return
-    }
+  spawn() {
     // this.x = gameScreen.offsetWidth; // deault x position
     // this.y = 70; // default y position
-    const x = gameScreen.offsetWidth
+    const x = this.gameScreen.offsetWidth
     const yMax = 110 // away from top
     const yMin = 40 // away from top
     const y = Math.random() * (yMax - yMin) + yMin
@@ -116,7 +109,7 @@ export class Enemy {
 
     // put it on screen
     this.outerDiv.appendChild(this.innerDiv);
-    gameScreen.appendChild(this.outerDiv);
+    this.gameScreen.appendChild(this.outerDiv);
 
     // (testing) show enemy info
     this.enemyInfo = document.createElement('div')
