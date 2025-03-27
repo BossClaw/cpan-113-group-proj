@@ -1,5 +1,6 @@
 import { Enemy } from "../enemy/enemy.js";
 import { Player } from "../player/player.js";
+import { GameView } from "../game-view/gameview.js";
 
 // Get level state
 function getLevelState(level = 1) {
@@ -46,16 +47,20 @@ export class Game {
     // player related
     this.player = player
     this.points = 0
-    this.baseHp = 3
-    this.fireWallHp = 1
-    this.fireWallLocationX = '100px'
-    this.fireWall = null
+    this.baseHP = 3
+    this.firewallHP = 1
+    this.firewallLocationX = '100px'
+    this.firewall = null
 
     // enemy related
     this.enemyArray = [] // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
     this.enemyCount = getLevelState(level).enemyCount
+    this.enemyLeft = getLevelState(level).enemyCount
     this.levelEnemySpeed = getLevelState(level).ememySpeed * difficultSpeedModifer[difficulty]
     this.enemySpawnTime = getLevelState(level).ememySpawnTime
+
+    // gameView
+    this.gameView = new GameView(this.gameScreen)
 
     // bind methods just in case
     this.start = this.start.bind(this)
@@ -70,16 +75,12 @@ export class Game {
   pauss() {
     // pasuss the game
   }
-  showGameStartMessage() {
-    // show game start messages
-  }
-  showWinScreen() {
-    // show game win screen
-  }
-  showLoseScreen() {
-    // show game lose screen
-  }
-  onPlayerShoot() {
+  playerShoot(missed = false) {
+    if (missed) {
+      // missing the shot
+      return
+    }
+
     // find the closest enemy to shoot
     if (this.enemyArray.length === 0) return
     let distance = Infinity
@@ -99,16 +100,12 @@ export class Game {
     if (!target) return
     target.takeDamage(this.player.attack())
   }
-  onPlayerMiss() {
-
-  }
   // Setup enemies at the beginning
   setup() {
+    // update game states display
+    this.updateGameStats()
+
     // spawn player
-    if (!this.player) {
-      alert('Missing player instance in game constructure')
-      return
-    }
     this.player.spawn(this.gameScreen)
 
     // spawn enemy
@@ -123,9 +120,9 @@ export class Game {
     const fireWall = document.createElement('div')
     fireWall.classList.add('firewall')
     fireWall.style.height = this.gameScreen.offsetHeight + 'px'
-    fireWall.style.left = this.fireWallLocationX
+    fireWall.style.left = this.firewallLocationX
     this.gameScreen.appendChild(fireWall);
-    this.fireWall = fireWall
+    this.firewall = fireWall
 
     console.log('Initial Enemies:', this.enemyArray);
   }
@@ -137,6 +134,9 @@ export class Game {
 
     // check is game over
     this.checkGameOver()
+
+    // update game states display
+    this.updateGameStats()
 
     // (maybe keyboard have here <--------)
     // 
@@ -165,14 +165,14 @@ export class Game {
       const baseX = this.gameScreen.getBoundingClientRect().left
 
       // enemy reaching firewall
-      if (this.fireWall) {
-        const fireWallX = this.fireWall.getBoundingClientRect().left
+      if (this.firewall) {
+        const fireWallX = this.firewall.getBoundingClientRect().left
         let distance = enemyX - fireWallX
         if (distance <= 0) {
-          this.fireWallHp -= enemy.attack()
-          if (this.fireWallHp <= 0) {
-            this.fireWall.remove()
-            this.fireWall = null
+          this.firewallHP -= enemy.attack()
+          if (this.firewallHP <= 0) {
+            this.firewall.remove()
+            this.firewall = null
           }
         }
         continue
@@ -180,8 +180,8 @@ export class Game {
       // enemy reaching base
       let distance = enemyX - baseX
       if (distance <= 0) {
-        this.baseHp -= enemy.attack()
-        console.log('baseHP', this.baseHp)
+        this.baseHP -= enemy.attack()
+        console.log('baseHP', this.baseHP)
       }
     }
 
@@ -189,29 +189,40 @@ export class Game {
     this.enemyArray.forEach(e => {
       e.updateInfo()
     })
-    // (testing) update basehp
-    document.querySelector('#basehp').innerText = this.baseHp
-
 
     // next frame
     requestAnimationFrame(this.update);
   }
-  checkGameOver() {
-    let enemyAlive = false
-    this.enemyArray.forEach(e => {
-      if (e.isAlive) enemyAlive = true
+  updateGameStats() {
+    this.gameView.displayGameStats({
+      baseHP: this.baseHP,
+      firewallHP: this.firewallHP,
+      points: this.points,
+      enemy: `${this.enemyLeft} / ${this.enemyCount}`
     })
-    if (!enemyAlive) {
+  }
+  checkEnemyLeft() {
+    {
+      let count = 0;
+      this.enemyArray.forEach(e => {
+        if (e.isAlive) count++;
+      });
+      this.enemyLeft = count;
+    }
+  }
+  checkGameOver() {
+    this.checkEnemyLeft()
+    if (this.enemyLeft === 0) {
       console.log('You win')
       this.isGame = false
-      alert('You win')
+      this.gameView.displayWin()
       return
     }
 
-    if (this.baseHp <= 0) {
+    if (this.baseHP <= 0) {
       console.log('You lose')
       this.isGame = false
-      alert('You lose')
+      this.gameView.displayLose()
       return
     }
   }
@@ -247,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === null) return
     // correct
     if (e.key === 'a') {
-      game.onPlayerShoot()
+      game.playerShoot()
       keyDiv.innerText = 'shoot'
 
     } else {

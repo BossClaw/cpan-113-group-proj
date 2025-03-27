@@ -7,6 +7,43 @@
   background-image: url('bg.png'); /* placeholder */
 }
 
+.gameover-div {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+.gameover-div.win {
+  color: rgb(255, 221, 71);
+}
+
+.gameover-div.lose {
+  color: rgb(255, 0, 43);
+}
+
+.game-states {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 110px;
+  left: 5px;
+  gap: 0;
+  font-size: 8px;
+  color: rgb(252, 73, 73);
+  z-index: 12;
+}
+
+.game-states p {
+  margin: 0;
+}
+
 /* Smallest (270px) */
 @media (max-width: 270px) {
   #game_screen {
