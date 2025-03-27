@@ -132,19 +132,21 @@ export class Game {
 
   // Main game loop
   update(timestamp) {
+    // check is game running
     if (!this.isGame) return
 
-    // timestamp is from requestAnimationFrame, its the time since game start
-    if (!this.lastTimestamp) this.lastTimestamp = timestamp;
-    // delta time is time since last frame
-    // can use delta to motify movment speed (so computer has the same speed)
-    const delta = timestamp - this.lastTimestamp;
-    this.lastTimestamp = timestamp;
+    // check is game over
+    this.checkGameOver()
 
     // (maybe keyboard have here <--------)
     // 
 
-    // move the next enemy
+    // Check delta time
+    if (!this.lastTimestamp) this.lastTimestamp = timestamp;
+    const delta = timestamp - this.lastTimestamp;
+    this.lastTimestamp = timestamp;
+
+    // Spawn Enemy if its time
     this.spawnTimer += delta;
     if (this.spawnTimer >= this.enemySpawnTime) {
       const nextEnemy = this.enemyArray.find(enemy => !enemy.isMoving);
@@ -175,7 +177,6 @@ export class Game {
         }
         continue
       }
-
       // enemy reaching base
       let distance = enemyX - baseX
       if (distance <= 0) {
@@ -184,16 +185,18 @@ export class Game {
       }
     }
 
-    // show enemy info
+    // (testing) show enemy info
     this.enemyArray.forEach(e => {
       e.updateInfo()
     })
-
     // (testing) update basehp
     document.querySelector('#basehp').innerText = this.baseHp
 
 
-    // check game over
+    // next frame
+    requestAnimationFrame(this.update);
+  }
+  checkGameOver() {
     let enemyAlive = false
     this.enemyArray.forEach(e => {
       if (e.isAlive) enemyAlive = true
@@ -211,9 +214,6 @@ export class Game {
       alert('You lose')
       return
     }
-
-    // next frame
-    requestAnimationFrame(this.update);
   }
   start() {
     this.setup();
