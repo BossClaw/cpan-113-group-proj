@@ -71,7 +71,7 @@ export class Enemy {
 
     // movement
     this.isMoving = false;
-    this.defaultMovementDuration = 3
+    this.defaultMovementDuration = 4
     this.actualMovementDuratrion = this.defaultMovementDuration / this.speed
 
     // testing info
@@ -115,17 +115,16 @@ export class Enemy {
     this.outerDiv.appendChild(this.innerDiv);
     gameScreen.appendChild(this.outerDiv);
 
-
-    // (testing) show left x location
+    // (testing) show enemy info
     this.enemyInfo = document.createElement('div')
     this.enemyInfo.classList.add('enemy-info')
     this.innerDiv.appendChild(this.enemyInfo)
-    this.enemyInfo.innerText = this.outerDiv.getBoundingClientRect().left - gameScreen.getBoundingClientRect().left;
+    this.updateInfo()
 
     return this.outerDiv
   }
   updateInfo() {
-    this.enemyInfo.innerText = this.getLocationX()
+    this.enemyInfo.innerText = `HP: ${this.hp}`
   }
   move() {
     this.outerDiv.classList.add('move')
@@ -147,9 +146,23 @@ export class Enemy {
     return this.damage
   }
   destroy() {
-    console.log(`Enemy destroyed`)
-    this.outerDiv.remove()
+    // removing 'move' will make the enemy get back to original location, so we need to keep this location
+    this.outerDiv.classList.add('stop')
+
+    this.innerDiv.classList.add(
+      'animate__animated',
+      'animate__rotateOutUpRight',
+      'animate__faster'
+    );
+    void this.innerDiv.offsetWidth; // Trigger reflow
+
+
+    // is dead
     this.isAlive = false
+    setTimeout(() => {
+      console.log(`Enemy destroyed`)
+      this.outerDiv.remove()
+    }, 1000)
   }
 }
 

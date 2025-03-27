@@ -65,7 +65,6 @@ export class Player {
     // Create inner div
     this.innerDiv = document.createElement('div');
     this.innerDiv.classList.add(this.innerClass);
-    this.innerDiv.style.backgroundColor = this.innerColor;
 
     // put it on screen
     this.outerDiv.appendChild(this.innerDiv);

@@ -267,7 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
   keyDiv.style.backgroundColor = 'red'
   keyDiv.style.top = '100px'
 
-
   // (testing) trigger player attack
   document.addEventListener('keyup', e => {
     console.log('Key released:', e.key); // <- add this for debugging
