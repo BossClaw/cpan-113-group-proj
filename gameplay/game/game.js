@@ -274,17 +274,27 @@ export class Game {
 document.addEventListener('DOMContentLoaded', () => {
   // get #game_screen
   const gameScreen = document.querySelector('#game_screen')
+
   // create game
   const game = new Game(gameScreen, 10, 'normal')
   console.log('game', game)
-  game.start()
 
+  // start game
+  const startBtn = document.querySelector('#start')
+
+  startBtn.addEventListener('click', () => {
+    game.start()
+    startBtn.style.display = 'none'
+  })
 
   // (testing) trigger player attack
   // using setTimout to avoid it becoming called right away, it cause onPlayerAttack to already auto trigger on game start
   setTimeout(() => {
+    // Hit "A" to attack
+    // Hit anything to missed
     document.addEventListener('keyup', (e) => {
-      console.log('Key released:', e.key); // <- add this for debugging
+
+      console.log('Key released:', e.key);
       if ((e.metaKey && e.key === 'r') || (e.ctrlKey && e.key === 'r')) return;
       if (e.key === null) return
       // correct

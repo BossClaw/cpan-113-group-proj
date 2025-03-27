@@ -3,7 +3,7 @@ const enemyList = [
     name: 'error',
     hp: 1,
     damage: 1,
-    speed: 1,
+    speed: 0.7,
     color: 'red',
     size: '16',
   },
