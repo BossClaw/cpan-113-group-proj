@@ -9,13 +9,19 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-duration: 10s; /* override with js */
+  z-index: 5;
 }
 
 .enemy.move {
   animation-name: moveLeft;
 }
 
-.enemyInfo {
+.enemy-sprit {
+  width: 100%;
+  height: 100%;
+}
+
+.enemy-info {
   color: white;
   font-size: 0.5rem;
 }

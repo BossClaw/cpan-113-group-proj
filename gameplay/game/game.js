@@ -1,4 +1,5 @@
 import { Enemy } from "../enemy/enemy.js";
+import { Player } from "../player/player.js";
 
 // Get level state
 function getLevelState(level = 1) {
@@ -33,7 +34,7 @@ const difficultSpeedModifer = {
 }
 
 export class Game {
-  constructor(gameScreen, level = 1, difficulty = 'easy') {
+  constructor(gameScreen, level = 1, difficulty = 'easy', player) {
     // #game_screen div
     this.gameScreen = gameScreen
 
@@ -43,6 +44,7 @@ export class Game {
     this.spawnTimer = 0;
 
     // player related
+    this.player = player
     this.points = 0
     this.baseHp = 3
     this.fireWallHp = 1
@@ -61,6 +63,13 @@ export class Game {
   }
   // Setup enemies at the beginning
   setup() {
+    // spawn player
+    if (!this.player) {
+      alert('Missing player instance in game constructure')
+      return
+    }
+    this.player.spawn()
+
     // spawn enemy
     for (let i = 0; i < this.enemyCount; i++) {
       const enemy = new Enemy(this.gameScreen, 1, this.levelEnemySpeed); // level 1
@@ -69,9 +78,6 @@ export class Game {
       this.enemyArray.push(enemy);
       console.log('enemy spawn')
     }
-
-    // spawn player
-    //
 
     // spawn fireWall
     const fireWall = document.createElement('div')
@@ -94,6 +100,9 @@ export class Game {
     // can use delta to motify movment speed (so computer has the same speed)
     const delta = timestamp - this.lastTimestamp;
     this.lastTimestamp = timestamp;
+
+    // (maybe keyboard have here <--------)
+    // 
 
     // move the next enemy
     this.spawnTimer += delta;
@@ -118,6 +127,7 @@ export class Game {
         let distance = enemyX - fireWallX
         if (distance <= 0) {
           this.fireWallHp -= enemy.attack()
+          this.enemyArray.splice(i, 1)
           if (this.fireWallHp <= 0) {
             this.fireWall.remove()
             this.fireWall = null
@@ -133,7 +143,6 @@ export class Game {
         this.enemyArray.splice(i, 1)
       }
     }
-
 
     // show enemy info
     this.enemyArray.forEach(e => {
@@ -162,17 +171,19 @@ export class Game {
     this.isGame = true
     requestAnimationFrame(this.update);
   }
-  checkCollision() {
-
-  }
+ 
 }
-
 
 // Testing
 document.addEventListener('DOMContentLoaded', () => {
-  // #game_screen
+  // get #game_screen
   const gameScreen = document.querySelector('#game_screen')
-  const game = new Game(gameScreen, 1, 'easy')
+
+  // create player
+  const player = new Player(gameScreen)
+
+  // create game
+  const game = new Game(gameScreen, 1, 'normal', player)
   console.log('game', game)
   game.start()
 })

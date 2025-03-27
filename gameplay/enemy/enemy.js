@@ -90,8 +90,6 @@ export class Enemy {
     // Create inner div
     this.innerDiv = document.createElement('div');
     this.innerDiv.classList.add(this.innerClass);
-    this.innerDiv.style.width = '100%';
-    this.innerDiv.style.height = '100%';
     this.innerDiv.style.backgroundColor = this.innerColor;
 
     // css animaiton speed
@@ -102,9 +100,9 @@ export class Enemy {
     this.gameScreen.appendChild(this.outerDiv);
 
 
-    // show left x
+    // (testing) show left x location
     this.enemyInfo = document.createElement('div')
-    this.enemyInfo.classList.add('enemyInfo')
+    this.enemyInfo.classList.add('enemy-info')
     this.innerDiv.appendChild(this.enemyInfo)
     this.enemyInfo.innerText = this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left;
 

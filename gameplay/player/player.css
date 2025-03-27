@@ -1,0 +1,19 @@
+.player {
+  position: absolute;
+  top: 100px;
+  right: 30; /* override with js */
+  width: 32px; /* override with js */
+  height: 32px; /* override with js */
+  background-color: rgb(255, 255, 255); /* override with js */
+  z-index: 4;
+}
+
+.player-sprit {
+  width: 100%;
+  height: 100%;
+}
+
+.player-info {
+  color: white;
+  font-size: 0.5rem;
+}
