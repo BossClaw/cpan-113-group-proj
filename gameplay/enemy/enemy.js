@@ -71,7 +71,7 @@ export class Enemy {
 
     // movement
     this.isMoving = false;
-    this.defaultMovementDuration = 5
+    this.defaultMovementDuration = 3
     this.actualMovementDuratrion = this.defaultMovementDuration / this.speed
 
     // testing info
@@ -125,13 +125,13 @@ export class Enemy {
     return this.outerDiv
   }
   updateInfo() {
-    this.enemyInfo.innerText = this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left;
+    this.enemyInfo.innerText = this.getLocationX()
   }
   move() {
     this.outerDiv.classList.add('move')
   }
   getLocationX() {
-    return this.outerDiv.getBoundingClientRect().left
+    return this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left
   }
   takeDamage(amount) {
     console.log(`Enemy took damage: ${amount}`)

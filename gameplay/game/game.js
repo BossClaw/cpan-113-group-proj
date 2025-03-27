@@ -75,7 +75,7 @@ export class Game {
   pauss() {
     // pasuss the game
   }
-  playerShoot(missed = false) {
+  playerAttack(missed = false) {
     if (missed) {
       // missing the shot
       return
@@ -86,16 +86,31 @@ export class Game {
     let distance = Infinity
     let target = null
 
-    // find enemy
+    // Find the closest enemny
     this.enemyArray.forEach(enemy => {
-      if (!enemy.isAlive) return
-      const enemyX = enemy.getLocationX()
-      const currentDistance = enemyX - this.player.getLocationX()
-      if (distance > currentDistance) {
-        distance = currentDistance
-        target = enemy
+      // Skip if enemy is not alive
+      if (!enemy.isAlive) return;
+
+      const enemyLocationX = enemy.getLocationX();
+      const playerLocationX = this.player.getLocationX();
+      const currentDistance = enemyLocationX - playerLocationX;
+
+      // Find the closest enemny
+      if (currentDistance < distance) {
+        // Check if the enemy is fully visible inside the game screen
+        const screenRect = this.gameScreen.getBoundingClientRect();
+        const enemyRect = enemy.outerDiv.getBoundingClientRect();
+
+        // is enemy fully inside the screen
+        const isFullyInside =
+          enemyRect.left >= screenRect.left &&
+          enemyRect.right <= screenRect.right;
+
+        if (!isFullyInside) return;
+        distance = currentDistance;
+        target = enemy;
       }
-    })
+    });
     // shoot it
     if (!target) return
     target.takeDamage(this.player.attack())
@@ -160,15 +175,14 @@ export class Game {
     // check for enemey collision
     for (let i = 0; i < this.enemyArray.length - 1; i++) {
       const enemy = this.enemyArray[i]
+
       if (!enemy.isAlive) continue
-      const enemyX = enemy.getLocationX()
-      const baseX = this.gameScreen.getBoundingClientRect().left
+      const enemyLocationX = enemy.getLocationX()
 
       // enemy reaching firewall
       if (this.firewall) {
-        const fireWallX = this.firewall.getBoundingClientRect().left
-        let distance = enemyX - fireWallX
-        if (distance <= 0) {
+        const fireWallDistance = enemyLocationX - (this.firewall.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left)
+        if (fireWallDistance <= 0) {
           this.firewallHP -= enemy.attack()
           if (this.firewallHP <= 0) {
             this.firewall.remove()
@@ -178,8 +192,7 @@ export class Game {
         continue
       }
       // enemy reaching base
-      let distance = enemyX - baseX
-      if (distance <= 0) {
+      if (enemyLocationX <= 0) {
         this.baseHP -= enemy.attack()
         console.log('baseHP', this.baseHP)
       }
@@ -245,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
   game.start()
 
 
-  // testing player attack
+  // (testing) showing player attack
   const keyDiv = document.createElement('div')
   const body = document.querySelector('body')
   body.appendChild(keyDiv)
@@ -253,12 +266,15 @@ document.addEventListener('DOMContentLoaded', () => {
   keyDiv.style.width = '100px'
   keyDiv.style.backgroundColor = 'red'
   keyDiv.style.top = '100px'
+
+
+  // (testing) trigger player attack
   document.addEventListener('keyup', e => {
     console.log('Key released:', e.key); // <- add this for debugging
     if (e.key === null) return
     // correct
     if (e.key === 'a') {
-      game.playerShoot()
+      game.playerAttack()
       keyDiv.innerText = 'shoot'
 
     } else {
