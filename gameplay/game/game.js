@@ -114,6 +114,8 @@ export class Game {
     // shoot it
     if (!target) return
     target.takeDamage(this.player.attack())
+    // gain points
+    this.points++
   }
   // Setup enemies at the beginning
   setup() {
@@ -173,7 +175,7 @@ export class Game {
     }
 
     // check for enemey collision
-    for (let i = 0; i < this.enemyArray.length - 1; i++) {
+    for (let i = 0; i < this.enemyArray.length; i++) {
       const enemy = this.enemyArray[i]
 
       if (!enemy.isAlive) continue
