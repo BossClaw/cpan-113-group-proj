@@ -50,7 +50,7 @@ export class Player {
       console.error('Player spawn missing gameScreen param')
       return
     }
-    const x = 20;
+    const x = 35;
     const y = 70;
 
     // Creat outter div

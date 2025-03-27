@@ -40,10 +40,18 @@ function getEnemyData(level) {
   return enemyList[level]
 }
 
+
+
+
 // gameScreen is the #game_screen div 
 // speed is calculated by game's difficult, game's level and enemy's own speed
 export class Enemy {
+  static nextId = 1
+
   constructor(gameScreen, enemyLevel = 1, gameSpeed = 1) {
+    // id
+    this.id = Enemy.nextId++
+
     // location/styles
     this.gameScreen = gameScreen;
     this.outerClass = 'enemy'
@@ -54,6 +62,7 @@ export class Enemy {
     this.height = getEnemyData(enemyLevel).size;
 
     // states
+    this.isAlive = true
     this.name = getEnemyData(enemyLevel).name
     this.hp = getEnemyData(enemyLevel).hp
     this.speed = getEnemyData(enemyLevel).speed * gameSpeed
@@ -137,9 +146,7 @@ export class Enemy {
   destroy() {
     console.log(`Enemy destroyed`)
     this.outerDiv.remove()
+    this.isAlive = false
   }
 }
-
-
-
 

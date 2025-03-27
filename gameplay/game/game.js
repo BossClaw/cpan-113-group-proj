@@ -15,7 +15,7 @@ function getLevelState(level = 1) {
 
   // how much to incrase
   const countIncrase = 2
-  const speedIncrase = 0.1
+  const speedIncrase = 0.05
 
   const enemyCount = baseEnemyCount + Math.floor((level - 1) / levelToIncraseCount) * countIncrase
   const ememySpeed = baseEnemySpeed + Math.floor((level - 1) / levelToIncraseSpeed) * speedIncrase
@@ -29,8 +29,8 @@ function getLevelState(level = 1) {
 const difficultSpeedModifer = {
   'easy': 0.5,
   'normal': 1,
-  'hard': 1.5,
-  'hardcore': 2,
+  'hard': 2,
+  'hardcore': 3,
 }
 
 export class Game {
@@ -61,6 +61,47 @@ export class Game {
     this.start = this.start.bind(this)
     this.update = this.update.bind(this)
   }
+  retry() {
+    // do the current level again
+  }
+  nextLevel() {
+    // reset the game and go to next game
+  }
+  pauss() {
+    // pasuss the game
+  }
+  showGameStartMessage() {
+    // show game start messages
+  }
+  showWinScreen() {
+    // show game win screen
+  }
+  showLoseScreen() {
+    // show game lose screen
+  }
+  onPlayerShoot() {
+    // find the closest enemy to shoot
+    if (this.enemyArray.length === 0) return
+    let distance = Infinity
+    let target = null
+
+    // find enemy
+    this.enemyArray.forEach(enemy => {
+      if (!enemy.isAlive) return
+      const enemyX = enemy.div.getBoundingClientRect().left
+      const currentDistance = enemyX - this.player.div.getBoundingClientRect().left
+      if (distance > currentDistance) {
+        distance = currentDistance
+        target = enemy
+      }
+    })
+    // shoot it
+    if (!target) return
+    target.takeDamage(this.player.attack())
+  }
+  onPlayerMiss() {
+
+  }
   // Setup enemies at the beginning
   setup() {
     // spawn player
@@ -68,7 +109,8 @@ export class Game {
       alert('Missing player instance in game constructure')
       return
     }
-    this.player.spawn(this.gameScreen)
+    const playerDiv = this.player.spawn(this.gameScreen)
+    this.player.div = playerDiv
 
     // spawn enemy
     for (let i = 0; i < this.enemyCount; i++) {
@@ -115,9 +157,10 @@ export class Game {
       this.spawnTimer = 0; // reset spawn timer
     }
 
-    // check for collision
-    for (let i = this.enemyArray.length - 1; i >= 0; i--) {
+    // check for enemey collision
+    for (let i = 0; i < this.enemyArray.length - 1; i++) {
       const enemy = this.enemyArray[i]
+      if (!enemy.isAlive) continue
       const enemyX = enemy.div.getBoundingClientRect().left
       const baseX = this.gameScreen.getBoundingClientRect().left
 
@@ -127,12 +170,12 @@ export class Game {
         let distance = enemyX - fireWallX
         if (distance <= 0) {
           this.fireWallHp -= enemy.attack()
-          this.enemyArray.splice(i, 1)
           if (this.fireWallHp <= 0) {
             this.fireWall.remove()
             this.fireWall = null
           }
         }
+        continue
       }
 
       // enemy reaching base
@@ -140,7 +183,6 @@ export class Game {
       if (distance <= 0) {
         this.baseHp -= enemy.attack()
         console.log('baseHP', this.baseHp)
-        this.enemyArray.splice(i, 1)
       }
     }
 
@@ -149,8 +191,16 @@ export class Game {
       e.updateInfo()
     })
 
+    // (testing) update basehp
+    document.querySelector('#basehp').innerText = this.baseHp
+
+
     // check game over
-    if (this.enemyArray.length === 0) {
+    let enemyAlive = false
+    this.enemyArray.forEach(e => {
+      if (e.isAlive) enemyAlive = true
+    })
+    if (!enemyAlive) {
       console.log('You win')
       this.isGame = false
       alert('You win')
@@ -164,6 +214,7 @@ export class Game {
       return
     }
 
+    // next frame
     requestAnimationFrame(this.update);
   }
   start() {
@@ -171,19 +222,42 @@ export class Game {
     this.isGame = true
     requestAnimationFrame(this.update);
   }
-
 }
 
 // Testing
 document.addEventListener('DOMContentLoaded', () => {
   // get #game_screen
   const gameScreen = document.querySelector('#game_screen')
-
   // create player
   const player = new Player(gameScreen)
-
   // create game
-  const game = new Game(gameScreen, 1, 'normal', player)
+  const game = new Game(gameScreen, 10, 'normal', player)
   console.log('game', game)
   game.start()
+
+
+  // testing player attack
+  const keyDiv = document.createElement('div')
+  const body = document.querySelector('body')
+  body.appendChild(keyDiv)
+  keyDiv.style.position = 'absolute';
+  keyDiv.style.width = '100px'
+  keyDiv.style.backgroundColor = 'red'
+  keyDiv.style.top = '100px'
+  document.addEventListener('keyup', e => {
+    console.log('Key released:', e.key); // <- add this for debugging
+    if (e.key === null) return
+    // correct
+    if (e.key === 'a') {
+      game.onPlayerShoot()
+      keyDiv.innerText = 'shoot'
+
+    } else {
+      keyDiv.innerText = 'missed'
+    }
+  })
+
 })
+
+
+
