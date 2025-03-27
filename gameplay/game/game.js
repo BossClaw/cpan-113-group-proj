@@ -68,13 +68,13 @@ export class Game {
       alert('Missing player instance in game constructure')
       return
     }
-    this.player.spawn()
+    this.player.spawn(this.gameScreen)
 
     // spawn enemy
     for (let i = 0; i < this.enemyCount; i++) {
       const enemy = new Enemy(this.gameScreen, 1, this.levelEnemySpeed); // level 1
-      const div = enemy.spawn()
-      enemy.div = div
+      const enemyDiv = enemy.spawn(this.gameScreen)
+      enemy.div = enemyDiv
       this.enemyArray.push(enemy);
       console.log('enemy spawn')
     }
@@ -171,7 +171,7 @@ export class Game {
     this.isGame = true
     requestAnimationFrame(this.update);
   }
- 
+
 }
 
 // Testing

@@ -29,17 +29,14 @@ function getGun(gun = 'debugger') {
 }
 
 export class Player {
-  constructor(gameScreen, gun = null, hat = null) {
+  constructor(gun = null, hat = null) {
     // location/styles
-    this.gameScreen = gameScreen;
     this.outerClass = 'player'
     this.innerClass = 'player-sprit'
     this.outerDiv = null
     this.innerDiv = null
     this.width = '32px'
     this.height = '32px';
-    this.x = 20; // deault x position
-    this.y = 70; // default y position
 
     // states
     this.gunDamage = getGun(gun).damage
@@ -48,15 +45,22 @@ export class Player {
     // (testing)
     this.playerInfo = null
   }
-  spawn() {
+  spawn(gameScreen) {
+    if (!gameScreen) {
+      console.error('Player spawn missing gameScreen param')
+      return
+    }
+    const x = 20;
+    const y = 70;
+
     // Creat outter div
     this.outerDiv = document.createElement('div');
     this.outerDiv.classList.add(this.outerClass)
     this.outerDiv.style.position = 'absolute';
     this.outerDiv.style.width = `${this.width}px`;
     this.outerDiv.style.height = `${this.height}px`;
-    this.outerDiv.style.left = `${this.x}px`;
-    this.outerDiv.style.top = `${this.y}px`;
+    this.outerDiv.style.left = `${x}px`;
+    this.outerDiv.style.top = `${y}px`;
 
     // Create inner div
     this.innerDiv = document.createElement('div');
@@ -65,7 +69,7 @@ export class Player {
 
     // put it on screen
     this.outerDiv.appendChild(this.innerDiv);
-    this.gameScreen.appendChild(this.outerDiv);
+    gameScreen.appendChild(this.outerDiv);
 
     // (testing) show player gun damage
     this.playerInfo = document.createElement('div')
@@ -75,7 +79,7 @@ export class Player {
 
     return this.outerDiv
   }
-  attack(){
+  attack() {
     console.log(`Player attack cause ${this.gunDamage}`)
     return this.gunDamage
   }

@@ -52,8 +52,6 @@ export class Enemy {
     this.innerDiv = null
     this.width = getEnemyData(enemyLevel).size;
     this.height = getEnemyData(enemyLevel).size;
-    this.x = gameScreen.offsetWidth; // deault x position
-    this.y = 70; // default y position
 
     // states
     this.name = getEnemyData(enemyLevel).name
@@ -77,15 +75,24 @@ export class Enemy {
     this.destroy = this.destroy.bind(this)
     this.attack = this.attack.bind(this)
   }
-  spawn() {
+  spawn(gameScreen) {
+    if (!gameScreen) {
+      console.error('Enemy spawn missing gameScreen param')
+      return
+    }
+    // this.x = gameScreen.offsetWidth; // deault x position
+    // this.y = 70; // default y position
+    const x = gameScreen.offsetWidth
+    const y = 70
+
     // Creat outter div
     this.outerDiv = document.createElement('div');
     this.outerDiv.classList.add(this.outerClass)
     this.outerDiv.style.position = 'absolute';
     this.outerDiv.style.width = `${this.width}px`;
     this.outerDiv.style.height = `${this.height}px`;
-    this.outerDiv.style.left = `${this.x}px`;
-    this.outerDiv.style.top = `${this.y}px`;
+    this.outerDiv.style.left = `${x}px`;
+    this.outerDiv.style.top = `${y}px`;
 
     // Create inner div
     this.innerDiv = document.createElement('div');
@@ -97,14 +104,14 @@ export class Enemy {
 
     // put it on screen
     this.outerDiv.appendChild(this.innerDiv);
-    this.gameScreen.appendChild(this.outerDiv);
+    gameScreen.appendChild(this.outerDiv);
 
 
     // (testing) show left x location
     this.enemyInfo = document.createElement('div')
     this.enemyInfo.classList.add('enemy-info')
     this.innerDiv.appendChild(this.enemyInfo)
-    this.enemyInfo.innerText = this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left;
+    this.enemyInfo.innerText = this.outerDiv.getBoundingClientRect().left - gameScreen.getBoundingClientRect().left;
 
     return this.outerDiv
   }
