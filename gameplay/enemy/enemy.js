@@ -71,7 +71,7 @@ export class Enemy {
 
     // movement
     this.isMoving = false;
-    this.defaultMovementDuration = 4
+    this.defaultMovementDuration = 3
     this.actualMovementDuratrion = this.defaultMovementDuration / this.speed
 
     // testing info
@@ -92,7 +92,9 @@ export class Enemy {
     // this.x = gameScreen.offsetWidth; // deault x position
     // this.y = 70; // default y position
     const x = gameScreen.offsetWidth
-    const y = 70
+    const yMax = 110 // away from top
+    const yMin = 40 // away from top
+    const y = Math.random() * (yMax - yMin) + yMin
 
     // Creat outter div
     this.outerDiv = document.createElement('div');
@@ -102,6 +104,7 @@ export class Enemy {
     this.outerDiv.style.height = `${this.height}px`;
     this.outerDiv.style.left = `${x}px`;
     this.outerDiv.style.top = `${y}px`;
+
 
     // Create inner div
     this.innerDiv = document.createElement('div');
@@ -118,7 +121,7 @@ export class Enemy {
     // (testing) show enemy info
     this.enemyInfo = document.createElement('div')
     this.enemyInfo.classList.add('enemy-info')
-    this.innerDiv.appendChild(this.enemyInfo)
+    this.outerDiv.appendChild(this.enemyInfo)
     this.updateInfo()
 
     return this.outerDiv
@@ -135,6 +138,8 @@ export class Enemy {
   takeDamage(amount) {
     console.log(`Enemy took damage: ${amount}`)
     this.hp -= amount;
+    this.innerDiv.classList.remove('hit')
+    this.innerDiv.classList.add('hit')
     // die
     if (this.hp <= 0) {
       this.destroy()
@@ -148,21 +153,23 @@ export class Enemy {
   destroy() {
     // removing 'move' will make the enemy get back to original location, so we need to keep this location
     this.outerDiv.classList.add('stop')
-
     this.innerDiv.classList.add(
       'animate__animated',
-      'animate__rotateOutUpRight',
+      'animate__slideOutRight',
       'animate__faster'
     );
+    this.innerDiv.style.animationDuration = '0.2s';
     void this.innerDiv.offsetWidth; // Trigger reflow
 
+    this.innerDiv.classList.remove('hit')
+    this.innerDiv.classList.add('hit')
 
     // is dead
     this.isAlive = false
     setTimeout(() => {
       console.log(`Enemy destroyed`)
       this.outerDiv.remove()
-    }, 1000)
+    }, 600)
   }
 }
 
