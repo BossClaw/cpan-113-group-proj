@@ -107,7 +107,7 @@ export class Game {
     }
 
     // check for collision
-    for (let i = 0; i < this.enemyArray.length - 1; i++) {
+    for (let i = this.enemyArray.length - 1; i >= 0; i--) {
       const enemy = this.enemyArray[i]
       const enemyX = enemy.div.getBoundingClientRect().left
       const baseX = this.gameScreen.getBoundingClientRect().left
@@ -118,7 +118,6 @@ export class Game {
         let distance = enemyX - fireWallX
         if (distance <= 0) {
           this.fireWallHp -= enemy.attack()
-          console.log('fireWall', this.fireWall)
           if (this.fireWallHp <= 0) {
             this.fireWall.remove()
             this.fireWall = null
@@ -145,11 +144,15 @@ export class Game {
     if (this.enemyArray.length === 0) {
       console.log('You win')
       this.isGame = false
+      alert('You win')
+      return
     }
 
     if (this.baseHp <= 0) {
       console.log('You lose')
       this.isGame = false
+      alert('You lose')
+      return
     }
 
     requestAnimationFrame(this.update);
