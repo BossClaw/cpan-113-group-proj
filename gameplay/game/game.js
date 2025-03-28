@@ -176,8 +176,8 @@ export class Game {
       const enemy = new Enemy(this.gameScreen, 1, this.levelEnemySpeed); // level 1
       enemy.spawn(this.gameScreen)
       this.enemyArray.push(enemy);
-      console.log('enemy spawn')
     }
+    console.log('EnemyArray:', this.enemyArray);
 
     // spawn fireWall
     const fireWall = document.createElement('div')
@@ -187,7 +187,21 @@ export class Game {
     this.gameScreen.appendChild(fireWall);
     this.firewall = fireWall
 
-    console.log('Initial Enemies:', this.enemyArray);
+    // set up game view buttons
+    const buttons = this.gameView.getButtons()
+    buttons.retry.addEventListener('click', () => {
+      window.location.reload()
+    })
+    buttons.quit.addEventListener('click', () => {
+      // to another page
+      alert('quit the game...')
+      window.location.reload()
+    })
+    buttons.leaderboardBtn.addEventListener('click', () => {
+      // to another page
+      alert('to leaderboard...')
+      window.location.reload()
+    })
   }
 
   // Main game loop

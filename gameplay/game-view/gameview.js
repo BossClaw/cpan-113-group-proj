@@ -10,10 +10,36 @@ export class GameView {
     this.gameScreenOverlay.classList.add('screen-overlay')
     this.gameScreen.appendChild(this.gameScreenOverlay)
 
+    // screen overlay 
+    this.title = document.createElement('p')
+    this.title.classList.add('screen-overlay-title')
+    this.gameScreenOverlay.appendChild(this.title)
+
+    // screen overly buttons
+    this.buttonsDiv = document.createElement('div')
+    this.buttonsDiv.classList.add('screen-overlay-buttons-div')
+    this.retryBtn = document.createElement('button')
+    this.quitBtn = document.createElement('button')
+    this.leaderboardBtn = document.createElement('button')
+    this.retryBtn.innerText = 'Retry'
+    this.quitBtn.innerText = 'Quit'
+    this.leaderboardBtn.innerText = 'Leaderboard'
+    this.buttonsDiv.appendChild(this.retryBtn)
+    this.buttonsDiv.appendChild(this.quitBtn)
+    this.buttonsDiv.appendChild(this.leaderboardBtn)
+    this.gameScreenOverlay.appendChild(this.buttonsDiv)
+
     // game stats
     this.gameStates = document.createElement('div')
     this.gameStates.classList.add('game-states')
     this.gameScreen.appendChild(this.gameStates)
+  }
+  getButtons() {
+    return {
+      retry: this.retryBtn,
+      quit: this.quitBtn,
+      leaderboardBtn: this.leaderboardBtn
+    }
   }
   hideScreenOverley() {
     this.gameScreenOverlay.style.display = 'none'
@@ -33,17 +59,17 @@ export class GameView {
   }
   displayWin() {
     this.gameScreenOverlay.classList.add('win')
-    this.gameScreenOverlay.innerText = 'YOU WIN'
+    this.title.innerText = 'YOU WIN'
     this.gameScreenOverlay.style.display = 'flex'
   }
   displayLose() {
     this.gameScreenOverlay.classList.add('lose')
-    this.gameScreenOverlay.innerText = 'YOU LOSE'
+    this.title.innerText = 'YOU LOSE'
     this.gameScreenOverlay.style.display = 'flex'
   }
   displayPauss() {
     this.gameScreenOverlay.classList.add('pauss')
-    this.gameScreenOverlay.innerText = 'Pauss'
+    this.title.innerText = 'Pauss'
     this.gameScreenOverlay.style.display = 'flex'
   }
 }
