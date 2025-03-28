@@ -9,9 +9,9 @@
   border: 1px solid red;
 }
 
-.gameover-div {
+.screen-overlay {
   position: absolute;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -22,17 +22,21 @@
   z-index: 10;
 }
 
-.gameover-div.win {
+.screen-overlay.win {
   color: rgb(255, 221, 71);
 }
 
-.gameover-div.lose {
+.screen-overlay.lose {
   color: rgb(255, 0, 43);
+}
+
+.screen-overlay.pauss {
+  color: white;
 }
 
 .game-states {
   position: absolute;
-  display: flex;
+  display: none;
   flex-direction: column;
   top: 110px;
   left: 5px;

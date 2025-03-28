@@ -123,7 +123,14 @@ export class Enemy {
     this.enemyInfo.innerText = `HP: ${this.hp}`
   }
   move() {
+    // only call 'move' once at the start
     this.outerDiv.classList.add('move')
+  }
+  pauss() {
+    this.outerDiv.classList.add('stop')
+  }
+  resume() {
+    this.outerDiv.classList.remove('stop')
   }
   getLocationX() {
     return this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left

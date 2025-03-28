@@ -43,6 +43,7 @@ export class Game {
     this.isGame = false
     this.lastTimestamp = 0;
     this.spawnTimer = 0;
+    this.animatedFrameId = null
 
     // player related
     this.playerObject = playerObject
@@ -75,6 +76,32 @@ export class Game {
   }
   pauss() {
     // pasuss the game
+    if (!this.isGame) return
+    this.isGame = false
+
+    // stop enemy
+    this.enemyArray.forEach(e => {
+      e.pauss()
+    })
+    // stop frame
+    cancelAnimationFrame(this.animatedFrameId)
+
+    // show pauss screen
+    this.gameView.displayPauss()
+  }
+  resume() {
+    if (this.isGame) return
+    this.isGame = true
+
+    // move enemy
+    this.enemyArray.forEach(e => {
+      e.resume()
+    })
+    // call next frame
+    this.animatedFrameId = requestAnimationFrame(this.update);
+
+    // hide pasuss screen
+    this.gameView.hideScreenOverley()
   }
   onPlayerAttack(isHit = true) {
     if (!this.isGame) return
@@ -225,7 +252,7 @@ export class Game {
     })
 
     // next frame
-    requestAnimationFrame(this.update);
+    this.animatedFrameId = requestAnimationFrame(this.update);
   }
   getGameStats() {
     return {
@@ -236,7 +263,7 @@ export class Game {
     }
   }
   updateGameStats() {
-    this.gameView.displayGameStats(this.getGameStats())
+    this.gameView.updateGameStats(this.getGameStats())
   }
   checkEnemyLeft() {
     {
@@ -279,12 +306,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const game = new Game(gameScreen, 10, 'normal')
   console.log('game', game)
 
-  // start game
   const startBtn = document.querySelector('#start')
+  const paussBtn = document.querySelector('#pauss')
 
+  // start game
   startBtn.addEventListener('click', () => {
     game.start()
     startBtn.style.display = 'none'
+    paussBtn.style.display = 'block'
+  })
+
+  // pauss game
+  paussBtn.addEventListener('click', () => {
+    if (game.isGame) {
+      game.pauss()
+      paussBtn.innerText = 'Resume'
+    } else {
+      game.resume()
+      paussBtn.innerText = 'Pauss'
+    }
   })
 
   // (testing) trigger player attack

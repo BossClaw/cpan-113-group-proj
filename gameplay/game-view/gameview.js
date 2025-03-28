@@ -4,32 +4,46 @@
 export class GameView {
   constructor(gameScreen) {
     this.gameScreen = gameScreen
+
+    // screen overlay (win,lose,pauss)
+    this.gameScreenOverlay = document.createElement('div')
+    this.gameScreenOverlay.classList.add('screen-overlay')
+    this.gameScreen.appendChild(this.gameScreenOverlay)
+
+    // game stats
+    this.gameStates = document.createElement('div')
+    this.gameStates.classList.add('game-states')
+    this.gameScreen.appendChild(this.gameStates)
   }
-  displayGameStats(gameStateObject) {
-    const old = document.querySelector('.game-states')
-    if (old) {
-      old.remove()
-    }
-    const states = document.createElement('div')
-    states.classList.add('game-states')
+  hideScreenOverley() {
+    this.gameScreenOverlay.style.display = 'none'
+  }
+  hideGameStats() {
+    this.gameStates.style.display = 'none'
+  }
+  updateGameStats(gameStateObject) {
+    // clear, and update stats
+    this.gameStates.style.display = 'flex'
+    this.gameStates.innerHTML = ''
     for (const key in gameStateObject) {
       const p = document.createElement('p')
       p.innerText = `${key} : ${gameStateObject[key]}`
-      states.appendChild(p)
+      this.gameStates.appendChild(p)
     }
-    this.gameScreen.appendChild(states)
   }
   displayWin() {
-    const gameOverDive = document.createElement('div')
-    gameOverDive.classList.add('gameover-div', 'win')
-    gameOverDive.innerText = 'YOU WIN'
-    this.gameScreen.appendChild(gameOverDive)
-
+    this.gameScreenOverlay.classList.add('win')
+    this.gameScreenOverlay.innerText = 'YOU WIN'
+    this.gameScreenOverlay.style.display = 'flex'
   }
   displayLose() {
-    const gameOverDive = document.createElement('div')
-    gameOverDive.classList.add('gameover-div', 'lose')
-    gameOverDive.innerText = 'YOU LOSE'
-    this.gameScreen.appendChild(gameOverDive)
+    this.gameScreenOverlay.classList.add('lose')
+    this.gameScreenOverlay.innerText = 'YOU LOSE'
+    this.gameScreenOverlay.style.display = 'flex'
+  }
+  displayPauss() {
+    this.gameScreenOverlay.classList.add('pauss')
+    this.gameScreenOverlay.innerText = 'Pauss'
+    this.gameScreenOverlay.style.display = 'flex'
   }
 }
