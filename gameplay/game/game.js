@@ -13,14 +13,23 @@ function getLevelState(level = 1) {
   // how many level to incrase
   const levelToIncraseCount = 2
   const levelToIncraseSpeed = 1
+  const levelToDecraseSpawnTime = 2
 
   // how much to incrase
   const countIncrase = 2
   const speedIncrase = 0.05
+  const spawnTimeDecrase = 100
+  const minSpawnTime = 200
 
   const enemyCount = baseEnemyCount + Math.floor((level - 1) / levelToIncraseCount) * countIncrase
   const ememySpeed = baseEnemySpeed + Math.floor((level - 1) / levelToIncraseSpeed) * speedIncrase
-  const ememySpawnTime = baseEnmeySpawnTime // just 3 second for now
+  const spawnTime = baseEnmeySpawnTime - Math.floor((level - 1) / levelToDecraseSpawnTime) * spawnTimeDecrase
+  let ememySpawnTime
+  if (spawnTime < minSpawnTime) {
+    ememySpawnTime = minSpawnTime
+  } else {
+    ememySpawnTime = spawnTime
+  }
 
   return {
     enemyCount, ememySpeed, ememySpawnTime
@@ -364,7 +373,8 @@ document.addEventListener('DOMContentLoaded', () => {
     paussBtn.style.display = 'block'
   })
 
-  // pauss game
+
+  // pauss / resume game
   paussBtn.addEventListener('click', () => {
     if (game.isPaused) {
       game.resume();  // If paused, resume
