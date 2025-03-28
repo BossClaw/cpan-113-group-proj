@@ -41,6 +41,7 @@ export class Game {
 
     // game status
     this.isGame = false
+    this.isPaused = false
     this.lastTimestamp = 0;
     this.spawnTimer = 0;
     this.animatedFrameId = null
@@ -75,36 +76,67 @@ export class Game {
     // reset the game and go to next game
   }
   pauss() {
-    // pasuss the game
-    if (!this.isGame) return
-    this.isGame = false
+    if (!this.isGame || this.isPaused) return;
 
-    // stop enemy
+    this.isPaused = true;
+
+    // Cancel the current animation frame
+    cancelAnimationFrame(this.animatedFrameId);
+
+    // Pause all enemies
     this.enemyArray.forEach(e => {
-      e.pauss()
-    })
-    // stop frame
-    cancelAnimationFrame(this.animatedFrameId)
+      if (e.isAlive) e.pauss();
+    });
 
-    // show pauss screen
-    this.gameView.displayPauss()
+    // Show pause screen
+    this.gameView.displayPauss();
   }
   resume() {
-    if (this.isGame) return
-    this.isGame = true
+    if (!this.isGame || !this.isPaused) return;
 
-    // move enemy
+    this.isPaused = false;
+
+    // Resume all enemies
     this.enemyArray.forEach(e => {
-      e.resume()
-    })
-    // call next frame
-    this.animatedFrameId = requestAnimationFrame(this.update);
+      if (e.isAlive) e.resume();
+    });
 
-    // hide pasuss screen
-    this.gameView.hideScreenOverley()
+    // Hide pause screen
+    this.gameView.hideScreenOverley();
+
+    //  Restart the game loop
+    this.animationId = requestAnimationFrame(this.update);
+  }
+  onFirewallAttacked(damage) {
+    this.firewallHP -= damage
+    this.firewall.classList.remove('player-attack');
+    this.firewall.classList.remove('on-hit');
+    // force reflow
+    void this.firewall.offsetWidth;
+    this.firewall.classList.add('on-hit');
+
+    // check is firewall destroyed
+    // give a little time for possible animaiton 
+    if (this.firewallHP <= 0) {
+      const temp = this.firewall
+      this.firewall = null
+      setTimeout(() => {
+        temp.remove()
+      }, 500)
+    }
+
+  }
+  onBasedAttacked(damage) {
+    this.baseHP -= damage
+    this.gameScreen.classList.remove('player-attack')
+    this.gameScreen.classList.remove('on-hit');
+    // force reflow
+    void this.gameScreen.offsetWidth;
+    this.gameScreen.classList.add('on-hit');
   }
   onPlayerAttack(isHit = true) {
     if (!this.isGame) return
+    if (this.isPaused) return
     if (!isHit) {
       // missing the shot
       this.player.missed()
@@ -124,6 +156,13 @@ export class Game {
     if (this.enemyArray.length === 0) return
     let distance = Infinity
     let target = null
+
+    // shake camera
+    this.gameScreen.classList.remove('on-hit');
+    this.gameScreen.classList.remove('player-attack');
+    // force reflow
+    void this.gameScreen.offsetWidth;
+    this.gameScreen.classList.add('player-attack');
 
     // Find the closest enemny
     this.enemyArray.forEach(enemy => {
@@ -207,7 +246,7 @@ export class Game {
   // Main game loop
   update(timestamp) {
     // check is game running
-    if (!this.isGame) return
+    if (!this.isGame || this.isPaused) return;
 
     // check is game over
     this.checkGameOver()
@@ -245,18 +284,13 @@ export class Game {
       if (this.firewall) {
         const fireWallDistance = enemyLocationX - (this.firewall.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left)
         if (fireWallDistance <= 0) {
-          this.firewallHP -= enemy.attack()
-          if (this.firewallHP <= 0) {
-            this.firewall.remove()
-            this.firewall = null
-          }
+          this.onFirewallAttacked(enemy.attack())
         }
         continue
       }
       // enemy reaching base
       if (enemyLocationX <= 0) {
-        this.baseHP -= enemy.attack()
-        console.log('baseHP', this.baseHP)
+        this.onBasedAttacked(enemy.attack())
       }
     }
 
@@ -279,7 +313,7 @@ export class Game {
   updateGameStats() {
     this.gameView.updateGameStats(this.getGameStats())
   }
-  checkEnemyLeft() {
+  checkEnemyLeftCount() {
     {
       let count = 0;
       this.enemyArray.forEach(e => {
@@ -289,7 +323,7 @@ export class Game {
     }
   }
   checkGameOver() {
-    this.checkEnemyLeft()
+    this.checkEnemyLeftCount()
     if (this.enemyLeft === 0) {
       console.log('You win')
       this.isGame = false
@@ -332,14 +366,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // pauss game
   paussBtn.addEventListener('click', () => {
-    if (game.isGame) {
-      game.pauss()
-      paussBtn.innerText = 'Resume'
+    if (game.isPaused) {
+      game.resume();  // If paused, resume
+      paussBtn.innerText = 'Pause';
     } else {
-      game.resume()
-      paussBtn.innerText = 'Pauss'
+      game.pauss();   // If not paused, pause
+      paussBtn.innerText = 'Resume';
     }
-  })
+  });
 
   // (testing) trigger player attack
   // using setTimout to avoid it becoming called right away, it cause onPlayerAttack to already auto trigger on game start
