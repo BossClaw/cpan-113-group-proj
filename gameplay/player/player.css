@@ -1,0 +1,43 @@
+.player {
+  position: absolute;
+  top: 100px;
+  right: 30; /* override with js */
+  width: 32px; /* override with js */
+  height: 32px; /* override with js */
+  background-color: rgb(255, 255, 255); /* override with js */
+  z-index: 4;
+}
+
+.player-sprit {
+  width: 100%;
+  height: 100%;
+}
+
+.player-info {
+  color: white;
+  font-size: 0.5rem;
+}
+
+.missed-div {
+  position: relative;
+  top: -40px;
+  width: 50px;
+  font-size: 0.5rem;
+}
+
+.missed {
+  position: absolute;
+  color: white;
+  animation: missed 0.7s forwards;
+}
+
+@keyframes missed {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-15px);
+    opacity: 0;
+  }
+}

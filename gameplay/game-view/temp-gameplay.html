@@ -8,14 +8,29 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
     <link rel="stylesheet" href="gameview.css" />
+    <link rel="stylesheet" href="../player/player.css" />
     <link rel="stylesheet" href="../enemy/enemy.css" />
     <link rel="stylesheet" href="../game/game.css" />
     <script type="module" src="/gameplay/game/game.js"></script>
-
     <title>Temp-gameplay</title>
   </head>
   <body>
     <!-- this is a temp file for testing, it will not be use for the final project -->
     <div id="game_screen"></div>
+    <div
+      style="
+        margin-top: 10%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+      "
+    >
+      <button id="start" style="width: 100px; height: 50px">Start</button>
+      <button id="pause" style="display: none; width: 100px; height: 50px">
+        Pause
+      </button>
+    </div>
   </body>
 </html>

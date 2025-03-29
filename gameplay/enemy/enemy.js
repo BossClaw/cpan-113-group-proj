@@ -3,7 +3,7 @@ const enemyList = [
     name: 'error',
     hp: 1,
     damage: 1,
-    speed: 1.5,
+    speed: 0.7,
     color: 'red',
     size: '16',
   },
@@ -40,10 +40,15 @@ function getEnemyData(level) {
   return enemyList[level]
 }
 
+
 // gameScreen is the #game_screen div 
 // speed is calculated by game's difficult, game's level and enemy's own speed
 export class Enemy {
+  static nextId = 1
   constructor(gameScreen, enemyLevel = 1, gameSpeed = 1) {
+    // id
+    this.id = Enemy.nextId++
+
     // location/styles
     this.gameScreen = gameScreen;
     this.outerClass = 'enemy'
@@ -52,10 +57,9 @@ export class Enemy {
     this.innerDiv = null
     this.width = getEnemyData(enemyLevel).size;
     this.height = getEnemyData(enemyLevel).size;
-    this.x = gameScreen.offsetWidth; // deault x position
-    this.y = 70; // default y position
 
     // states
+    this.isAlive = true
     this.name = getEnemyData(enemyLevel).name
     this.hp = getEnemyData(enemyLevel).hp
     this.speed = getEnemyData(enemyLevel).speed * gameSpeed
@@ -64,7 +68,7 @@ export class Enemy {
 
     // movement
     this.isMoving = false;
-    this.defaultMovementDuration = 5
+    this.defaultMovementDuration = 3
     this.actualMovementDuratrion = this.defaultMovementDuration / this.speed
 
     // testing info
@@ -78,20 +82,26 @@ export class Enemy {
     this.attack = this.attack.bind(this)
   }
   spawn() {
+    // this.x = gameScreen.offsetWidth; // deault x position
+    // this.y = 70; // default y position
+    const x = this.gameScreen.offsetWidth
+    const yMax = 110 // away from top
+    const yMin = 40 // away from top
+    const y = Math.random() * (yMax - yMin) + yMin
+
     // Creat outter div
     this.outerDiv = document.createElement('div');
     this.outerDiv.classList.add(this.outerClass)
     this.outerDiv.style.position = 'absolute';
     this.outerDiv.style.width = `${this.width}px`;
     this.outerDiv.style.height = `${this.height}px`;
-    this.outerDiv.style.left = `${this.x}px`;
-    this.outerDiv.style.top = `${this.y}px`;
+    this.outerDiv.style.left = `${x}px`;
+    this.outerDiv.style.top = `${y}px`;
+
 
     // Create inner div
     this.innerDiv = document.createElement('div');
     this.innerDiv.classList.add(this.innerClass);
-    this.innerDiv.style.width = '100%';
-    this.innerDiv.style.height = '100%';
     this.innerDiv.style.backgroundColor = this.innerColor;
 
     // css animaiton speed
@@ -101,24 +111,35 @@ export class Enemy {
     this.outerDiv.appendChild(this.innerDiv);
     this.gameScreen.appendChild(this.outerDiv);
 
-
-    // show left x
+    // (testing) show enemy info
     this.enemyInfo = document.createElement('div')
-    this.enemyInfo.classList.add('enemyInfo')
-    this.innerDiv.appendChild(this.enemyInfo)
-    this.enemyInfo.innerText = this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left;
+    this.enemyInfo.classList.add('enemy-info')
+    this.outerDiv.appendChild(this.enemyInfo)
+    this.updateInfo()
 
     return this.outerDiv
   }
   updateInfo() {
-    this.enemyInfo.innerText = this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left;
+    this.enemyInfo.innerText = `HP: ${this.hp}`
   }
   move() {
+    // only call 'move' once at the start
     this.outerDiv.classList.add('move')
+  }
+  pauss() {
+    this.outerDiv.classList.add('stop')
+  }
+  resume() {
+    this.outerDiv.classList.remove('stop')
+  }
+  getLocationX() {
+    return this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left
   }
   takeDamage(amount) {
     console.log(`Enemy took damage: ${amount}`)
     this.hp -= amount;
+    this.innerDiv.classList.remove('hit')
+    this.innerDiv.classList.add('hit')
     // die
     if (this.hp <= 0) {
       this.destroy()
@@ -130,11 +151,25 @@ export class Enemy {
     return this.damage
   }
   destroy() {
-    console.log(`Enemy destroyed`)
-    this.outerDiv.remove()
+    // removing 'move' will make the enemy get back to original location, so we need to keep this location
+    this.outerDiv.classList.add('stop')
+    this.innerDiv.classList.add(
+      'animate__animated',
+      'animate__slideOutRight',
+      'animate__faster'
+    );
+    this.innerDiv.style.animationDuration = '0.2s';
+    void this.innerDiv.offsetWidth; // Trigger reflow
+
+    this.innerDiv.classList.remove('hit')
+    this.innerDiv.classList.add('hit')
+
+    // is dead
+    this.isAlive = false
+    setTimeout(() => {
+      console.log(`Enemy destroyed`)
+      this.outerDiv.remove()
+    }, 600)
   }
 }
-
-
-
 

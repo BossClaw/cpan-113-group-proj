@@ -1,21 +1,48 @@
+/* outer div */
 .enemy {
   position: absolute;
   top: 100px;
-  right: -100; /* override with js */
   width: 16px; /* override with js */
   height: 16px; /* override with js */
-  background-color: red; /* override with js */
   animation-timing-function: linear;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-duration: 10s; /* override with js */
+  border: 1px solid red;
+  z-index: 5;
+}
+
+/* inner div */
+.enemy-sprit {
+  width: 100%;
+  height: 100%;
 }
 
 .enemy.move {
   animation-name: moveLeft;
 }
 
-.enemyInfo {
+
+.hit::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0;
+  animation: strong-flash 0.1s infinite both;
+}
+
+.enemy.move.stop {
+  animation-play-state: paused;
+}
+
+.enemy-info {
+  position: relative;
+  top: -30px;
+  width: 50px;
   color: white;
   font-size: 0.5rem;
 }
@@ -26,5 +53,16 @@
   }
   to {
     transform: translateX(-460px); /* 360px screen + max 100px width buffer */
+  }
+}
+
+@keyframes strong-flash {
+  0% {
+    opacity: 0;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+  100% {
+    opacity: 0.9;
+    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7);
   }
 }
