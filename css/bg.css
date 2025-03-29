@@ -1,0 +1,50 @@
+:root {
+    --scroll-offset: 0;
+
+    --scroll-bg: -1px;
+    --scroll-mg: -1px;
+    --scroll-fg: -1px;
+
+    --pad_gap: 16px;
+
+    --section_height: 680px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: url('../img/bg/bg_SKY.png') repeat-x fixed center / auto 100vh;
+}
+
+#parallax_container {
+    background-image: url('../img/bg/bg_FG.png'), url('../img/bg/bg_MG.png'), url('../img/bg/bg_BG.png');
+    background-position: left var(--scroll-fg), left var(--scroll-mg), left var(--scroll-bg);
+    background-repeat: repeat-x, repeat-x, repeat-x;
+    background-size: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.build_top {
+    background-image: url("/img/bg/bg_BUILD_TOP.png");
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: var(--section_height);
+}
+
+.build_mid {
+    background-image: url("/img/bg/bg_BUILD_MID.png");
+    background-position: right bottom;
+    background-repeat: repeat-y;
+    background-size: 100%;
+    min-height: var(--section_height);
+}
+
+.build_bot {
+    background-image: url("/img/bg/bg_BUILD_BOT.png");
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: var(--section_height);
+}
