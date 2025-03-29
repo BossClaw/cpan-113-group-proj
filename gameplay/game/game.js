@@ -2,6 +2,8 @@ import { Enemy } from "../enemy/enemy.js";
 import { Player } from "../player/player.js";
 import { GameView } from "../game-view/gameview.js";
 
+const wordsJsonPath = '../words.json'
+
 // Get level state
 function getLevelState(level = 1) {
   if (level < 1) level = 1
@@ -44,7 +46,7 @@ const difficultSpeedModifer = {
 }
 
 export class Game {
-  constructor(gameScreen, level = 1, difficulty = 'easy', playerObject = null) {
+  constructor(gameScreen, level = 1, difficulty = 'easy', language = 'JavaScript', playerObject = null) {
     // #game_screen div
     this.gameScreen = gameScreen
 
@@ -74,6 +76,11 @@ export class Game {
     // gameView
     this.gameView = new GameView(this.gameScreen)
 
+    // keyboard related
+    this.language = language
+    this.languageList = []
+    this.nextKey = 'a'
+
     // bind methods just in case
     this.start = this.start.bind(this)
     this.update = this.update.bind(this)
@@ -84,7 +91,7 @@ export class Game {
   nextLevel() {
     // reset the game and go to next game
   }
-  pauss() {
+  pause() {
     if (!this.isGame || this.isPaused) return;
 
     this.isPaused = true;
@@ -94,11 +101,11 @@ export class Game {
 
     // Pause all enemies
     this.enemyArray.forEach(e => {
-      if (e.isAlive) e.pauss();
+      if (e.isAlive) e.pause();
     });
 
     // Show pause screen
-    this.gameView.displayPauss();
+    this.gameView.displayPause();
   }
   resume() {
     if (!this.isGame || !this.isPaused) return;
@@ -115,6 +122,36 @@ export class Game {
 
     //  Restart the game loop
     this.animationId = requestAnimationFrame(this.update);
+  }
+  async getLanguageList() {
+    try {
+      const response = await fetch(wordsJsonPath)
+      const json = await response.json()
+      const words = json.words
+
+      let lang = this.language.charAt(0).toUpperCase() + this.language.slice(1).toLowerCase()
+
+      console.log('words', words)
+      console.log('lang', lang)
+
+      // try to get the language
+      const languageList = words[lang]
+      if (!languageList) {
+        this.languageList = words.JavaScript
+      } else {
+        this.languageList = languageList
+      }
+      console.log('languageList', languageList)
+
+    } catch (err) {
+      console.error('Fail to fetch words.json')
+    }
+  }
+  setNextKey(key) {
+    this.nextKey = key
+  }
+  getNextKey(key) {
+    return this.nextKey
   }
   onFirewallAttacked(damage) {
     this.firewallHP -= damage
@@ -205,7 +242,8 @@ export class Game {
     this.points++
   }
   // Setup enemies at the beginning
-  setup() {
+  async setup() {
+
     // update game states display
     this.updateGameStats()
 
@@ -348,40 +386,48 @@ export class Game {
     }
   }
   start() {
-    this.setup();
+    this.setup()
     this.isGame = true
     requestAnimationFrame(this.update);
   }
 }
 
-// Testing
+// -------------- Steps --------------
+// 1. create game instance
+// 2. game.getLanguageList()
+// 3. game.start() [player interaction]
+// -----------------------------------
+
+// Testing ---------------------------
 document.addEventListener('DOMContentLoaded', () => {
   // get #game_screen
   const gameScreen = document.querySelector('#game_screen')
 
   // create game
-  const game = new Game(gameScreen, 10, 'normal')
+  const game = new Game(gameScreen, 10, 'normal', 'python')
+  // set up the game (get words)
+  game.getLanguageList()
   console.log('game', game)
 
   const startBtn = document.querySelector('#start')
-  const paussBtn = document.querySelector('#pauss')
+  const pauseBtn = document.querySelector('#pause')
 
   // start game
   startBtn.addEventListener('click', () => {
     game.start()
     startBtn.style.display = 'none'
-    paussBtn.style.display = 'block'
+    pauseBtn.style.display = 'block'
   })
 
 
   // pauss / resume game
-  paussBtn.addEventListener('click', () => {
+  pauseBtn.addEventListener('click', () => {
     if (game.isPaused) {
       game.resume();  // If paused, resume
-      paussBtn.innerText = 'Pause';
+      pauseBtn.innerText = 'pause';
     } else {
-      game.pauss();   // If not paused, pause
-      paussBtn.innerText = 'Resume';
+      game.pause();   // If not paused, pause
+      pauseBtn.innerText = 'Resume';
     }
   });
 

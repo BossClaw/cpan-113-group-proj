@@ -5,7 +5,7 @@ export class GameView {
   constructor(gameScreen) {
     this.gameScreen = gameScreen
 
-    // screen overlay (win,lose,pauss)
+    // screen overlay (win,lose,pause)
     this.gameScreenOverlay = document.createElement('div')
     this.gameScreenOverlay.classList.add('screen-overlay')
     this.gameScreen.appendChild(this.gameScreenOverlay)
@@ -67,9 +67,9 @@ export class GameView {
     this.title.innerText = 'YOU LOSE'
     this.gameScreenOverlay.style.display = 'flex'
   }
-  displayPauss() {
-    this.gameScreenOverlay.classList.add('pauss')
-    this.title.innerText = 'Pauss'
+  displayPause() {
+    this.gameScreenOverlay.classList.add('pause')
+    this.title.innerText = 'Pause'
     this.gameScreenOverlay.style.display = 'flex'
   }
 }
