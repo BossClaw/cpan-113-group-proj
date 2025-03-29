@@ -8,8 +8,7 @@ const startGame = document.getElementById("temp-start");
 localStorage.clear()
 
 let pickedLanguages = [];
-console.log(languageButtons);
-console.log(typeof languageButtons);
+
 Array.from(languageButtons).forEach((button) => {
   button.addEventListener("click", function (event) {
     console.log(event.target);
@@ -38,7 +37,7 @@ function toggleAddToList(button) {
 }
 
 startGame.addEventListener("click", function () {
-  localStorage.setItem("pickedLanguages", pickedLanguages);
+  localStorage.setItem("pickedLanguages", JSON.stringify(pickedLanguages));
   // TEMPORARY REDIRECT
   window.location.href = "http://127.0.0.1:5502/gameplay.html";
 });

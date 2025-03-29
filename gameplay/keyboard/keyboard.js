@@ -1,6 +1,5 @@
 document.addEventListener("keydown", event => {
     event.preventDefault()
-    console.log(event)
     document.getElementById(event.code).classList.add("active")
 })
 
