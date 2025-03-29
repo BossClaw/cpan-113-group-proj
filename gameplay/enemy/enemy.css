@@ -1,0 +1,30 @@
+.enemy {
+  position: absolute;
+  top: 100px;
+  right: -100; /* override with js */
+  width: 16px; /* override with js */
+  height: 16px; /* override with js */
+  background-color: red; /* override with js */
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-duration: 10s; /* override with js */
+}
+
+.enemy.move {
+  animation-name: moveLeft;
+}
+
+.enemyInfo {
+  color: white;
+  font-size: 0.5rem;
+}
+
+@keyframes moveLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-460px); /* 360px screen + max 100px width buffer */
+  }
+}
