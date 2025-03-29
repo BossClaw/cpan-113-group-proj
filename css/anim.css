@@ -1,0 +1,59 @@
+
+/* ANIMS */
+/* CTA PULSE */
+@keyframes pulse {
+    0% {
+      color: var(--bright);
+    }
+  
+    20% {
+      color: var(--dark);
+    }
+  
+    40% {
+      color: var(--mid);
+    }
+  
+    60% {
+      color: var(--dark);
+    }
+  
+    100% {
+      color: var(--bright);
+    }
+  }
+  
+  .cta_pulse {      
+    animation: pulse 2.1s infinite;
+  }
+  
+  
+  @keyframes spinCursor {
+    0% {
+      content: "/";
+    }
+  
+    25% {
+      content: "-";
+    }
+  
+    50% {
+      content: "\\";
+    }
+  
+    75% {
+      content: "|";
+    }
+  
+    100% {
+      content: "/";
+    }
+  }
+  
+  .cursor::before {
+    content: "|";
+    display: inline-block;
+    font-family: monospace;
+    animation: spinCursor 0.5s steps(1) infinite;
+  }
+  
