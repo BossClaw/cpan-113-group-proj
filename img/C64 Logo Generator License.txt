@@ -1,0 +1,13 @@
+C64 Charset Logo Generator
+Idea and code by Chris 'Cupid' Heilmann (@codepo8) - ported from the original tool written in PHP using gd
+
+Charset ripping and credit research by Dejan 'Nucleus' Petronijevic
+
+Charset cleanup and transparency adding by Daniel 'Deekay' Kottmair
+
+https://codepo8.github.io/logo-o-matic/#info
+
+
+This is open source and you can download and contribute on GitHub.
+
+https://github.com/codepo8/logo-o-matic/
