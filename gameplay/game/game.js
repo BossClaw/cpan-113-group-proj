@@ -39,7 +39,7 @@ function getLevelState(level = 1) {
 }
 
 const difficultSpeedModifer = {
-  'easy': 0.5,
+  'easy': 0.1,
   'normal': 1,
   'hard': 2,
   'hardcore': 3,
@@ -124,28 +124,28 @@ export class Game {
     this.animationId = requestAnimationFrame(this.update);
   }
   async getLanguageList() {
-    try {
-      const response = await fetch(wordsJsonPath)
-      const json = await response.json()
-      const words = json.words
+    // try {
+    //   const response = await fetch(wordsJsonPath)
+    //   const json = await response.json()
+    //   const words = json.words
 
-      let lang = this.language.charAt(0).toUpperCase() + this.language.slice(1).toLowerCase()
+    //   let lang = this.language.charAt(0).toUpperCase() + this.language.slice(1).toLowerCase()
 
-      console.log('words', words)
-      console.log('lang', lang)
+    //   console.log('words', words)
+    //   console.log('lang', lang)
 
-      // try to get the language
-      const languageList = words[lang]
-      if (!languageList) {
-        this.languageList = words.JavaScript
-      } else {
-        this.languageList = languageList
-      }
-      console.log('languageList', languageList)
+    //   // try to get the language
+    //   const languageList = words[lang]
+    //   if (!languageList) {
+    //     this.languageList = words.JavaScript
+    //   } else {
+    //     this.languageList = languageList
+    //   }
+    //   console.log('languageList', languageList)
 
-    } catch (err) {
-      console.error('Fail to fetch words.json')
-    }
+    // } catch (err) {
+    //   console.error('Fail to fetch words.json')
+    // }
   }
   setNextKey(key) {
     this.nextKey = key
@@ -189,7 +189,6 @@ export class Game {
       // spawn new enemy (level: 0 the "error") 
       const enemy = new Enemy(this.gameScreen, 0, this.levelEnemySpeed)
       enemy.spawn()
-      console.log("new enemy:", enemy)
       this.enemyArray.push(enemy)
       this.enemyCount++
       this.enemyLeft++
@@ -263,7 +262,6 @@ export class Game {
       enemy.spawn(this.gameScreen)
       this.enemyArray.push(enemy);
     }
-    console.log('EnemyArray:', this.enemyArray);
 
     // spawn fireWall
     const fireWall = document.createElement('div')
@@ -372,14 +370,12 @@ export class Game {
   checkGameOver() {
     this.checkEnemyLeftCount()
     if (this.enemyLeft === 0) {
-      console.log('You win')
       this.isGame = false
       this.gameView.displayWin()
       return
     }
 
     if (this.baseHP <= 0) {
-      console.log('You lose')
       this.isGame = false
       this.gameView.displayLose()
       return
@@ -399,58 +395,56 @@ export class Game {
 // -----------------------------------
 
 // Testing ---------------------------
-document.addEventListener('DOMContentLoaded', () => {
-  // get #game_screen
-  const gameScreen = document.querySelector('#game_screen')
+// document.addEventListener('DOMContentLoaded', () => {
+//   // get #game_screen
+//   const gameScreen = document.querySelector('#game_screen')
 
-  // create game
-  const game = new Game(gameScreen, 10, 'normal', 'python')
-  // set up the game (get words)
-  game.getLanguageList()
-  console.log('game', game)
+//   // create game
+//   const game = new Game(gameScreen, 10, 'normal', 'python')
+//   // set up the game (get words)
+//   console.log('game', game)
 
-  const startBtn = document.querySelector('#start')
-  const pauseBtn = document.querySelector('#pause')
+//   const startBtn = document.querySelector('#start')
+//   const pauseBtn = document.querySelector('#pause')
 
-  // start game
-  startBtn.addEventListener('click', () => {
-    game.start()
-    startBtn.style.display = 'none'
-    pauseBtn.style.display = 'block'
-  })
+//   // start game
+//   startBtn.addEventListener('click', () => {
+//     game.start()
+//     startBtn.style.display = 'none'
+//     pauseBtn.style.display = 'block'
+//   })
 
 
-  // pauss / resume game
-  pauseBtn.addEventListener('click', () => {
-    if (game.isPaused) {
-      game.resume();  // If paused, resume
-      pauseBtn.innerText = 'pause';
-    } else {
-      game.pause();   // If not paused, pause
-      pauseBtn.innerText = 'Resume';
-    }
-  });
+//   // pauss / resume game
+//   pauseBtn.addEventListener('click', () => {
+//     if (game.isPaused) {
+//       game.resume();  // If paused, resume
+//       pauseBtn.innerText = 'pause';
+//     } else {
+//       game.pause();   // If not paused, pause
+//       pauseBtn.innerText = 'Resume';
+//     }
+//   });
 
-  // (testing) trigger player attack
-  // using setTimout to avoid it becoming called right away, it cause onPlayerAttack to already auto trigger on game start
-  setTimeout(() => {
-    // Hit "A" to attack
-    // Hit anything to missed
-    document.addEventListener('keyup', (e) => {
+//   // (testing) trigger player attack
+//   // using setTimout to avoid it becoming called right away, it cause onPlayerAttack to already auto trigger on game start
+//   setTimeout(() => {
+//     // Hit "A" to attack
+//     // Hit anything to missed
+//     document.addEventListener('keyup', (e) => {
 
-      console.log('Key released:', e.key);
-      if ((e.metaKey && e.key === 'r') || (e.ctrlKey && e.key === 'r')) return;
-      if (e.key === null) return
-      // correct
-      if (e.key === 'a') {
-        game.onPlayerAttack()
+//       if ((e.metaKey && e.key === 'r') || (e.ctrlKey && e.key === 'r')) return;
+//       if (e.key === null) return
+//       // correct
+//       if (e.key === 'a') {
+//         game.onPlayerAttack()
 
-      } else {
-        game.onPlayerAttack(false)
-      }
-    })
-  }, 500)
-})
+//       } else {
+//         game.onPlayerAttack(false)
+//       }
+//     })
+//   }, 500)
+// })
 
 
 
