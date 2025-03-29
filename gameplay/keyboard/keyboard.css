@@ -36,3 +36,12 @@ width: 80px;
 .active{
     scale: 0.85;
   }
+
+
+/* MOVE KEYBOARD TEMP */
+.keyboard{
+  position: fixed;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, -20%);
+}
