@@ -136,7 +136,6 @@ export class Enemy {
     return this.outerDiv.getBoundingClientRect().left - this.gameScreen.getBoundingClientRect().left
   }
   takeDamage(amount) {
-    console.log(`Enemy took damage: ${amount}`)
     this.hp -= amount;
     this.innerDiv.classList.remove('hit')
     this.innerDiv.classList.add('hit')
@@ -146,7 +145,6 @@ export class Enemy {
     }
   }
   attack() {
-    console.log(`Enemy attack casuse ${this.damage} damage`)
     this.destroy()
     return this.damage
   }
@@ -167,7 +165,6 @@ export class Enemy {
     // is dead
     this.isAlive = false
     setTimeout(() => {
-      console.log(`Enemy destroyed`)
       this.outerDiv.remove()
     }, 600)
   }

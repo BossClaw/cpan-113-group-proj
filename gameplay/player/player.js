@@ -53,7 +53,6 @@ export class Player {
   }
   spawn() {
     if (!this.gameScreen) {
-      console.error('Player spawn missing gameScreen param')
       return
     }
     const x = 35;
@@ -94,11 +93,9 @@ export class Player {
     return this.outerDiv.getBoundingClientRect().left
   }
   attack() {
-    console.log(`Player attack cause ${this.gunDamage}`)
     return this.gunDamage
   }
   missed() {
-    console.log(`Player missed`)
     const message = document.createElement('div')
     message.classList.add('missed')
     message.innerText = 'missed'
