@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="temp-container">
+        <h2>Pick languages</h2>
         <button class="language" id="JS">JavaScript</button>
         <button class="language" id="Python">Python</button>
         <button class="language" id="CSS">CSS</button>
@@ -16,6 +17,24 @@
         <button class="language" id="C#">C#</button>
         <button class="language" id="C++">C++</button>
     </div>
+    <div class="temp-container">
+        <h2>Pick Difficulty</h2>
+        <input type="range" min="1" max="4" id="difficulty" name="Difficulty"/>
+        <div id="difficulty-display"></div>
+    </div>
     <button id="temp-start">PLAY GAME</button>
 </body>
+
 </html>
+
+<!-- TEMPORARY -->
+<style>
+    button{
+        width: 100px;
+        height: 50px;
+        padding: 10px;
+        text-align: center;
+        line-height: 0;
+        margin: 10px
+    }
+</style>

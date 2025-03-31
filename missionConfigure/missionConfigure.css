@@ -2,3 +2,7 @@
 .active-language{
     background-color: green;
 }
+
+#difficulty {
+    width: 300px;
+}
