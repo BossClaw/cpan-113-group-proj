@@ -11,11 +11,20 @@
 
 #starting-display{
   position: absolute;
-  color: red;
+  color: rgb(255, 0, 43);
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   visibility: visible;
+}
+
+#pause-display{
+  position: fixed;
+  padding: 20px;
+  top: 20px;
+  left: 10px;
+  color: rgb(255, 0, 43);
+  font-size: 30px;
 }
 
 .keyboard{
