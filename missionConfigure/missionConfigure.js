@@ -43,6 +43,8 @@ startGame.addEventListener("click", function () {
   localStorage.setItem("pickedLanguages", JSON.stringify(pickedLanguages));
   // Difficulty
   localStorage.setItem("difficulty", pickedDifficulty)
+  // Level
+  localStorage.setItem("level", pickedLevel)
 
   // TEMPORARY REDIRECT
   window.location.href = "http://127.0.0.1:5502/gameplay.html";
