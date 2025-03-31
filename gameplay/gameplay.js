@@ -39,7 +39,7 @@ if (!localStorage.getItem("pickedLanguages")) {
     window.location.href = "http://127.0.0.1:5502/missionConfigure.html"
 } else {
     pickedLanguages = JSON.parse(localStorage.getItem("pickedLanguages"))
-    generateWord()
+    // generateWord()
 }
 
 // Display word function
@@ -84,7 +84,7 @@ function attack(key) {
         console.log(`Attack ${key}`)
     } else {
         game.onPlayerAttack(false)
-        onsole.log('Missed')
+        console.log('Missed')
     }
     checkForCompletion(letterToTypeIndex)
 }
@@ -98,22 +98,45 @@ function checkForCompletion(letterToTypeIndex) {
     }
 }
 
-
-// EVENT LISTENER ON PAGE KEYDOWN
-document.addEventListener("keydown", event => {
-    event.preventDefault()
-    attack(event.key)
-})
-
+// Toggle pause on pause off
+function togglePause(){
+    if(game.isPaused){
+        game.resume()
+    }else{
+        game.pause()
+    }
+}
 
 
 // Game buttons
-const startBtn = document.querySelector('#start')
+// const startBtn = document.querySelector('#start')
 const pauseBtn = document.querySelector('#pause')
+// Starting display (span)
+const startingDisplay = document.getElementById("starting-display")
+
 
 // start game
-startBtn.addEventListener('click', () => {
-    game.start()
-    startBtn.style.display = 'none'
-    pauseBtn.style.display = 'block'
+// startBtn.addEventListener('click', () => {
+//     game.start()
+//     startBtn.style.display = 'none'
+//     pauseBtn.style.display = 'block'
+// })
+
+
+// EVENT LISTENER ON PAGE KEYDOWN
+document.addEventListener("keydown", event => {
+    console.log(event.key)
+    event.preventDefault()
+    if(event.key === "Enter" && !game.gameView.overlay){
+        game.start()
+        startingDisplay.style.visibility = "hidden"
+        clearWordDisplay()
+        generateWord()
+    }else if(event.key === "Escape" && game.isGame){
+        togglePause()
+    }else if(game.isGame){
+        attack(event.key) 
+    }
 })
+
+

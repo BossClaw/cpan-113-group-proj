@@ -126,7 +126,7 @@ export class Enemy {
     // only call 'move' once at the start
     this.outerDiv.classList.add('move')
   }
-  pauss() {
+  pause() {
     this.outerDiv.classList.add('stop')
   }
   resume() {
