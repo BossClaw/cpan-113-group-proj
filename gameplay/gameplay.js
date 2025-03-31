@@ -99,17 +99,12 @@ function checkForCompletion(letterToTypeIndex) {
 }
 
 
-// EVENT LISTENER ON PAGE KEYDOWN
-document.addEventListener("keydown", event => {
-    event.preventDefault()
-    attack(event.key)
-})
-
-
-
 // Game buttons
 const startBtn = document.querySelector('#start')
 const pauseBtn = document.querySelector('#pause')
+// Starting display (span)
+const startingDisplay = document.getElementById("starting-display")
+
 
 // start game
 startBtn.addEventListener('click', () => {
@@ -117,3 +112,18 @@ startBtn.addEventListener('click', () => {
     startBtn.style.display = 'none'
     pauseBtn.style.display = 'block'
 })
+
+
+// EVENT LISTENER ON PAGE KEYDOWN
+document.addEventListener("keydown", event => {
+    event.preventDefault()
+    console.log(event.key)
+    if(event.key === "Enter" && !game.isGame){
+        game.start()
+        startingDisplay.style.visibility = "hidden"
+    } else if(game.isGame){
+     attack(event.key)   
+    }
+})
+
+
