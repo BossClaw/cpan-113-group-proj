@@ -84,7 +84,7 @@ function attack(key) {
         console.log(`Attack ${key}`)
     } else {
         game.onPlayerAttack(false)
-        onsole.log('Missed')
+        console.log('Missed')
     }
     checkForCompletion(letterToTypeIndex)
 }
@@ -117,13 +117,14 @@ const startingDisplay = document.getElementById("starting-display")
 // EVENT LISTENER ON PAGE KEYDOWN
 document.addEventListener("keydown", event => {
     event.preventDefault()
-    console.log(event.key)
-    if(event.key === "Enter" && !game.isGame){
+    if(event.key === "Enter" && !game.gameView.overlay){
+        console.log(game.gameView.overlay)
         game.start()
         startingDisplay.style.visibility = "hidden"
+        clearWordDisplay()
         generateWord()
     } else if(game.isGame){
-     attack(event.key)   
+        attack(event.key)   
     }
 })
 

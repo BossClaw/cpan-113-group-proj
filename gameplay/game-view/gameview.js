@@ -9,6 +9,7 @@ export class GameView {
     this.gameScreenOverlay = document.createElement('div')
     this.gameScreenOverlay.classList.add('screen-overlay')
     this.gameScreen.appendChild(this.gameScreenOverlay)
+    this.overlay = false
 
     // screen overlay 
     this.title = document.createElement('p')
@@ -43,6 +44,7 @@ export class GameView {
   }
   hideScreenOverley() {
     this.gameScreenOverlay.style.display = 'none'
+    this.overlay = false
   }
   hideGameStats() {
     this.gameStates.style.display = 'none'
@@ -61,11 +63,13 @@ export class GameView {
     this.gameScreenOverlay.classList.add('win')
     this.title.innerText = 'YOU WIN'
     this.gameScreenOverlay.style.display = 'flex'
+    this.overlay = true
   }
   displayLose() {
     this.gameScreenOverlay.classList.add('lose')
     this.title.innerText = 'YOU LOSE'
     this.gameScreenOverlay.style.display = 'flex'
+    this.overlay = true
   }
   displayPause() {
     this.gameScreenOverlay.classList.add('pause')
