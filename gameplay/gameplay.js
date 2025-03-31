@@ -39,7 +39,7 @@ if (!localStorage.getItem("pickedLanguages")) {
     window.location.href = "http://127.0.0.1:5502/missionConfigure.html"
 } else {
     pickedLanguages = JSON.parse(localStorage.getItem("pickedLanguages"))
-    generateWord()
+    // generateWord()
 }
 
 // Display word function
@@ -107,11 +107,11 @@ const startingDisplay = document.getElementById("starting-display")
 
 
 // start game
-startBtn.addEventListener('click', () => {
-    game.start()
-    // startBtn.style.display = 'none'
-    pauseBtn.style.display = 'block'
-})
+// startBtn.addEventListener('click', () => {
+//     game.start()
+//     startBtn.style.display = 'none'
+//     pauseBtn.style.display = 'block'
+// })
 
 
 // EVENT LISTENER ON PAGE KEYDOWN
@@ -121,6 +121,7 @@ document.addEventListener("keydown", event => {
     if(event.key === "Enter" && !game.isGame){
         game.start()
         startingDisplay.style.visibility = "hidden"
+        generateWord()
     } else if(game.isGame){
      attack(event.key)   
     }
