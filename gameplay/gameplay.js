@@ -100,7 +100,7 @@ function checkForCompletion(letterToTypeIndex) {
 
 
 // Game buttons
-const startBtn = document.querySelector('#start')
+// const startBtn = document.querySelector('#start')
 const pauseBtn = document.querySelector('#pause')
 // Starting display (span)
 const startingDisplay = document.getElementById("starting-display")
@@ -109,7 +109,7 @@ const startingDisplay = document.getElementById("starting-display")
 // start game
 startBtn.addEventListener('click', () => {
     game.start()
-    startBtn.style.display = 'none'
+    // startBtn.style.display = 'none'
     pauseBtn.style.display = 'block'
 })
 
