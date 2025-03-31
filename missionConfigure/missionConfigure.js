@@ -49,9 +49,9 @@ startGame.addEventListener("click", function () {
 });
 
 
-// Temporary Slider CSS
+// Temporary Difficulty Slider CSS
 const difficultyDisplay = document.getElementById("difficulty-display")
-const slider = document.getElementById("difficulty")
+const difficultySlider = document.getElementById("difficulty")
 
 const difficultyValues = {
   1: "easy",
@@ -60,17 +60,36 @@ const difficultyValues = {
   4: "hardcore"
 }
 
-slider.addEventListener("input", function(){
-  console.log(slider.value)
-  console.log(difficultyDisplay)
+// Get difficulty value
+difficultySlider.addEventListener("input", function(){
   let value = difficultyValues[this.value]
-  console.log("value", value)
   difficultyDisplay.textContent = value
   pickedDifficulty = value
 })
 
 // Initial difficulty display
-difficultyDisplay.textContent = difficultyValues[slider.value]
+difficultyDisplay.textContent = difficultyValues[difficultySlider.value]
 
 // Initial picked difficulty
-let pickedDifficulty = difficultyValues[slider.value]
+let pickedDifficulty = difficultyValues[difficultySlider.value]
+
+
+// Temporary Level Slider Css
+const levelDisplay = document.getElementById("level-display")
+const levelSlider = document.getElementById("level")
+
+// Get level value
+levelSlider.addEventListener("input", function(){
+  levelDisplay.textContent = this.value
+  pickedLevel = this.value
+  console.log(pickedLevel)
+})
+
+// Initial level display
+levelDisplay.textContent = levelSlider.value
+
+
+// Initial picked level
+let pickedLevel = levelSlider.value
+
+console.log(pickedLevel)
