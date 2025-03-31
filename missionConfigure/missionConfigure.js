@@ -39,7 +39,11 @@ function toggleAddToList(button) {
 
 // Save to local storage 
 startGame.addEventListener("click", function () {
+  // Languages
   localStorage.setItem("pickedLanguages", JSON.stringify(pickedLanguages));
+  // Difficulty
+  localStorage.setItem("difficulty", pickedDifficulty)
+
   // TEMPORARY REDIRECT
   window.location.href = "http://127.0.0.1:5502/gameplay.html";
 });
@@ -48,6 +52,7 @@ startGame.addEventListener("click", function () {
 // Temporary Slider CSS
 const difficultyDisplay = document.getElementById("difficulty-display")
 const slider = document.getElementById("difficulty")
+
 const difficultyValues = {
   1: "easy",
   2: "normal",
@@ -61,6 +66,11 @@ slider.addEventListener("input", function(){
   let value = difficultyValues[this.value]
   console.log("value", value)
   difficultyDisplay.textContent = value
+  pickedDifficulty = value
 })
 
+// Initial difficulty display
 difficultyDisplay.textContent = difficultyValues[slider.value]
+
+// Initial picked difficulty
+let pickedDifficulty = difficultyValues[slider.value]
