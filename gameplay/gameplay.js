@@ -98,6 +98,15 @@ function checkForCompletion(letterToTypeIndex) {
     }
 }
 
+// Toggle pause on pause off
+function togglePause(){
+    if(game.isPaused){
+        game.resume()
+    }else{
+        game.pause()
+    }
+}
+
 
 // Game buttons
 // const startBtn = document.querySelector('#start')
@@ -116,15 +125,17 @@ const startingDisplay = document.getElementById("starting-display")
 
 // EVENT LISTENER ON PAGE KEYDOWN
 document.addEventListener("keydown", event => {
+    console.log(event.key)
     event.preventDefault()
     if(event.key === "Enter" && !game.gameView.overlay){
-        console.log(game.gameView.overlay)
         game.start()
         startingDisplay.style.visibility = "hidden"
         clearWordDisplay()
         generateWord()
-    } else if(game.isGame){
-        attack(event.key)   
+    }else if(event.key === "Escape" && game.isGame){
+        togglePause()
+    }else if(game.isGame){
+        attack(event.key) 
     }
 })
 
