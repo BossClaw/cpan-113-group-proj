@@ -5,3 +5,11 @@
   justify-content: center;
   font-size: 50px;
 }
+
+#starting-display{
+  position: absolute;
+  color: red;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
