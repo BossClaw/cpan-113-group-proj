@@ -165,8 +165,7 @@ button {
   border-bottom-color: var(--dark);
   background-color: var(--mid);
 
-  padding: 4px;
-  display: block;
+  padding: 4px;  
   margin-block: var(--pad_gap);
 }
 
@@ -291,31 +290,31 @@ footer {
 /* BREAKPOINT TESTING */
 
 @media (min-width: 360px) {
-  section {
+  header {
     background-color: green;
   }
 }
 
 @media (min-width: 540px) {
-  section {
+  header {
     background-color: red;
   }
 }
 
 @media (min-width: 680px) {
-  section {
+  header {
     background-color: blue;
   }
 }
 
 @media (min-width: 720px) {
-  section {
+  header {
     background-color: black;
   }
 }
 
 @media (min-width: 1280px) {
-  section {
+  header {
     background-color: orange;
   }
 }

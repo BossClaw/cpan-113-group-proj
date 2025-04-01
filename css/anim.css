@@ -1,59 +1,87 @@
-
 /* ANIMS */
+
 /* CTA PULSE */
 @keyframes pulse {
+  0% {
+    color: var(--bright);
+  }
+
+  20% {
+    color: var(--dark);
+  }
+
+  40% {
+    color: var(--mid);
+  }
+
+  60% {
+    color: var(--dark);
+  }
+
+  100% {
+    color: var(--bright);
+  }
+}
+
+.cta_pulse {
+  animation: pulse 2.1s infinite;
+}
+
+/* WORD BUGS IN TYPED */
+/* TODO - MOVE TO DEDICATED index.css */
+@keyframes typed_bugs {  
     0% {
-      color: var(--bright);
+      color: green;
     }
-  
+
     20% {
-      color: var(--dark);
+      color: yellow;
     }
-  
+
     40% {
-      color: var(--mid);
+      color: red;
     }
-  
+
     60% {
-      color: var(--dark);
+      color: orange;
     }
-  
+
     100% {
-      color: var(--bright);
+      color: yellow;
     }
   }
-  
-  .cta_pulse {      
-    animation: pulse 2.1s infinite;
+
+  .typed_bugs {
+    animation: typed_bugs 2.1s infinite;
   }
-  
-  
-  @keyframes spinCursor {
-    0% {
-      content: "/";
-    }
-  
-    25% {
-      content: "-";
-    }
-  
-    50% {
-      content: "\\";
-    }
-  
-    75% {
-      content: "|";
-    }
-  
-    100% {
-      content: "/";
-    }
+
+
+/* SPIN CURSOR  */
+@keyframes spinCursor {
+  0% {
+    content: "/";
   }
-  
-  .cursor::before {
+
+  25% {
+    content: "-";
+  }
+
+  50% {
+    content: "\\";
+  }
+
+  75% {
     content: "|";
-    display: inline-block;
-    font-family: monospace;
-    animation: spinCursor 0.5s steps(1) infinite;
   }
-  
+
+  100% {
+    content: "/";
+  }
+}
+
+.cursor::before {
+  content: "|";
+  display: inline-block;
+  font-family: monospace;
+  animation: spinCursor 0.5s steps(1) infinite;
+}

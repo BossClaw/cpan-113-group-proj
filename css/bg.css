@@ -4,10 +4,6 @@
     --scroll-bg: -1px;
     --scroll-mg: -1px;
     --scroll-fg: -1px;
-
-    --pad_gap: 16px;
-
-    --section_height: 680px;
 }
 
 body {
@@ -23,28 +19,5 @@ body {
     background-size: 100%;
     margin: 0;
     padding: 0;
-}
-
-.build_top {
-    background-image: url("/img/bg/bg_BUILD_TOP.png");
-    background-position: right bottom;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    height: var(--section_height);
-}
-
-.build_mid {
-    background-image: url("/img/bg/bg_BUILD_MID.png");
-    background-position: right bottom;
-    background-repeat: repeat-y;
-    background-size: 100%;
-    min-height: var(--section_height);
-}
-
-.build_bot {
-    background-image: url("/img/bg/bg_BUILD_BOT.png");
-    background-position: right bottom;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    height: var(--section_height);
+    backdrop-filter: saturate(180%) blur(20px);
 }
