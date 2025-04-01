@@ -27,7 +27,7 @@ export class GameView {
     this.leaderboardBtn.innerText = 'Leaderboard'
     this.buttonsDiv.appendChild(this.retryBtn)
     this.buttonsDiv.appendChild(this.quitBtn)
-    this.buttonsDiv.appendChild(this.leaderboardBtn)
+    // this.buttonsDiv.appendChild(this.leaderboardBtn)
     this.gameScreenOverlay.appendChild(this.buttonsDiv)
 
     // game stats
