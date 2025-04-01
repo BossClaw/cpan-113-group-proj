@@ -3,31 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!---game classes (lu)-->
+    <title>TYPE DEFENDER - Play</title>
 
+    <!-- 3RD PARTY -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
+
+    <!-- COMMON -->
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/bg.css" />
+    <link rel="stylesheet" href="css/anim.css" />
+    <link rel="stylesheet" href="css/crt.css" />
+
+    <!-- TBD - MODULES -->
+    <script type="module" src="js/common.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+    <!---game classes (lu)-->
+
     <link rel="stylesheet" href="gameplay/game-view/gameview.css" />
     <link rel="stylesheet" href="gameplay/player/player.css" />
     <link rel="stylesheet" href="gameplay/enemy/enemy.css" />
     <link rel="stylesheet" href="gameplay/game/game.css" />
+
     <!--keyboard (jas)--->
     <link rel="stylesheet" href="gameplay/keyboard/keyboard.css" />
     <link rel="stylesheet" href="gameplay/gameplay.css" />
+
     <!---js-->
     <script type="module" src="gameplay/keyboard/keyboard.js" defer></script>
     <script type="module" src="gameplay/game/game.js" defer></script>
     <script type="module" src="gameplay/gameplay.js" defer></script>
-    <title>Game Play</title>
   </head>
+
   <body>
+    <!-- Game Buttons -->
     <span id="pause-display">Press ESC to toggle pause</span>
-    <!-- Game Screen -->
-    <div id="game_screen">
-      <span id="starting-display">Press Enter To Start</span>
-    </div>
+
     <div
       style="
         margin-top: 10%;
@@ -44,8 +58,11 @@
       </button> -->
     </div>
 
-    <!-- ============== WORD DISPLAY ====================== -->
-    <div id="word-container" class="word"></div>
+    <!-- Game Screen -->
+    <div id="game_screen">      
+      <div id="word-container" class="word"></div>
+      <span id="starting-display">Press Enter To Start</span>
+    </div>
 
     <!-- ============================= KEYBOARD ========================================== -->
     <div class="keyboard">
@@ -234,5 +251,31 @@
         </li>
       </ul>
     </div>
+
+    <!-- ============================= COMMON PAGE STUFF ========================================== -->
+    <footer id="footer">
+      <p>
+        <button id="ui_crt_toggle" type="button">TOGGLE CRT</button>
+        &copy; 20XX lujabo <span class="cursor"></span>
+
+        <a href="#">lu</a>
+        <a href="#">ja</a>
+        <a href="#">bo</a>
+
+        <!-- <a href="#top">Top</a> -->
+      </p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("[DOM][EVENT] DOMContentLoaded");
+        console.log(
+          "[TBD] type start to start.  complete words to finish instead of half way through."
+        );
+
+        // NARP
+        // addCommonToElement("footer");
+      });
+    </script>
   </body>
 </html>

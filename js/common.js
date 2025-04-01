@@ -1,4 +1,7 @@
 // COMMON JS TO EVERY PAGE IN THE PROJECT
+// TBD - SPLIT .JS UP INTO FOCUSED FILES : backend.js, audio.js, video.js, etc...
+
+import { viz_init_bg } from "./bg.js";
 
 // TBD - ONLY 2 .HTML FILES, index.html & play.html
 
@@ -13,6 +16,33 @@
 // PROCEED TO REGULAR PAGE LOAD
 
 // =================================================================
+// WIP - TEMPLATE STYLE
+
+// react style
+// export function addCommonToElement(elementId, componentFunction) {
+//   document.addEventListener("DOMContentLoaded", () => {
+//     const element = document.getElementById(elementId);
+//     if (element) {
+//       element.innerHTML = componentFunction();
+//     } else {
+//       console.warn(`Element with ID '${elementId}' not found.`);
+//     }
+//   });
+// }
+
+// FETCH STYLE
+export function addCommonToElement(elementId) {
+  const element = document.getElementById(elementId);
+  console.log(`[COMMON][DOM] FETCHING[${elementId}] ELEMENT[${element}]`);
+
+  if (element) {
+    element.innerHTML = fetch(`./common/${elementId}.html`);
+  } else {
+    console.warn(`Element with ID '${elementId}' not found.`);
+  }
+}
+
+// =================================================================
 // HANDLE THE LOGGED IN CHECK
 
 function redirect_to_login() {
@@ -22,6 +52,7 @@ function redirect_to_login() {
 
   // JWT NOT VALID AUT? REDIRECT
 
+  // !!!! - BLOCKING DIV
   return false;
 }
 
@@ -35,6 +66,40 @@ function ui_init_events() {
   document.querySelector("#ui_crt_toggle").addEventListener("click", () => {
     crt_toggle();
   });
+}
+
+// =================================================================
+// AUDIO WRAPPER
+
+const AUD_VOLUME_KEY = "aud_volume";
+
+function aud_get_volume() {
+  var cur_volume = parseFloat(localStorage.getItem(AUD_VOLUME));
+  console.log(`[COMMON][AUD] get_volume(${cur_volume})`);
+  return cur_volume;
+}
+
+function aud_set_volume(volume_val) {
+  console.log(`[COMMON][AUD] set_volume(${volume_val})`);
+  localStorage.setItem(AUD_VOLUME, volume_val);
+
+  update_aud_dom();
+}
+
+function update_aud_dom() {
+  // UPDATE THE AUDIO DOM WITH MUTE / VOLUME VALS
+}
+
+function aud_init() {
+  console.log("[COMMON][PAGE][AUD] INIT");
+
+  // TBD - READ 'LAST PLAY POINT' FROM STORAGE
+
+  // PLAY MUSIC FROM THAT POINT
+
+  // TODO - READ VOLUME/MUTE
+
+  // TODO - ATTACH CALLBACK ON WINDOW EXIT
 }
 
 // =================================================================
@@ -55,7 +120,7 @@ const VIZ_CRT_ENABLED_KEY = "viz_crt_enabled";
 
 function crt_get_enabled() {
   // TRY GET VAL FROM STORAGE
-  var cur_crt_val = localStorage.getItem(VIZ_CRT_ENABLED_KEY) == 'true';
+  var cur_crt_val = localStorage.getItem(VIZ_CRT_ENABLED_KEY) == "true";
   console.log(`[COMMON][VIZ][CRT] get_enabled(${cur_crt_val})`);
 
   return cur_crt_val;
@@ -160,36 +225,6 @@ function show_view(viewIndex) {
       view_info_arr[pi].style.display = "none";
     }
   }
-}
-
-// =======================================================================
-// VIZ BACKGROUND
-
-function viz_init_bg() {
-  // HANDLE THE BG PARALLAX
-  // const bottom_offset = 384
-  const bottom_offset = 680;
-  function update_bg_scroll(scroll_y) {
-    const scroll_bg = bottom_offset + scroll_y * 0.7;
-    const scroll_mg = bottom_offset + scroll_y * 0.8;
-    const scroll_fg = bottom_offset + scroll_y * 0.9;
-
-    console.log(
-      `SCROLL_Y[${scroll_y}] BG[${scroll_bg}] MG[${scroll_mg}] FG[${scroll_fg}]`
-    );
-
-    document.documentElement.style.setProperty("--scroll-bg", `${scroll_bg}px`);
-    document.documentElement.style.setProperty("--scroll-mg", `${scroll_mg}px`);
-    document.documentElement.style.setProperty("--scroll-fg", `${scroll_fg}px`);
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    update_bg_scroll(0);
-  });
-
-  document.addEventListener("scroll", () => {
-    update_bg_scroll(window.scrollY);
-  });
 }
 
 // =======================================================================

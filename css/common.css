@@ -165,7 +165,7 @@ button {
   border-bottom-color: var(--dark);
   background-color: var(--mid);
 
-  padding: 4px;  
+  padding: 4px;
   margin-block: var(--pad_gap);
 }
 
@@ -317,4 +317,9 @@ footer {
   header {
     background-color: orange;
   }
+}
+
+/* DYNAMIC PAGE VIEWS / MODALS */
+.hidden {
+  display: none;
 }
