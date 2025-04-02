@@ -4,13 +4,16 @@
   right: 30; /* override with js */
   width: 32px; /* override with js */
   height: 32px; /* override with js */
-  background-color: rgb(255, 255, 255); /* override with js */
   z-index: 4;
 }
 
 .player-sprit {
   width: 100%;
   height: 100%;
+  
+  /* override with js */
+  /* background-color: rgb(255, 255, 255);  */
+  background-image: url('/gameplay/player/player_idle.gif');
 }
 
 .player-info {

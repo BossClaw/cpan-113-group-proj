@@ -8,7 +8,7 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-duration: 10s; /* override with js */
-  border: 1px solid red;
+  /* border: 1px solid red; */
   z-index: 5;
 }
 
