@@ -1,16 +1,18 @@
 import { Enemy } from "../enemy/enemy.js";
 import { Player } from "../player/player.js";
 import { GameView } from "../game-view/gameview.js";
+import scoreManager from "./scoreManager.js";
+import { initializeGameLogic } from "../gameplay.js";
+import flaggedNames from "./flaggedNames.js";
 
-const wordsJsonPath = "../words.json";
 
 // Get level state
 function getLevelState(level = 1) {
   if (level < 1) level = 1;
   // base
-  const baseEnemyCount = 5;
-  const baseEnemySpeed = 1;
-  const baseEnmeySpawnTime = 1000;
+  const baseEnemyCount = 15;
+  const baseEnemySpeed = 0.5;
+  const baseEnmeySpawnTime = 500;
 
   // how many level to incrase
   const levelToIncraseCount = 2;
@@ -47,7 +49,7 @@ function getLevelState(level = 1) {
 }
 
 const difficultSpeedModifer = {
-  easy: 0.1,
+  easy: 0.5,
   normal: 1,
   hard: 2,
   hardcore: 3,
@@ -56,15 +58,19 @@ const difficultSpeedModifer = {
 export class Game {
   constructor(
     gameScreen,
-    level = 1,
+    level = '1',
     difficulty = "easy",
-    language = "JavaScript",
     playerObject = null
   ) {
     // #game_screen div
-    this.gameScreen = gameScreen;
+    this.gameScreen = gameScreen
+    this.gameScreen.innerHTML = ''
 
     // game status
+    this.level = level
+    this.difficulty = difficulty
+    this.languages = []
+    this.highScore = 0 // all levels added up
     this.isGame = false;
     this.isPaused = false;
     this.lastTimestamp = 0;
@@ -74,7 +80,7 @@ export class Game {
     // player related
     this.playerObject = playerObject;
     this.player = null;
-    this.points = 0;
+    this.points = 0; // current level score
     this.baseHP = 3;
     this.firewallHP = 1;
     this.firewallLocationX = "100px";
@@ -91,20 +97,16 @@ export class Game {
     // gameView
     this.gameView = new GameView(this.gameScreen);
 
-    // keyboard related
-    this.language = language;
-    this.languageList = [];
-    this.nextKey = "a";
+    // show start message display
+    this.gameView.showStartMessage(this.level, this.difficulty)
 
     // bind methods just in case
     this.start = this.start.bind(this);
     this.update = this.update.bind(this);
-  }
-  retry() {
-    // do the current level again
-  }
-  nextLevel() {
-    // reset the game and go to next game
+    this.getGameStates = this.getGameStates.bind(this);
+    this.onContinueBtnPress = this.onContinueBtnPress.bind(this);
+    this.onRetryBtnPress = this.onRetryBtnPress.bind(this);
+    this.onQuitBtnPress = this.onQuitBtnPress.bind(this);
   }
   pause() {
     if (!this.isGame || this.isPaused) return;
@@ -120,7 +122,7 @@ export class Game {
     });
 
     // Show pause screen
-    this.gameView.displayPause();
+    this.gameView.displayPause(this.highScore);
   }
   resume() {
     if (!this.isGame || !this.isPaused) return;
@@ -137,32 +139,6 @@ export class Game {
 
     //  Restart the game loop
     this.animationId = requestAnimationFrame(this.update);
-  }
-  async getLanguageList() {
-    // try {
-    //   const response = await fetch(wordsJsonPath)
-    //   const json = await response.json()
-    //   const words = json.words
-    //   let lang = this.language.charAt(0).toUpperCase() + this.language.slice(1).toLowerCase()
-    //   console.log('words', words)
-    //   console.log('lang', lang)
-    //   // try to get the language
-    //   const languageList = words[lang]
-    //   if (!languageList) {
-    //     this.languageList = words.JavaScript
-    //   } else {
-    //     this.languageList = languageList
-    //   }
-    //   console.log('languageList', languageList)
-    // } catch (err) {
-    //   console.error('Fail to fetch words.json')
-    // }
-  }
-  setNextKey(key) {
-    this.nextKey = key;
-  }
-  getNextKey(key) {
-    return this.nextKey;
   }
   onFirewallAttacked(damage) {
     this.firewallHP -= damage;
@@ -191,6 +167,7 @@ export class Game {
     this.gameScreen.classList.add("on-hit");
   }
   onPlayerAttack(isHit = true) {
+    console.log('player Attack:', isHit)
     if (!this.isGame) return;
     if (this.isPaused) return;
     if (!isHit) {
@@ -253,8 +230,13 @@ export class Game {
   // Setup enemies at the beginning
   async setup() {
     // update game states display
-    this.updateGameStats();
+    // this.updateGameStats();
 
+    // check if this is the first leve in a playthough
+    // clear current score left over
+    if (!currentGame) {
+      scoreManager.removeCurrentCore()
+    }
     // spawn player
     if (this.playerObject) {
       const gun = this.playerObject.gun;
@@ -271,7 +253,6 @@ export class Game {
       enemy.spawn(this.gameScreen);
       this.enemyArray.push(enemy);
     }
-
     // spawn fireWall
     const fireWall = document.createElement("div");
     fireWall.classList.add("firewall");
@@ -280,23 +261,105 @@ export class Game {
     this.gameScreen.appendChild(fireWall);
     this.firewall = fireWall;
 
-    // set up game view buttons
+    // set up gameview buttons
     const buttons = this.gameView.getButtons();
-    buttons.retry.addEventListener("click", () => {
-      window.location.reload();
-    });
-    buttons.quit.addEventListener("click", () => {
-      // to another page
-      // alert("quit the game...");
-      window.location.href = "index.html";
-    });
-    buttons.leaderboardBtn.addEventListener("click", () => {
-      // to another page
-      alert("to leaderboard...");
-      window.location.reload();
-    });
-  }
 
+    // continue btn
+    buttons.continue.addEventListener("click", this.onContinueBtnPress);
+    // retry btn
+    buttons.retry.addEventListener("click", this.onRetryBtnPress);
+    // quit btn
+    buttons.quit.addEventListener("click", this.onQuitBtnPress);
+  }
+  onContinueBtnPress(e) {
+    if (e?.key && e.key !== 'c') return
+    document.removeEventListener('keydown', this.onContinueBtnPress)
+
+    // start a new game, to the next level
+    startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject)
+  }
+  onRetryBtnPress(e) {
+    if (e?.key && e.key !== 'r') return
+    document.removeEventListener('keydown', this.onRetryBtnPress)
+
+    // start a new game with currnet level
+    startNewGame(this.gameScreen, this.level, this.difficulty, this.playerObject)
+  }
+  onQuitBtnPress(e) {
+    if (e?.key && e.key !== 'q') {
+      return
+    } else {
+      e.preventDefault()
+    }
+    // add player name
+    this.gameView.displayNameInput()
+
+    const nameInput = this.gameView.nameInput
+    const nameMessage = this.gameView.nameInputMessage
+    const nameBtn = this.gameView.nameInputBtn
+    nameMessage.innerText = ''
+    nameInput.focus()
+    document.removeEventListener('keydown', this.onQuitBtnPress)
+
+    function onNameEnter() {
+      try {
+        // check name
+        let name = nameInput.value.trim()
+        if (name === '') throw new Error('Missing initials')
+        if (name.length !== 3) throw new Error('must be 3 letters')
+
+        // CAP the name
+        name = name.toUpperCase()
+
+        // check for bad name
+        flaggedNames.forEach(flag => {
+          if (name === flag) {
+            throw new Error('Flagged initials')
+          }
+        })
+
+        // all score data is already saved in game over check 
+        // store player name to current score
+        scoreManager.setCurrentScoreName(name)
+        // push to local scores array
+        scoreManager.addToHighScores()
+
+        nameMessage.innerText = 'saving...'
+
+        // remove listeners
+        document.removeEventListener('click', onNameEnter)
+        document.removeEventListener('keydown', onNameEnter)
+
+        // back to home page
+        setTimeout(() => {
+          window.location.href = '/'
+        }, 1000)
+
+      } catch (err) {
+        nameMessage.innerText = err.message
+      }
+    }
+    // Add Event Listeners
+    nameBtn.addEventListener('click', onNameEnter)
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        onNameEnter()
+      }
+    })
+  }
+  // (BUG) this can cause problem 
+  addEndGameButtonsListeners(isWon = true) {
+
+    if (isWon) {
+      // add continue
+      document.addEventListener('keydown', this.onContinueBtnPress)
+    } else {
+      // add retry
+      document.addEventListener('keydown', this.onRetryBtnPress)
+    }
+    // add quit
+    document.addEventListener('keydown', this.onQuitBtnPress)
+  }
   // Main game loop
   update(timestamp) {
     // check is game running
@@ -306,10 +369,7 @@ export class Game {
     this.checkGameOver();
 
     // update game states display
-    this.updateGameStats();
-
-    // (maybe keyboard have here <--------)
-    //
+    //this.updateGameStats();
 
     // Check delta time
     if (!this.lastTimestamp) this.lastTimestamp = timestamp;
@@ -368,7 +428,7 @@ export class Game {
     };
   }
   updateGameStats() {
-    this.gameView.updateGameStats(this.getGameStats());
+    // this.gameView.updateGameStats(this.getGameStats());
   }
   checkEnemyLeftCount() {
     {
@@ -381,78 +441,95 @@ export class Game {
   }
   checkGameOver() {
     this.checkEnemyLeftCount();
+    // win
     if (this.enemyLeft === 0) {
       this.isGame = false;
-      this.gameView.displayWin();
+      // store current points
+      this.saveToLocalStorage()
+      // display
+      this.gameView.displayWin(this.highScore);
+
+      // add buttons listener
+      this.addEndGameButtonsListeners(true)
       return;
     }
 
+    // lose
     if (this.baseHP <= 0) {
       this.isGame = false;
-      this.gameView.displayLose();
+      // display
+      this.gameView.displayLose(this.highScore);
+
+      // add buttons listener
+      this.addEndGameButtonsListeners(false)
       return;
     }
+  }
+  saveToLocalStorage() {
+    // save scores
+    scoreManager.addToCurrentScore(this.points)
+    // save level
+    localStorage.setItem('level', this.level)
+    // save difficulty
+    localStorage.setItem('difficulty', this.difficulty)
+    // save language
+    localStorage.setItem('pickedLanguages', JSON.stringify(this.languages))
+
+    // update gameStates
+    this.getGameStates()
+  }
+  getGameStates() {
+    // return everything about the current game
+    const CURRENT_SCORE_KEY = "settings_current_score";
+    const SCORES_KEY = "settings_scores";
+    const DIFFICULTY_KEY = 'difficulty';
+    const LEVEL_KEY = 'level';
+    const LANGUAGES_KEY = 'pickedLanguages';
+
+    this.languages = JSON.parse(localStorage.getItem(LANGUAGES_KEY) || '[]')
+    this.highScore = scoreManager.getCurrentScore().score
+
+    const gameStates = {
+      level: this.level,
+      difficulty: this.difficulty,
+      languages: this.languages,
+      highScore: this.highScore,
+      enemyCount: this.enemyCount,
+      enemySpawnTime: this.enemySpawnTime,
+      levelEnemySpeed: this.levelEnemySpeed,
+    }
+    return gameStates
+  }
+  setGameStatesToLocal() {
+    // when go to next level
+    // set the storage level
+    // set current score
+  }
+  setHightScroeToLocal() {
+    // add player name
+    // add current score (local) to scores array (local)
   }
   start() {
     this.setup();
     this.isGame = true;
+    this.getGameStates() // update game states
+
+    // Run game
     requestAnimationFrame(this.update);
+
   }
 }
 
-// -------------- Steps --------------
-// 1. create game instance
-// 2. game.getLanguageList()
-// 3. game.start() [player interaction]
-// -----------------------------------
+// Start new game: create a new game instance
+let currentGame = null;
 
-// Testing ---------------------------
-// document.addEventListener('DOMContentLoaded', () => {
-//   // get #game_screen
-//   const gameScreen = document.querySelector('#game_screen')
+export function startNewGame(gameScreen, level = 1, difficulty = "easy", playerObject = null) {
+  if (currentGame && currentGame.animatedFrameId) {
+    cancelAnimationFrame(currentGame.animatedFrameId);
+  }
+  // Create a new game instance
+  currentGame = new Game(gameScreen, level, difficulty, playerObject);
 
-//   // create game
-//   const game = new Game(gameScreen, 10, 'normal', 'python')
-//   // set up the game (get words)
-//   console.log('game', game)
-
-//   const startBtn = document.querySelector('#start')
-//   const pauseBtn = document.querySelector('#pause')
-
-//   // start game
-//   startBtn.addEventListener('click', () => {
-//     game.start()
-//     startBtn.style.display = 'none'
-//     pauseBtn.style.display = 'block'
-//   })
-
-//   // pauss / resume game
-//   pauseBtn.addEventListener('click', () => {
-//     if (game.isPaused) {
-//       game.resume();  // If paused, resume
-//       pauseBtn.innerText = 'pause';
-//     } else {
-//       game.pause();   // If not paused, pause
-//       pauseBtn.innerText = 'Resume';
-//     }
-//   });
-
-//   // (testing) trigger player attack
-//   // using setTimout to avoid it becoming called right away, it cause onPlayerAttack to already auto trigger on game start
-//   setTimeout(() => {
-//     // Hit "A" to attack
-//     // Hit anything to missed
-//     document.addEventListener('keyup', (e) => {
-
-//       if ((e.metaKey && e.key === 'r') || (e.ctrlKey && e.key === 'r')) return;
-//       if (e.key === null) return
-//       // correct
-//       if (e.key === 'a') {
-//         game.onPlayerAttack()
-
-//       } else {
-//         game.onPlayerAttack(false)
-//       }
-//     })
-//   }, 500)
-// })
+  // init gameplay using temp-gameplay
+  initializeGameLogic(currentGame)
+}
