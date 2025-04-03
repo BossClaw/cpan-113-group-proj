@@ -24,21 +24,23 @@ class ScoreManager {
 
     return score;
   }
-
+  remoreCurrentCore() {
+    localStorage.removeItem(CURRENT_SCORE_KEY)
+  }
   getScores() {
     const scoresString = localStorage.getItem(SCORES_KEY);
     return scoresString ? JSON.parse(scoresString) : [];
   }
 
-  addToCurrentScore(amount = 1) {
+  addToCurrentScore(_score = 0) {
     let currentScore = this.getCurrentScore();
 
     if (currentScore) {
-      currentScore.score += amount;
+      currentScore.score += _score;
       currentScore.date = new Date();
     } else {
       currentScore = defaultScore();
-      currentScore.score = amount;
+      currentScore.score = _score;
     }
 
     currentScore.maxLevel = localStorage.getItem(LEVEL_KEY) || '';
@@ -55,18 +57,19 @@ class ScoreManager {
       localStorage.setItem(CURRENT_SCORE_KEY, JSON.stringify(currentScore));
     }
   }
-
   addToHighScores() {
+    // add currentScore to scores and remove it
     const currentScore = this.getCurrentScore();
     if (!currentScore) return;
 
     const scores = this.getScores();
     scores.push(currentScore);
-
-    scores.sort((a, b) => b.score - a.score); // Sort descending
+    scores.sort((a, b) => b.score - a.score);
 
     localStorage.setItem(SCORES_KEY, JSON.stringify(scores));
-    localStorage.removeItem(CURRENT_SCORE_KEY);
+
+    // remove current score
+    this.remoreCurrentCore()
   }
 }
 

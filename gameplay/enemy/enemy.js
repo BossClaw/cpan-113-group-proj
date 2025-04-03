@@ -11,7 +11,7 @@ const enemyList = [
     name: "bug",
     hp: 1,
     damage: 1,
-    speed: 0.1,
+    speed: 1,
     color: "blue",
     size: "16",
   },

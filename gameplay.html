@@ -59,9 +59,10 @@
     </div>
 
     <!-- Game Screen -->
-    <div id="game_screen">      
-      <div id="word-container" class="word"></div>
-      <span id="starting-display">Press Enter To Start</span>
+    <div id="game_screen">
+      <!-- created with gameview.js -->
+      <!-- <div id="word-container" class="word"></div>
+      <span id="starting-display">Press Enter To Start</span> -->
     </div>
 
     <!-- ============================= KEYBOARD ========================================== -->
@@ -267,15 +268,15 @@
     </footer>
 
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        console.log("[DOM][EVENT] DOMContentLoaded");
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('[DOM][EVENT] DOMContentLoaded')
         console.log(
-          "[TBD] type start to start.  complete words to finish instead of half way through."
-        );
+          '[TBD] type start to start.  complete words to finish instead of half way through.'
+        )
 
         // NARP
         // addCommonToElement("footer");
-      });
+      })
     </script>
   </body>
 </html>

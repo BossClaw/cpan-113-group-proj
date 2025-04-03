@@ -8,12 +8,12 @@ export function get_languages() {
   return JSON.parse(local_languages_str);
 }
 
-export function get_level(default = 1) {
+export function get_level(_level = 1) {
   var local_level = localStorage.getItem("settings_level");
   if (local_level) {
     return local_level;
   }
-  return default;
+  return _level;
 }
 
 export function get_difficulty() {

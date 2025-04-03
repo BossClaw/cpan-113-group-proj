@@ -1,4 +1,8 @@
+
+
+
 document.addEventListener("keydown", (event) => {
+
   // PREVENT KEY FROM INTERACTING WITH THE PAGE
   event.preventDefault();
 

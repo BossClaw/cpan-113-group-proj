@@ -3,7 +3,6 @@ import { Game } from "./game/game.js";
 // Variables for word-to-type
 let letterToTypeIndex = 0;
 let displayedWord = "";
-const wordLetters = document.getElementById("word-container");
 
 // Variables for game settings
 let pickedLanguages = [];
@@ -28,6 +27,9 @@ if (
 // Create Game
 const gameScreen = document.getElementById("game_screen");
 const game = new Game(gameScreen, pickedLevel, pickedDifficulty);
+// get the word container from game (else it will try to get it before its created)
+const wordLetters = game.gameView.wordContainer;
+
 
 // Import words.json
 async function importWords() {
