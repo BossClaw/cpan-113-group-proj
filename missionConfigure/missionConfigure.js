@@ -108,7 +108,7 @@ startGame.addEventListener("click", function () {
     localStorage.setItem("level", pickedLevel);
 
     // TEMPORARY REDIRECT
-    window.location.href = "http://127.0.0.1:5502/gameplay.html";
+    window.location.href = "gameplay.html";
   } else {
     alert("Please pick your languages");
   }

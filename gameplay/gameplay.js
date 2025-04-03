@@ -1,18 +1,15 @@
 import { startNewGame } from "./game/game.js";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // first game
-  const gameScreen = document.querySelector('#game_screen')
-  const level = localStorage.getItem('level') || '1'
-  const difficulty = localStorage.getItem('difficulty') || 'noemal'
-  startNewGame(gameScreen, level, difficulty)
-})
-
-
+  const gameScreen = document.querySelector("#game_screen");
+  const level = localStorage.getItem("level") || "1";
+  const difficulty = localStorage.getItem("difficulty") || "normal";
+  startNewGame(gameScreen, level, difficulty);
+});
 
 // Initialization function
 export async function initializeGameLogic(gameInstance) {
-
   // Variables for word-to-type
   let letterToTypeIndex = 0;
   let displayedWord = "";
@@ -21,10 +18,8 @@ export async function initializeGameLogic(gameInstance) {
   // Variables for game settings
   let pickedLanguages = [];
 
-
   // Check local storage
   pickedLanguages = JSON.parse(localStorage.getItem("pickedLanguages"));
-
 
   // Import words.json
   async function importWords() {
@@ -56,15 +51,18 @@ export async function initializeGameLogic(gameInstance) {
 
   // Generate new word
   function generateWord() {
-    const randomLang = pickedLanguages[Math.floor(Math.random() * pickedLanguages.length)];
+    const randomLang =
+      pickedLanguages[Math.floor(Math.random() * pickedLanguages.length)];
     const languageWords = wordList[randomLang];
-    displayedWord = languageWords[Math.floor(Math.random() * languageWords.length)];
+    displayedWord =
+      languageWords[Math.floor(Math.random() * languageWords.length)];
     displayWord(displayedWord);
   }
 
   // Typing attack
   function attack(key) {
-    const letterSpan = wordLetters.getElementsByTagName("span")[letterToTypeIndex];
+    const letterSpan =
+      wordLetters.getElementsByTagName("span")[letterToTypeIndex];
     if (key === letterSpan.innerHTML) {
       letterSpan.style.color = "green";
       letterToTypeIndex += 1;
@@ -93,9 +91,13 @@ export async function initializeGameLogic(gameInstance) {
   }
 
   // Key listener
-  const startingDisplay = gameInstance.gameView.startingDisplay
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !gameInstance.gameView.overlay) {
+  const startingDisplay = gameInstance.gameView.startingDisplay;
+  document.addEventListener("keyup", (event) => {
+    if (
+      event.key === "Enter" &&
+      !gameInstance.gameView.overlay &&
+      !gameInstance.isGame
+    ) {
       event.preventDefault();
       gameInstance.start();
       startingDisplay.style.visibility = "hidden";
@@ -103,12 +105,10 @@ export async function initializeGameLogic(gameInstance) {
       generateWord();
     } else if (event.key === "Escape" && gameInstance.isGame) {
       togglePause();
+    } else if (event.key === "Shift"){
+      return
     } else if (gameInstance.isGame) {
       attack(event.key);
     }
   });
 }
-
-
-
-
