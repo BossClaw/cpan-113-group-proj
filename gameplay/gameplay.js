@@ -125,8 +125,8 @@ const startingDisplay = document.getElementById("starting-display");
 // EVENT LISTENER ON PAGE KEYDOWN
 document.addEventListener("keydown", (event) => {
   console.log(event.key);
-  event.preventDefault();
   if (event.key === "Enter" && !game.gameView.overlay) {
+    event.preventDefault();
     game.start();
     startingDisplay.style.visibility = "hidden";
     clearWordDisplay();

@@ -38,10 +38,10 @@
   align-items: center;
   width: 360px;
   height: 160px;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
   font-size: 10px;
   padding-top: 10px;
-  z-index: 10;
+  z-index: 20;
 }
 
 .screen-overlay.win {
@@ -58,7 +58,7 @@
 
 .screen-overlay-title {
   position: relative;
-  font-size: 14px;
+  font-size: 18px;
   padding: 0;
   margin: 0;
 }
@@ -166,16 +166,25 @@
   align-items: center;
   width: 100%;
   text-align: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .name-input-title {
   font-size: 12px;
 }
 
+.name-input-lower-div {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  gap: 4px 10px;
+}
+
 .name-input {
-  font-size: 17px;
-  width: 70px;
+  grid-column: 1;
+  grid-row: 1;
+  font-size: 15px;
+  width: 100px;
   background-color: black;
   border: 2px solid yellow;
   color: yellow;
@@ -194,6 +203,52 @@
   color: rgb(103, 103, 103);
 }
 
+.name-input-btn {
+  grid-column: 2;
+  grid-row: 1;
+  color: black;
+  font-size: 10px;
+  height: 30px;
+  background-color: yellow;
+  margin: 0;
+}
+
+.name-input-message {
+  grid-column: 1 / 3;
+  grid-row: 2;
+  font-size: 9px;
+  color: red;
+}
+
+/* starting display */
+.start-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  text-align: center;
+  margin: 0;
+  width: 100%;
+}
+
+.start-display-enter {
+  width: 100%;
+  font-size: 12px;
+  color: rgb(255, 0, 0);
+  margin-bottom: 10px;
+}
+
+.start-display-level {
+  font-size: 10px;
+  color: white;
+  margin: 0;
+}
+
+.start-display-diff {
+  font-size: 10px;
+  color: white;
+  margin: 0;
+}
+
 /* game states */
 .game-states {
   position: absolute;
@@ -209,6 +264,15 @@
 
 .game-states p {
   margin: 0;
+}
+
+/* word container  */
+#word-container {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20px;
 }
 
 @keyframes on-base-hit {

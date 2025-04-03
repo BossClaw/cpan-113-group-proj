@@ -85,8 +85,8 @@ export async function initializeGameLogic(gameInstance) {
   // Key listener
   const startingDisplay = gameInstance.gameView.startingDisplay
   document.addEventListener("keydown", (event) => {
-    event.preventDefault();
     if (event.key === "Enter" && !gameInstance.gameView.overlay) {
+      event.preventDefault();
       gameInstance.start();
       startingDisplay.style.visibility = "hidden";
       clearWordDisplay();

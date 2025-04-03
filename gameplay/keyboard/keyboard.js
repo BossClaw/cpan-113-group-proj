@@ -4,7 +4,7 @@
 document.addEventListener("keydown", (event) => {
 
   // PREVENT KEY FROM INTERACTING WITH THE PAGE
-  event.preventDefault();
+  //event.preventDefault();
 
   // GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
   const el = document.getElementById(event.code);
@@ -18,7 +18,7 @@ document.addEventListener("keydown", (event) => {
 document.addEventListener("keyup", (event) => {
   // PREVENT KEY FROM INTERACTING WITH THE PAGE
   // TBD - WHAT WOULD LISTEN FOR KEYUP THAT WE DON'T ACTUALLY SET?
-  event.preventDefault();
+  //event.preventDefault();
 
   // GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
   const el = document.getElementById(event.code);

@@ -12,10 +12,28 @@ export class GameView {
     this.gameScreen.appendChild(this.wordContainer)
 
     // starting-display
-    this.startingDisplay = document.createElement('span')
+    this.startingDisplay = document.createElement('div')
+    this.startingDisplay.classList.add('start-display')
     this.startingDisplay.id = 'starting-display'
-    this.startingDisplay.innerText = 'Press Enter To Start'
     this.gameScreen.appendChild(this.startingDisplay)
+
+    // starting-display text
+    this.startingDisplayEnter = document.createElement('p')
+    this.startingDisplayEnter.classList.add('start-display-enter')
+    this.startingDisplayEnter.innerText = 'Press Enter To Start'
+    this.startingDisplay.appendChild(this.startingDisplayEnter)
+
+    // starting-display game info
+    this.startingDisplayLevel = document.createElement('p')
+    this.startingDisplayLevel.classList.add('start-display-level')
+    this.startingDisplayLevel.innerText = 'Level: 999'
+    this.startingDisplay.appendChild(this.startingDisplayLevel)
+
+    this.startingDisplayDiff = document.createElement('p')
+    this.startingDisplayDiff.classList.add('start-display-diff')
+    this.startingDisplayDiff.innerText = 'Difficulty: Normal'
+    this.startingDisplay.appendChild(this.startingDisplayDiff)
+
 
     // screen overlay (win,lose,pause)
     this.gameScreenOverlay = document.createElement('div')
@@ -50,7 +68,7 @@ export class GameView {
 
     // Continue button
     this.continueBtn = document.createElement('button')
-    this.continueBtn.classList.add('crt', 'selected')
+    this.continueBtn.classList.add('crt')
     this.continueBtn.id = 'continue-btn'
     this.continueBtn.innerText = 'Continue'
 
@@ -84,11 +102,25 @@ export class GameView {
     this.nameInputTitle.innerText = 'ENTER YOUR INITIALS'
     this.nameInputDiv.appendChild(this.nameInputTitle)
 
+    this.nameInputLowerDiv = document.createElement('div')
+    this.nameInputLowerDiv.classList.add('name-input-lower-div')
+    this.nameInputDiv.appendChild(this.nameInputLowerDiv)
+
     this.nameInput = document.createElement('input')
     this.nameInput.classList.add('name-input')
     this.nameInput.maxLength = '3'
-    this.nameInput.placeholder = '___'
-    this.nameInputDiv.appendChild(this.nameInput)
+    this.nameInput.placeholder = '---'
+    this.nameInputLowerDiv.appendChild(this.nameInput)
+
+    this.nameInputBtn = document.createElement('button')
+    this.nameInputBtn.classList.add('name-input-btn')
+    this.nameInputBtn.innerText = 'OK'
+    this.nameInputLowerDiv.appendChild(this.nameInputBtn)
+
+    this.nameInputMessage = document.createElement('span')
+    this.nameInputMessage.classList.add('name-input-message')
+    this.nameInputMessage.innerText = 'Message here'
+    this.nameInputDiv.appendChild(this.nameInputMessage)
 
     // (Test) game stats
     // this.gameStates = document.createElement('div')
@@ -101,6 +133,11 @@ export class GameView {
       retry: this.retryBtn,
       quit: this.quitBtn,
     }
+  }
+  showStartMessage(level, difficulty) {
+    this.startingDisplay.style.display = 'felx'
+    this.startingDisplayLevel.innerText = `LVL: ${level}`
+    this.startingDisplayDiff.innerText = `DIFF: ${difficulty}`
   }
   hideScreenOverley() {
     this.gameScreenOverlay.style.display = 'none'

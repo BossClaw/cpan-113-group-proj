@@ -3,6 +3,7 @@ import { Player } from "../player/player.js";
 import { GameView } from "../game-view/gameview.js";
 import scoreManager from "./scoreManager.js";
 import { initializeGameLogic } from "./temp-gameplay.js";
+import flaggedNames from "./flaggedNames.js";
 
 
 // Get level state
@@ -94,6 +95,9 @@ export class Game {
 
     // gameView
     this.gameView = new GameView(this.gameScreen);
+
+    // show start message display
+    this.gameView.showStartMessage(this.level, this.difficulty)
 
     // bind methods just in case
     this.start = this.start.bind(this);
@@ -256,15 +260,55 @@ export class Game {
 
     // set up gameview buttons
     const buttons = this.gameView.getButtons();
+    // retry
     buttons.retry.addEventListener("click", () => {
       // start a new game with currnet level
       startNewGame(this.gameScreen, this.level, this.difficulty, this.playerObject)
     });
+    // quit
     buttons.quit.addEventListener("click", () => {
       // add player name
+      this.gameView.displayNameInput()
 
-      // update scores list
-      window.location.href = "index.html";
+      const nameInput = this.gameView.nameInput
+      const nameMessage = this.gameView.nameInputMessage
+      const nameBtn = this.gameView.nameInputBtn
+      nameMessage.innerText = ''
+
+      console.log('nameInput', nameInput)
+      alert('check nameinput')
+      nameBtn.addEventListener('click', () => {
+        alert('click')
+        try {
+          // check name
+          let name = nameInput.value.trim()
+          if (name === '') throw new Error('Missing initials')
+          if (name.length !== 3) throw new Error('must be 3 letters')
+
+          flaggedNames.forEach(flag => {
+            if (name === flag) {
+              throw new Error('Flagged initials')
+            }
+          })
+          // CAP the name
+          name = name.toUpperCase()
+          // all score data is already saved in game over check 
+          // store player name to current score
+          scoreManager.setCurrentScoreName(name)
+          // push to local scores array
+          scoreManager.addToHighScores()
+
+          nameMessage.innerText = 'saving...'
+          // back to home page
+          setTimeout(() => {
+            window.location.href = '/'
+          }, 1000)
+
+        } catch (err) {
+          nameMessage.innerText = err.message
+        }
+      })
+
     });
     buttons.continue.addEventListener("click", () => {
       // start a new game, to the next level
@@ -416,11 +460,7 @@ export class Game {
   start() {
     this.setup();
     this.isGame = true;
-    const gameStates = this.getGameStates()
-
-    // testing
-    console.log('gameStates:', gameStates)
-    alert(`current level: ${this.level}, ${this.difficulty}`)
+    this.getGameStates() // update game states
 
     // Run game
     requestAnimationFrame(this.update);
