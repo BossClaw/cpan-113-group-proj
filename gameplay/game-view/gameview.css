@@ -272,7 +272,7 @@
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 20px;
+  z-index: 20;
 }
 
 @keyframes on-base-hit {
