@@ -274,11 +274,10 @@ export class Game {
     if (e?.key && e.key !== 'c') return
     document.removeEventListener('keydown', this.onContinueBtnPress)
 
-
     // start a new game, to the next level
     startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject)
   }
-  onRetryBtnPress() {
+  onRetryBtnPress(e) {
     if (e?.key && e.key !== 'r') return
     document.removeEventListener('keydown', this.onRetryBtnPress)
 

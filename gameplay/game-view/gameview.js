@@ -70,19 +70,19 @@ export class GameView {
     this.continueBtn = document.createElement('button')
     this.continueBtn.classList.add('crt')
     this.continueBtn.id = 'continue-btn'
-    this.continueBtn.innerText = 'Continue (C)'
+    this.continueBtn.innerText = 'Continue(C)'
 
     // retry button
     this.retryBtn = document.createElement('button')
     this.retryBtn.classList.add('crt')
     this.retryBtn.id = 'retry-btn'
-    this.retryBtn.innerText = 'Retry (R)'
+    this.retryBtn.innerText = 'Retry(R)'
 
     // quit button
     this.quitBtn = document.createElement('button')
     this.quitBtn.classList.add('crt')
     this.quitBtn.id = 'quit-btn'
-    this.quitBtn.innerText = 'Quit (Q)'
+    this.quitBtn.innerText = 'Quit(Q)'
 
     // append buttons to buttonsDiv
     this.buttonsDiv.appendChild(this.continueBtn)
