@@ -75,7 +75,7 @@ export class GameView {
     // retry button
     this.retryBtn = document.createElement('button')
     this.retryBtn.classList.add('crt')
-    this.retryBtn.id = 'rety-btn'
+    this.retryBtn.id = 'retry-btn'
     this.retryBtn.innerText = 'Retry'
 
     // quit button

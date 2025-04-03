@@ -141,6 +141,11 @@
   display: none;
 }
 
+/* hide retry when win */
+.screen-overlay.win #retry-btn {
+  display: none;
+}
+
 /* high score */
 .highscore-div {
   display: flex;

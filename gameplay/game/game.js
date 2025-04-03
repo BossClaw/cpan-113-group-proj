@@ -104,12 +104,6 @@ export class Game {
     this.update = this.update.bind(this);
     this.getGameStates = this.getGameStates.bind(this);
   }
-  retry() {
-    // do the current level again
-  }
-  nextLevel() {
-    // reset the game and go to next game
-  }
   pause() {
     if (!this.isGame || this.isPaused) return;
 
@@ -260,12 +254,18 @@ export class Game {
 
     // set up gameview buttons
     const buttons = this.gameView.getButtons();
-    // retry
+
+    // continue btn
+    buttons.continue.addEventListener("click", () => {
+      // start a new game, to the next level
+      startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject)
+    });
+    // retry btn
     buttons.retry.addEventListener("click", () => {
       // start a new game with currnet level
       startNewGame(this.gameScreen, this.level, this.difficulty, this.playerObject)
     });
-    // quit
+    // quit btn
     buttons.quit.addEventListener("click", () => {
       // add player name
       this.gameView.displayNameInput()
@@ -275,10 +275,7 @@ export class Game {
       const nameBtn = this.gameView.nameInputBtn
       nameMessage.innerText = ''
 
-      console.log('nameInput', nameInput)
-      alert('check nameinput')
       nameBtn.addEventListener('click', () => {
-        alert('click')
         try {
           // check name
           let name = nameInput.value.trim()
@@ -309,10 +306,6 @@ export class Game {
         }
       })
 
-    });
-    buttons.continue.addEventListener("click", () => {
-      // start a new game, to the next level
-      startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject)
     });
   }
 
@@ -397,17 +390,19 @@ export class Game {
   }
   checkGameOver() {
     this.checkEnemyLeftCount();
+    // win
     if (this.enemyLeft === 0) {
       this.isGame = false;
+      // store current points
       this.saveToLocalStorage()
       // display
       this.gameView.displayWin(this.highScore);
       return;
     }
 
+    // lose
     if (this.baseHP <= 0) {
       this.isGame = false;
-      this.saveToLocalStorage()
       // display
       this.gameView.displayLose(this.highScore);
       return;
