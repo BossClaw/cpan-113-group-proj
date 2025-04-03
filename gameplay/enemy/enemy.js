@@ -112,7 +112,6 @@ export class Enemy {
     // this.innerDiv.style.backgroundColor = this.innerColor;
     let bg_str = `url("/gameplay/enemy/${this.name}.gif")`;
     this.innerDiv.style.backgroundImage = bg_str;
-    console.log(bg_str);
 
     // css animaiton speed
     this.outerDiv.style.animationDuration =

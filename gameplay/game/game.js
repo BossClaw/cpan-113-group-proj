@@ -103,6 +103,9 @@ export class Game {
     this.start = this.start.bind(this);
     this.update = this.update.bind(this);
     this.getGameStates = this.getGameStates.bind(this);
+    this.onContinueBtnPress = this.onContinueBtnPress.bind(this);
+    this.onRetryBtnPress = this.onRetryBtnPress.bind(this);
+    this.onQuitBtnPress = this.onQuitBtnPress.bind(this);
   }
   pause() {
     if (!this.isGame || this.isPaused) return;
@@ -163,6 +166,7 @@ export class Game {
     this.gameScreen.classList.add("on-hit");
   }
   onPlayerAttack(isHit = true) {
+    console.log('player Attack:', isHit)
     if (!this.isGame) return;
     if (this.isPaused) return;
     if (!isHit) {
@@ -248,7 +252,6 @@ export class Game {
       enemy.spawn(this.gameScreen);
       this.enemyArray.push(enemy);
     }
-
     // spawn fireWall
     const fireWall = document.createElement("div");
     fireWall.classList.add("firewall");
@@ -261,21 +264,33 @@ export class Game {
     const buttons = this.gameView.getButtons();
 
     // continue btn
-    buttons.continue.addEventListener("click", () => this.onContinueBtnPress());
+    buttons.continue.addEventListener("click", this.onContinueBtnPress);
     // retry btn
-    buttons.retry.addEventListener("click", () => this.onRetryBtnPress());
+    buttons.retry.addEventListener("click", this.onRetryBtnPress);
     // quit btn
-    buttons.quit.addEventListener("click", () => this.onQuitBtnPress());
+    buttons.quit.addEventListener("click", this.onQuitBtnPress);
   }
-  onContinueBtnPress() {
+  onContinueBtnPress(e) {
+    if (e?.key && e.key !== 'c') return
+    document.removeEventListener('keydown', this.onContinueBtnPress)
+
+
     // start a new game, to the next level
     startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject)
   }
   onRetryBtnPress() {
+    if (e?.key && e.key !== 'r') return
+    document.removeEventListener('keydown', this.onRetryBtnPress)
+
     // start a new game with currnet level
     startNewGame(this.gameScreen, this.level, this.difficulty, this.playerObject)
   }
-  onQuitBtnPress() {
+  onQuitBtnPress(e) {
+    if (e?.key && e.key !== 'q') {
+      return
+    } else {
+      e.preventDefault()
+    }
     // add player name
     this.gameView.displayNameInput()
 
@@ -284,6 +299,7 @@ export class Game {
     const nameBtn = this.gameView.nameInputBtn
     nameMessage.innerText = ''
     nameInput.focus()
+    document.removeEventListener('keydown', this.onQuitBtnPress)
 
     function onNameEnter() {
       try {
@@ -311,8 +327,9 @@ export class Game {
         nameMessage.innerText = 'saving...'
 
         // remove listeners
-        document.removeEventListener('keydown', onNameEnter)
         document.removeEventListener('click', onNameEnter)
+        document.removeEventListener('keydown', onNameEnter)
+
         // back to home page
         setTimeout(() => {
           window.location.href = '/'
@@ -329,6 +346,19 @@ export class Game {
         onNameEnter()
       }
     })
+  }
+  // (BUG) this can cause problem 
+  addEndGameButtonsListeners(isWon = true) {
+
+    if (isWon) {
+      // add continue
+      document.addEventListener('keydown', this.onContinueBtnPress)
+    } else {
+      // add retry
+      document.addEventListener('keydown', this.onRetryBtnPress)
+    }
+    // add quit
+    document.addEventListener('keydown', this.onQuitBtnPress)
   }
   // Main game loop
   update(timestamp) {
@@ -418,6 +448,9 @@ export class Game {
       this.saveToLocalStorage()
       // display
       this.gameView.displayWin(this.highScore);
+
+      // add buttons listener
+      this.addEndGameButtonsListeners(true)
       return;
     }
 
@@ -426,6 +459,9 @@ export class Game {
       this.isGame = false;
       // display
       this.gameView.displayLose(this.highScore);
+
+      // add buttons listener
+      this.addEndGameButtonsListeners(false)
       return;
     }
   }
