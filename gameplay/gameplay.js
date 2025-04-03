@@ -105,6 +105,8 @@ export async function initializeGameLogic(gameInstance) {
       generateWord();
     } else if (event.key === "Escape" && gameInstance.isGame) {
       togglePause();
+    } else if (event.key === "Shift"){
+      return
     } else if (gameInstance.isGame) {
       attack(event.key);
     }
