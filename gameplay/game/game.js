@@ -261,73 +261,75 @@ export class Game {
     const buttons = this.gameView.getButtons();
 
     // continue btn
-    buttons.continue.addEventListener("click", () => {
-      // start a new game, to the next level
-      startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject)
-    });
+    buttons.continue.addEventListener("click", () => this.onContinueBtnPress());
     // retry btn
-    buttons.retry.addEventListener("click", () => {
-      // start a new game with currnet level
-      startNewGame(this.gameScreen, this.level, this.difficulty, this.playerObject)
-    });
+    buttons.retry.addEventListener("click", () => this.onRetryBtnPress());
     // quit btn
-    buttons.quit.addEventListener("click", () => {
-      // add player name
-      this.gameView.displayNameInput()
-
-      const nameInput = this.gameView.nameInput
-      const nameMessage = this.gameView.nameInputMessage
-      const nameBtn = this.gameView.nameInputBtn
-      nameMessage.innerText = ''
-      nameInput.focus()
-
-      function onNameEnter() {
-        try {
-          // check name
-          let name = nameInput.value.trim()
-          if (name === '') throw new Error('Missing initials')
-          if (name.length !== 3) throw new Error('must be 3 letters')
-
-          // CAP the name
-          name = name.toUpperCase()
-
-          // check for bad name
-          flaggedNames.forEach(flag => {
-            if (name === flag) {
-              throw new Error('Flagged initials')
-            }
-          })
-
-          // all score data is already saved in game over check 
-          // store player name to current score
-          scoreManager.setCurrentScoreName(name)
-          // push to local scores array
-          scoreManager.addToHighScores()
-
-          nameMessage.innerText = 'saving...'
-
-          // remove listeners
-          document.removeEventListener('keydown', onNameEnter)
-          document.removeEventListener('click', onNameEnter)
-          // back to home page
-          setTimeout(() => {
-            window.location.href = '/'
-          }, 1000)
-
-        } catch (err) {
-          nameMessage.innerText = err.message
-        }
-      }
-      // Add Event Listeners
-      nameBtn.addEventListener('click', onNameEnter)
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          onNameEnter()
-        }
-      })
-    });
+    buttons.quit.addEventListener("click", () => this.onQuitBtnPress());
   }
+  onContinueBtnPress() {
+    // start a new game, to the next level
+    startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject)
+  }
+  onRetryBtnPress() {
+    // start a new game with currnet level
+    startNewGame(this.gameScreen, this.level, this.difficulty, this.playerObject)
+  }
+  onQuitBtnPress() {
+    // add player name
+    this.gameView.displayNameInput()
 
+    const nameInput = this.gameView.nameInput
+    const nameMessage = this.gameView.nameInputMessage
+    const nameBtn = this.gameView.nameInputBtn
+    nameMessage.innerText = ''
+    nameInput.focus()
+
+    function onNameEnter() {
+      try {
+        // check name
+        let name = nameInput.value.trim()
+        if (name === '') throw new Error('Missing initials')
+        if (name.length !== 3) throw new Error('must be 3 letters')
+
+        // CAP the name
+        name = name.toUpperCase()
+
+        // check for bad name
+        flaggedNames.forEach(flag => {
+          if (name === flag) {
+            throw new Error('Flagged initials')
+          }
+        })
+
+        // all score data is already saved in game over check 
+        // store player name to current score
+        scoreManager.setCurrentScoreName(name)
+        // push to local scores array
+        scoreManager.addToHighScores()
+
+        nameMessage.innerText = 'saving...'
+
+        // remove listeners
+        document.removeEventListener('keydown', onNameEnter)
+        document.removeEventListener('click', onNameEnter)
+        // back to home page
+        setTimeout(() => {
+          window.location.href = '/'
+        }, 1000)
+
+      } catch (err) {
+        nameMessage.innerText = err.message
+      }
+    }
+    // Add Event Listeners
+    nameBtn.addEventListener('click', onNameEnter)
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        onNameEnter()
+      }
+    })
+  }
   // Main game loop
   update(timestamp) {
     // check is game running
