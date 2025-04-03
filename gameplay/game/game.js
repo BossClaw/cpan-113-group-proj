@@ -2,7 +2,7 @@ import { Enemy } from "../enemy/enemy.js";
 import { Player } from "../player/player.js";
 import { GameView } from "../game-view/gameview.js";
 import scoreManager from "./scoreManager.js";
-import { initializeGameLogic } from "./temp-gameplay.js";
+import { initializeGameLogic } from "../gameplay.js";
 import flaggedNames from "./flaggedNames.js";
 
 
@@ -58,12 +58,13 @@ const difficultSpeedModifer = {
 export class Game {
   constructor(
     gameScreen,
-    level = 1,
+    level = '1',
     difficulty = "easy",
     playerObject = null
   ) {
     // #game_screen div
-    this.gameScreen = gameScreen;
+    this.gameScreen = gameScreen
+    this.gameScreen.innerHTML = ''
 
     // game status
     this.level = level
@@ -521,13 +522,11 @@ export class Game {
 
 // Start new game: create a new game instance
 let currentGame = null;
-function startNewGame(gameScreen, level = 1, difficulty = "easy", playerObject = null) {
+
+export function startNewGame(gameScreen, level = 1, difficulty = "easy", playerObject = null) {
   if (currentGame && currentGame.animatedFrameId) {
     cancelAnimationFrame(currentGame.animatedFrameId);
   }
-  // Clear screen
-  gameScreen.innerHTML = "";
-
   // Create a new game instance
   currentGame = new Game(gameScreen, level, difficulty, playerObject);
 
