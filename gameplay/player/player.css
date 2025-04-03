@@ -13,7 +13,7 @@
   
   /* override with js */
   /* background-color: rgb(255, 255, 255);  */
-  background-image: url('/gameplay/player/player_idle.gif');
+  background-image: url('gameplay/player/player_idle.gif');
 }
 
 .player-info {
