@@ -63,15 +63,17 @@ export async function initializeGameLogic(gameInstance) {
   }
 
   // Typing attack
-  let isKeyDown = false
+  let lastSpwanTime = Date.now()
   function attack(key) {
     const letterSpan = wordLetters.getElementsByTagName("span")[letterToTypeIndex];
     if (key === letterSpan.innerHTML) {
       letterSpan.style.color = "green";
       letterToTypeIndex += 1;
       gameInstance.onPlayerAttack();
-    } else if(!isKeyDown) {
+    } else if ((lastKeypressTime - lastSpwanTime > 200)) {
       gameInstance.onPlayerAttack(false);
+      lastSpwanTime = Date.now()
+      console.log("Spawn")
     }
     checkForCompletion();
   }
@@ -95,8 +97,9 @@ export async function initializeGameLogic(gameInstance) {
 
   // Key listener
   const startingDisplay = gameInstance.gameView.startingDisplay
+  let lastKeypressTime = Date.now()
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !gameInstance.gameView.overlay) {
+    if (event.key === "Enter" && !gameInstance.gameView.overlay && !gameInstance.isGame) {
       event.preventDefault();
       gameInstance.start();
       startingDisplay.style.visibility = "hidden";
@@ -105,14 +108,14 @@ export async function initializeGameLogic(gameInstance) {
     } else if (event.key === "Escape" && gameInstance.isGame) {
       togglePause();
     } else if (gameInstance.isGame) {
-      isKeyDown = true
+      lastKeypressTime = Date.now()
       attack(event.key);
     }
   });
 
-  document.addEventListener("keyup", function(){
-    isKeyDown = false
-  })
+  // document.addEventListener("keyup", function(){
+  //   isKeyDown = false
+  // })
 
 }
 
