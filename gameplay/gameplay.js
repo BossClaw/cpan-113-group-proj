@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // first game
   const gameScreen = document.querySelector("#game_screen");
   const level = localStorage.getItem("level") || "1";
-  const difficulty = localStorage.getItem("difficulty") || "noemal";
+  const difficulty = localStorage.getItem("difficulty") || "normal";
   startNewGame(gameScreen, level, difficulty);
 });
 
