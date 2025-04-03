@@ -114,7 +114,7 @@ export class GameView {
 
     this.nameInputBtn = document.createElement('button')
     this.nameInputBtn.classList.add('name-input-btn')
-    this.nameInputBtn.innerText = 'OK'
+    this.nameInputBtn.innerText = 'Enter'
     this.nameInputLowerDiv.appendChild(this.nameInputBtn)
 
     this.nameInputMessage = document.createElement('span')

@@ -227,6 +227,11 @@ export class Game {
     // update game states display
     // this.updateGameStats();
 
+    // check if this is the first leve in a playthough
+    // clear current score left over
+    if (!currentGame) {
+      scoreManager.removeCurrentCore()
+    }
     // spawn player
     if (this.playerObject) {
       const gun = this.playerObject.gun;
@@ -274,21 +279,25 @@ export class Game {
       const nameMessage = this.gameView.nameInputMessage
       const nameBtn = this.gameView.nameInputBtn
       nameMessage.innerText = ''
+      nameInput.focus()
 
-      nameBtn.addEventListener('click', () => {
+      function onNameEnter() {
         try {
           // check name
           let name = nameInput.value.trim()
           if (name === '') throw new Error('Missing initials')
           if (name.length !== 3) throw new Error('must be 3 letters')
 
+          // CAP the name
+          name = name.toUpperCase()
+
+          // check for bad name
           flaggedNames.forEach(flag => {
             if (name === flag) {
               throw new Error('Flagged initials')
             }
           })
-          // CAP the name
-          name = name.toUpperCase()
+
           // all score data is already saved in game over check 
           // store player name to current score
           scoreManager.setCurrentScoreName(name)
@@ -296,6 +305,10 @@ export class Game {
           scoreManager.addToHighScores()
 
           nameMessage.innerText = 'saving...'
+
+          // remove listeners
+          document.removeEventListener('keydown', onNameEnter)
+          document.removeEventListener('click', onNameEnter)
           // back to home page
           setTimeout(() => {
             window.location.href = '/'
@@ -304,8 +317,14 @@ export class Game {
         } catch (err) {
           nameMessage.innerText = err.message
         }
+      }
+      // Add Event Listeners
+      nameBtn.addEventListener('click', onNameEnter)
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          onNameEnter()
+        }
       })
-
     });
   }
 

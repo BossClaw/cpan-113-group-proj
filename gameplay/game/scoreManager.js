@@ -24,7 +24,7 @@ class ScoreManager {
 
     return score;
   }
-  remoreCurrentCore() {
+  removeCurrentCore() {
     localStorage.removeItem(CURRENT_SCORE_KEY)
   }
   getScores() {
@@ -69,7 +69,7 @@ class ScoreManager {
     localStorage.setItem(SCORES_KEY, JSON.stringify(scores));
 
     // remove current score
-    this.remoreCurrentCore()
+    this.removeCurrentCore()
   }
 }
 
