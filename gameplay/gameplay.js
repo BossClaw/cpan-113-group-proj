@@ -63,13 +63,14 @@ export async function initializeGameLogic(gameInstance) {
   }
 
   // Typing attack
+  let isKeyDown = false
   function attack(key) {
     const letterSpan = wordLetters.getElementsByTagName("span")[letterToTypeIndex];
     if (key === letterSpan.innerHTML) {
       letterSpan.style.color = "green";
       letterToTypeIndex += 1;
       gameInstance.onPlayerAttack();
-    } else {
+    } else if(!isKeyDown) {
       gameInstance.onPlayerAttack(false);
     }
     checkForCompletion();
@@ -104,9 +105,15 @@ export async function initializeGameLogic(gameInstance) {
     } else if (event.key === "Escape" && gameInstance.isGame) {
       togglePause();
     } else if (gameInstance.isGame) {
+      isKeyDown = true
       attack(event.key);
     }
   });
+
+  document.addEventListener("keyup", function(){
+    isKeyDown = false
+  })
+
 }
 
 
