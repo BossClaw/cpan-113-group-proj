@@ -332,7 +332,7 @@ export class Game {
 
         // back to home page
         setTimeout(() => {
-          window.location.href = '/'
+          window.location.href = 'index.html'
         }, 1000)
 
       } catch (err) {
