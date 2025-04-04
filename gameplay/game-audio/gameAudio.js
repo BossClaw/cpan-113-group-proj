@@ -57,10 +57,13 @@ class GameAudio {
     this.audioCacheMap = new Map() // audio instance
     this.audioIndexMap = new Map() // current index of each list
     this.currentMusic = null // only 1 music at a time
+
+    // bin
+    this.toggleMusic = this.toggleMusic.bind(this)
   }
-  giveConsent() {
+  setConsent(consent = true) {
     // call in class  game "Enter" game button
-    this.playerConsent = true
+    this.playerConsent = consent
   }
   setMusicVolume(volume = 0.5) {
     this.musicVolume = Math.max(0, Math.min(1, volume)) // clamp it
@@ -69,13 +72,20 @@ class GameAudio {
     this.sfxVolume = Math.max(0, Math.min(1, volume)) // clamp it
   }
   stopMusic() {
-    if (this.currentMusic) {
+    if (!this.currentMusic) return
+    this.currentMusic.pause();
+    this.currentMusic.currentTime = 0;
+    this.currentMusic = null;
+  }
+  toggleMusic() {
+    if (!this.currentMusic) return;
+
+    if (this.currentMusic.paused) {
+      this.currentMusic.play().catch(console.warn);
+    } else {
       this.currentMusic.pause();
-      this.currentMusic.currentTime = 0;
-      this.currentMusic = null;
     }
   }
-
   play(path, isMusic = false, loop = false) {
     if (!this.playerConsent) return
 
