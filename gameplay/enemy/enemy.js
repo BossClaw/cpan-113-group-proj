@@ -1,3 +1,6 @@
+import { gameAudio } from "../game-audio/gameAudio.js";
+
+
 const enemyList = [
   {
     name: "error",
@@ -152,6 +155,10 @@ export class Enemy {
     this.hp -= amount;
     this.innerDiv.classList.remove("hit");
     this.innerDiv.classList.add("hit");
+
+    // play SFX
+    gameAudio.playEnemyHit()
+
     // die
     if (this.hp <= 0) {
       this.destroy();

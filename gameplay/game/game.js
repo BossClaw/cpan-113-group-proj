@@ -4,6 +4,7 @@ import { GameView } from "../game-view/gameview.js";
 import scoreManager from "./scoreManager.js";
 import { initializeGameLogic } from "../gameplay.js";
 import flaggedNames from "./flaggedNames.js";
+import { gameAudio } from "../game-audio/gameAudio.js";
 
 
 // Get level state
@@ -40,7 +41,6 @@ function getLevelState(level = 1) {
   } else {
     ememySpawnTime = spawnTime;
   }
-
   return {
     enemyCount,
     ememySpeed,
@@ -100,6 +100,9 @@ export class Game {
     // show start message display
     this.gameView.showStartMessage(this.level, this.difficulty)
 
+    // sonund toggle button
+    this.gameView.soundToggle.addEventListener('click', this.toggleSound)
+
     // bind methods just in case
     this.start = this.start.bind(this);
     this.update = this.update.bind(this);
@@ -140,11 +143,22 @@ export class Game {
     //  Restart the game loop
     this.animationId = requestAnimationFrame(this.update);
   }
+  toggleSound() {
+    if (gameAudio.playerConsent) {
+      // turn off
+      gameAudio.setConsent(false)
+      gameAudio.toggleMusic()
+    } else {
+      // turn on
+      gameAudio.setConsent(true)
+      gameAudio.toggleMusic()
+    }
+  }
   onFirewallAttacked(damage) {
     this.firewallHP -= damage;
     this.firewall.classList.remove("player-attack");
     this.firewall.classList.remove("on-hit");
-    // force reflow
+    // force reflow 
     void this.firewall.offsetWidth;
     this.firewall.classList.add("on-hit");
 
@@ -153,6 +167,8 @@ export class Game {
     if (this.firewallHP <= 0) {
       const temp = this.firewall;
       this.firewall = null;
+      // SFX
+      gameAudio.playFirewallDie()
       setTimeout(() => {
         temp.remove();
       }, 500);
@@ -165,6 +181,9 @@ export class Game {
     // force reflow
     void this.gameScreen.offsetWidth;
     this.gameScreen.classList.add("on-hit");
+
+    // SFX
+    gameAudio.playBaseHit()
   }
   onPlayerAttack(isHit = true) {
     console.log('player Attack:', isHit)
@@ -193,7 +212,7 @@ export class Game {
     this.gameScreen.classList.remove("on-hit");
     this.gameScreen.classList.remove("player-attack");
     // force reflow
-    void this.gameScreen.offsetWidth;
+    //void this.gameScreen.offsetWidth;
     this.gameScreen.classList.add("player-attack");
 
     // Find the closest enemny
@@ -451,6 +470,9 @@ export class Game {
 
       // add buttons listener
       this.addEndGameButtonsListeners(true)
+
+      // WIN MUSIC
+      gameAudio.playWinMusic()
       return;
     }
 
@@ -462,6 +484,9 @@ export class Game {
 
       // add buttons listener
       this.addEndGameButtonsListeners(false)
+
+      // LOSE MUSIC
+      gameAudio.playLoseMusic()
       return;
     }
   }
@@ -513,10 +538,14 @@ export class Game {
     this.setup();
     this.isGame = true;
     this.getGameStates() // update game states
+    // concent gameAudio
+    gameAudio.setConsent()
+
+    // play backgronud music
+    gameAudio.playBackgroundMusic(false)
 
     // Run game
     requestAnimationFrame(this.update);
-
   }
 }
 
@@ -526,6 +555,10 @@ let currentGame = null;
 export function startNewGame(gameScreen, level = 1, difficulty = "easy", playerObject = null) {
   if (currentGame && currentGame.animatedFrameId) {
     cancelAnimationFrame(currentGame.animatedFrameId);
+  }
+  // if this is the first game remove current scores
+  if (!currentGame) {
+    scoreManager.removeCurrentCore()
   }
   // Create a new game instance
   currentGame = new Game(gameScreen, level, difficulty, playerObject);

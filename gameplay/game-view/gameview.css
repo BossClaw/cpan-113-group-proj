@@ -280,6 +280,27 @@
   z-index: 20;
 }
 
+/* sound toggle */
+.sound-toggle {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  height: 20px;
+  width: 20px;
+  margin: 0;
+  background-color: gray;
+  cursor: pointer;
+  z-index: 100;
+}
+.sound-toggle::after {
+  position: absolute;
+  inset: 0;
+  top: -2px;
+  left: 1px;
+  content: 's';
+  font-size: 10px;
+}
+
 @keyframes on-base-hit {
   0% {
     opacity: 0;
