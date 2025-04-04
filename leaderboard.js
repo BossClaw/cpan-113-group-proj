@@ -50,7 +50,7 @@ function updateLocalLeaderboard(limit = 10) {
   for (let i = 0; i < scores.length; i++) {
     // score text
     const scoreRecord = scores[i]
-    const scoreText = String(scoreRecord.score).padStart(4, '0')
+    const scoreText = String(scoreRecord.score).padStart(5, '0')
     // placement text
     let placement
     if (i === 0) {
@@ -62,12 +62,21 @@ function updateLocalLeaderboard(limit = 10) {
     } else {
       placement = `${i + 1}TH`
     }
-    const scoreDivText = `${placement}   ${scoreText}   ${scoreRecord.name}`
 
-    // create score h2 element
+    // create elements
+    const placeSpan = document.createElement('span')
+    placeSpan.innerText = placement
+    const scoreSpan = document.createElement('span')
+    scoreSpan.innerText = scoreText
+    const nameSpan = document.createElement('span')
+    nameSpan.innerText = scoreRecord.name
+
+    // create h2
     const scoreH2 = document.createElement('h2')
-    scoreH2.innerText = scoreDivText
-    scoreH2.classList.add('cta_pulse')
+    scoreH2.appendChild(placeSpan)
+    scoreH2.appendChild(scoreSpan)
+    scoreH2.appendChild(nameSpan)
+
     // append
     leaderboardDiv.appendChild(scoreH2)
   }
