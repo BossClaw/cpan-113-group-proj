@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/bg.css" />
     <link rel="stylesheet" href="css/anim.css" />
     <link rel="stylesheet" href="css/crt.css" />
+    <link rel="stylesheet" href="css/leaderboard.css" />
 
     <!-- TBD - MODULES -->
     <script type="module" src="js/common.js"></script>
@@ -20,6 +21,9 @@
 
     <!-- GAME SETTINGS -->
     <script type="module" src="game_settings.js"></script>
+
+    <!--LEADERBOARD-->
+    <script type="module" src="leaderboard.js" defer></script>
   </head>
 
   <body>
@@ -115,14 +119,16 @@
           <section>
             <div class="tc">
               <h2 class="cta_pulse">LEADERBOARD</h2>
-              <h2 class="cta_pulse">BUT - 2048</h2>
-              <h2 class="cta_pulse">JIZ - 1024</h2>
-              <h2 class="cta_pulse">OOO - 512</h2>
-              <h2 class="cta_pulse">OOO - 256</h2>
-              <h2 class="cta_pulse">OOO - 128</h2>
-              <h2 class="cta_pulse">OOO - 64</h2>
-              <h2 class="cta_pulse">OOO - 32</h2>
-              <h2 class="cta_pulse">OOO - 16</h2>
+              <div id="leaderboard">
+                <h2 class="cta_pulse">BUT - 2048</h2>
+                <h2 class="cta_pulse">JIZ - 1024</h2>
+                <h2 class="cta_pulse">OOO - 512</h2>
+                <h2 class="cta_pulse">OOO - 256</h2>
+                <h2 class="cta_pulse">OOO - 128</h2>
+                <h2 class="cta_pulse">OOO - 64</h2>
+                <h2 class="cta_pulse">OOO - 32</h2>
+                <h2 class="cta_pulse">OOO - 16</h2>
+              </div>
             </div>
           </section>
         </main>
@@ -162,40 +168,26 @@
       // PAGE-SPECIFIC JS
 
       // TODO - JASMINE READ VALUES FROM GAME SETTINGS
-      // update_value_on_div("level", game_settings.get_level());      
+      // update_value_on_div("level", game_settings.get_level());
 
       // update_value_on_div("level", game_settings.get_level(666));
-      
+
       // TYPED_INTRO
-      var typed_mission = new Typed("#typed_mission", {
-        stringsElement: "#typed-intro",
+      var typed_mission = new Typed('#typed_mission', {
+        stringsElement: '#typed-intro',
         typeSpeed: 70,
         smartBackspace: true,
-      });
+      })
 
       // WIP - COMMON MUSIC
 
-      function apply_game_settings() {
-        
-      }
+      function apply_game_settings() {}
     </script>
 
     <div class="hidden">
-      LIBRARIES
-      
-      Typed.js
-      https://mattboldt.com/demos/typed-js/
-      
-      ANIMATE.CSS
+      LIBRARIES Typed.js https://mattboldt.com/demos/typed-js/ ANIMATE.CSS
       https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css
-      
-      
-      CRT.CSS
-      
-      
-      
-      AUDIO ASSETS      
-      
-      FONT ASSETS</div>
+      CRT.CSS AUDIO ASSETS FONT ASSETS
+    </div>
   </body>
 </html>
