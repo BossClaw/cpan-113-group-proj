@@ -3,6 +3,7 @@ import { Player } from "../player/player.js";
 import { GameView } from "../game-view/gameview.js";
 import scoreManager from "./scoreManager.js";
 import { initializeGameLogic } from "../gameplay.js";
+import { set_background_glitch } from "../background.js";
 import flaggedNames from "./flaggedNames.js";
 import { gameAudio } from "../game-audio/gameAudio.js";
 
@@ -64,7 +65,10 @@ export class Game {
   ) {
     // #game_screen div
     this.gameScreen = gameScreen
-    this.gameScreen.innerHTML = ''
+    this.gameScreen.innerHTML = "";
+
+    // SET RANDOM BACKGROUND GLITCH
+    set_background_glitch(this.gameScreen);
 
     // game status
     this.level = level
