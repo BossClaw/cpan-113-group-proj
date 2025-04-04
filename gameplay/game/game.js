@@ -4,6 +4,7 @@ import { GameView } from "../game-view/gameview.js";
 import scoreManager from "./scoreManager.js";
 import { initializeGameLogic } from "../gameplay.js";
 import flaggedNames from "./flaggedNames.js";
+import { GameAudio } from "../game-audio/gameAudio.js";
 
 
 // Get level state
@@ -96,6 +97,9 @@ export class Game {
 
     // gameView
     this.gameView = new GameView(this.gameScreen);
+
+    // gameAudio
+    this.gameAudio = new GameAudio()
 
     // show start message display
     this.gameView.showStartMessage(this.level, this.difficulty)
@@ -513,6 +517,12 @@ export class Game {
     this.setup();
     this.isGame = true;
     this.getGameStates() // update game states
+    // concent gameAudio
+    this.gameAudio.giveConsent()
+
+    // play backgronud music
+    this.gameAudio.setMusicVolume(1)
+    this.gameAudio.playBackgroundMusic(false)
 
     // Run game
     requestAnimationFrame(this.update);

@@ -38,7 +38,6 @@ const enemyHit = [
 
 const playerAttackSFX = []
 
-
 export class GameAudio {
   constructor() {
     // user need to click on something to consent play audio
@@ -51,7 +50,6 @@ export class GameAudio {
     this.audioCacheMap = new Map() // audio instance
     this.audioIndexMap = new Map() // current index of each list
     this.currentMusic = null // only 1 music at a time
-
   }
   giveConsent() {
     // call in class  game "Enter" game button
