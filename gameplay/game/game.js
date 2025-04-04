@@ -4,7 +4,7 @@ import { GameView } from "../game-view/gameview.js";
 import scoreManager from "./scoreManager.js";
 import { initializeGameLogic } from "../gameplay.js";
 import flaggedNames from "./flaggedNames.js";
-import { GameAudio } from "../game-audio/gameAudio.js";
+import { gameAudio } from "../game-audio/gameAudio.js";
 
 
 // Get level state
@@ -41,7 +41,6 @@ function getLevelState(level = 1) {
   } else {
     ememySpawnTime = spawnTime;
   }
-
   return {
     enemyCount,
     ememySpeed,
@@ -98,9 +97,6 @@ export class Game {
     // gameView
     this.gameView = new GameView(this.gameScreen);
 
-    // gameAudio
-    this.gameAudio = new GameAudio()
-
     // show start message display
     this.gameView.showStartMessage(this.level, this.difficulty)
 
@@ -148,7 +144,7 @@ export class Game {
     this.firewallHP -= damage;
     this.firewall.classList.remove("player-attack");
     this.firewall.classList.remove("on-hit");
-    // force reflow
+    // force reflow 
     void this.firewall.offsetWidth;
     this.firewall.classList.add("on-hit");
 
@@ -157,6 +153,8 @@ export class Game {
     if (this.firewallHP <= 0) {
       const temp = this.firewall;
       this.firewall = null;
+      // SFX
+      gameAudio.playFirewallDie()
       setTimeout(() => {
         temp.remove();
       }, 500);
@@ -169,6 +167,9 @@ export class Game {
     // force reflow
     void this.gameScreen.offsetWidth;
     this.gameScreen.classList.add("on-hit");
+
+    // SFX
+    gameAudio.playBaseHit()
   }
   onPlayerAttack(isHit = true) {
     console.log('player Attack:', isHit)
@@ -197,7 +198,7 @@ export class Game {
     this.gameScreen.classList.remove("on-hit");
     this.gameScreen.classList.remove("player-attack");
     // force reflow
-    void this.gameScreen.offsetWidth;
+    //void this.gameScreen.offsetWidth;
     this.gameScreen.classList.add("player-attack");
 
     // Find the closest enemny
@@ -455,6 +456,9 @@ export class Game {
 
       // add buttons listener
       this.addEndGameButtonsListeners(true)
+
+      // WIN MUSIC
+      gameAudio.playWinMusic()
       return;
     }
 
@@ -466,6 +470,9 @@ export class Game {
 
       // add buttons listener
       this.addEndGameButtonsListeners(false)
+
+      // LOSE MUSIC
+      gameAudio.playLoseMusic()
       return;
     }
   }
@@ -518,15 +525,13 @@ export class Game {
     this.isGame = true;
     this.getGameStates() // update game states
     // concent gameAudio
-    this.gameAudio.giveConsent()
+    gameAudio.giveConsent()
 
     // play backgronud music
-    this.gameAudio.setMusicVolume(1)
-    this.gameAudio.playBackgroundMusic(false)
+    gameAudio.playBackgroundMusic(false)
 
     // Run game
     requestAnimationFrame(this.update);
-
   }
 }
 

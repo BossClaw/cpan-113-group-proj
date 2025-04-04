@@ -7,11 +7,11 @@ const bgMusic = [
 
 // win / lose
 const winMusic = [
-  'gameplay/audio/music/Retro Victory #1.wav'
+  'gameplay/audio/music/Retro Victory 1.wav'
 ]
 
 const loseMusic = [
-  'gameplay/audio/music/Retro Defeat #3.wav'
+  'gameplay/audio/music/Retro Defeat 3.wav'
 ]
 
 // base
@@ -31,22 +31,29 @@ const firewallDie = [
 
 // enemy
 const enemyHit = [
-  'gameplay/audio/sfx/enemy_disintegrate_hi.wav',
   'gameplay/audio/sfx/enemy_distintegrate_lo.wav',
+  'gameplay/audio/sfx/enemy_disintegrate_md.wav',
+  'gameplay/audio/sfx/enemy_hit_md.wav'
+]
+
+// player
+const playerAttack = [
   'gameplay/audio/sfx/enemy_hit_hi.wav'
 ]
 
-const playerAttackSFX = []
+const playerMissed = [
+  'gameplay/audio/sfx/player_reload.wav'
+]
 
-export class GameAudio {
+class GameAudio {
   constructor() {
     // user need to click on something to consent play audio
     // this will be the start game "Enter" button
     // Game class will trigger it, and let GameAudio know
     // ***** interaction NEED to trigger Audio.play() at least 1 time
     this.playerConsent = false
-    this.musicVolume = 0.5
-    this.sfxVolume = 0.5
+    this.musicVolume = 0.3
+    this.sfxVolume = 1
     this.audioCacheMap = new Map() // audio instance
     this.audioIndexMap = new Map() // current index of each list
     this.currentMusic = null // only 1 music at a time
@@ -90,6 +97,12 @@ export class GameAudio {
       this.stopMusic();
       this.currentMusic = audio;
     }
+
+    // remove after played
+    audio.addEventListener("ended", () => {
+      audio.removeAttribute("src");
+      audio.load();
+    });
 
     // play 
     audio.play().catch(err => {
@@ -136,7 +149,17 @@ export class GameAudio {
     this.playFromList(firewallDie, isRandom)
   }
   // Enemy
-  playEnemyDie(isRandom) {
+  playEnemyHit(isRandom) {
     this.playFromList(enemyHit, isRandom)
   }
+  // player
+  playPlayerAttack(isRandom) {
+    this.playFromList(playerAttack, isRandom)
+  }
+  playPlayerMissed(isRandom) {
+    this.playFromList(playerMissed, isRandom)
+
+  }
 }
+const gameAudio = new GameAudio()
+export { gameAudio }

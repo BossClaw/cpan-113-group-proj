@@ -1,3 +1,5 @@
+import { gameAudio } from "../game-audio/gameAudio.js";
+
 const hatList = [];
 
 const theGunDictionary = {
@@ -92,9 +94,14 @@ export class Player {
     return this.outerDiv.getBoundingClientRect().left;
   }
   attack() {
+    // play SFX
+    gameAudio.playPlayerAttack()
     return this.gunDamage;
   }
   missed() {
+    // play SFX
+    gameAudio.playPlayerMissed()
+
     const message = document.createElement("div");
     message.classList.add("missed");
     message.innerText = "missed";
