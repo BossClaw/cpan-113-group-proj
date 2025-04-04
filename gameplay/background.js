@@ -8,7 +8,6 @@
 export function set_background_glitch(gameScreen) {
   let bg_idx = `` + (Math.random() * 10).toFixed(0);
   bg_idx = bg_idx.padStart(2, "0");
-  bg_idx = "03";
   const bg_url = `url("../gameplay/background/bg_${bg_idx}_glitch.gif")`;
   console.log(
     `[GAMEVIEW] MADE RAND BG[${bg_url}] FOR[${gameScreen}] ID[${gameScreen.id}]`
