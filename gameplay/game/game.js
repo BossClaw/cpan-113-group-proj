@@ -416,7 +416,7 @@ export class Game {
         }
       }
       // enemy reaching mainframe
-      if (enemyLocationX - this.mainframeDiv.getBoundingClientRect().right <= 0) {
+      if (this.mainframeDiv && this.mainframe.isAlive && enemyLocationX - this.mainframeDiv.getBoundingClientRect().right <= 0) {
         this.onMainframeAttacked(enemy.attack());
         continue;
       }
