@@ -306,6 +306,8 @@ function show_view(viewIndex) {
 function common_page_init() {
   console.log("[COMMON][PAGE] INIT");
 
+  // OSC FIRST TO THEN GET ELEMENT EVENTS
+  osc_init();
   ui_init_events();
   viz_init();
   aud_init();
@@ -318,6 +320,29 @@ function common_page_init() {
 
 function common_page_unload() {
   // AUTO SAVE TO HEROKU?
+}
+
+// =============================================================================
+// ON SCREEN CONTROLS
+
+// DYN ADD THE DIV TO BODY TO BE CONSISTENT WITH ALL PAGES
+
+function osc_init() {
+  const osc_div = document.createElement("div");
+
+  osc_div.id = "os_controls";
+
+  const butt_crt = document.createElement("button");
+  butt_crt.id = "ui_crt_toggle";
+  butt_crt.textContent = `CRT`;
+  osc_div.appendChild(butt_crt);
+
+  const butt_mute = document.createElement("button");
+  butt_mute.id = "butt_aud_mute";
+  osc_div.appendChild(butt_mute);
+
+  // ADD TO BODY
+  document.body.appendChild(osc_div);
 }
 
 // =============================================================================
