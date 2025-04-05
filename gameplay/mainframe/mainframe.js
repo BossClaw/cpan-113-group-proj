@@ -22,7 +22,7 @@ export class Mainframe {
       console.warn('missing game screen')
       return;
     }
-    // Creat outter div
+    // Create outer div
     this.outerDiv = document.createElement("div");
     this.outerDiv.classList.add(this.outerClass);
     this.outerDiv.style.position = "absolute";
