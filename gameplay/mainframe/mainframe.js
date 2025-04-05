@@ -1,21 +1,20 @@
 import { gameAudio } from "../game-audio/gameAudio.js";
 
 export class Mainframe {
-  constructor(gameScreen, hp = 10) {
+  constructor(gameScreen) {
     this.gameScreen = gameScreen
     // location/styles
     this.outerClass = "mainframe";
     this.innerClass = "mainframe-sprit";
-    this.locationX = 8,
-      this.locationY = 45
+    this.locationX = 8
+    this.locationY = 45
 
     // divs
     this.outerDiv = null;
     this.innerDiv = null;
 
-
     // stats
-    this.hp = hp
+    this.hp = 10
     this.isAlive = true
   }
   spawn() {
@@ -60,6 +59,16 @@ export class Mainframe {
   }
   takeDamage(damage = 1) {
     this.hp -= damage
+    // dmage stage
+    if (this.hp > 8) {
+      this.changeDamageStage(0); 
+    } else if (this.hp > 6) {
+      this.changeDamageStage(1); 
+    } else if (this.hp > 3) {
+      this.changeDamageStage(2); 
+    } else {
+      this.changeDamageStage(3); 
+    }
     // SFX
     gameAudio.playBaseHit()
 
@@ -72,6 +81,28 @@ export class Mainframe {
     if (this.hp <= 0) {
       this.destroy()
     }
+  }
+  changeDamageStage(stage = 0) {
+    // 0 = default, increase stage as damaged
+    const maxStage = 3
+    const damageStage = Math.min(maxStage, Math.max(0, stage))
+    let color = "#FFFFFF";
+
+    switch (damageStage) {
+      case 0:
+        color = "#FFFFFF";
+        break;
+      case 1:
+        color = "#FFCCCC";
+        break;
+      case 2:
+        color = "#FF6666";
+        break;
+      case 3:
+        color = "#FF3333";
+        break;
+    }
+    this.innerDiv.style.backgroundColor = color;
   }
   destroy() {
     this.isAlive = false
