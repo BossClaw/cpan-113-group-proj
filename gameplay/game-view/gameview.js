@@ -1,5 +1,5 @@
 // UI and display for the game-view screen
-
+import { set_background_win } from "../background.js";
 
 export class GameView {
   constructor(gameScreen) {
@@ -170,7 +170,10 @@ export class GameView {
     this.title.innerText = 'YOU WIN'
     this.highScore.innerText = _highscroe
     this.gameScreenOverlay.style.display = 'flex'
-    this.overlay = true
+    this.overlay = true;
+
+    // CHANGE THE BG TO WIN
+    set_background_win(this.gameScreen);
   }
   displayLose(_highscroe = 0) {
     // hide name input
