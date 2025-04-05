@@ -2,6 +2,7 @@
 // TBD - SPLIT .JS UP INTO FOCUSED FILES : backend.js, audio.js, video.js, etc...
 
 import { viz_init_bg } from "./bg.js";
+import { gameAudio } from "../gameplay/game-audio/gameAudio.js";
 
 // TBD - ONLY 2 .HTML FILES, index.html & play.html
 
@@ -90,16 +91,88 @@ function update_aud_dom() {
   // UPDATE THE AUDIO DOM WITH MUTE / VOLUME VALS
 }
 
+// =================================================================
+// AUD WRAPPER
+
 function aud_init() {
   console.log("[COMMON][PAGE][AUD] INIT");
 
-  // TBD - READ 'LAST PLAY POINT' FROM STORAGE
+  // COMMON PAGE BG MUSIC
+  gameAudio.setConsent();
+  gameAudio.play(
+    "audio/music/Phat_Phrog_Studios_Retro_Fragments.mp3",
+    true,
+    true
+  );
 
-  // PLAY MUSIC FROM THAT POINT
+  aud_update_dom();
 
-  // TODO - READ VOLUME/MUTE
+  var aud_mute = document.querySelector("#butt_aud_mute");
+  if (!aud_mute) {
+    console.error("Element with ID 'butt_aud_mute' not found.");
+    return;
+  }
 
-  // TODO - ATTACH CALLBACK ON WINDOW EXIT
+  aud_mute.addEventListener("click", () => {
+    aud_mute_toggle();
+  });
+}
+
+const VIZ_AUD_MUTED_KEY = "aud_muted";
+
+function aud_get_muted() {
+  var cur_aud_val = localStorage.getItem(VIZ_AUD_MUTED_KEY) == "true";
+  console.log(`[COMMON][AUD] get_muted(${cur_aud_val})`);
+  return cur_aud_val;
+}
+
+function aud_set_muted(aud_muted) {
+  console.log(`[COMMON][AUD] set_muted(${aud_muted})`);
+  localStorage.setItem(VIZ_AUD_MUTED_KEY, aud_muted);
+  
+  // UPDATE THE PLAYING
+  gameAudio.setConsent(true);
+  gameAudio.toggleMusic();
+
+  // UPDATE THE ICON
+  aud_update_dom();
+}
+
+function aud_mute_toggle() {
+  console.log("[COMMON][AUD] TOGGLE MUTED CLICKED");
+
+  // CALC INVERSE
+  const mute_inverse = !aud_get_muted();
+  console.log(
+    `[COMMON][AUD] CUR(${aud_get_muted()}) TOGGLING TO(${mute_inverse})`
+  );
+
+  // STORE & APPLY INVERSE
+  aud_set_muted(mute_inverse);
+}
+
+// UPDATE THE DOM BASED ON VAL
+function aud_update_dom() {
+  // GET THE BODY/DIV/DOM ELEMENT TARGET FOR CRT
+  var target = document.querySelector("#butt_aud_mute");
+
+  if (!target) {
+    console.log(`[COMMON][AUD] NO DOM FOUND TO UPDATE`);
+    return;
+  }
+
+  const aud_is_muted = aud_get_muted();
+
+  console.log(`[COMMON][AUD] UPDATING DOM[${target.id}] MUTED(${aud_is_muted})`);
+
+  // SET SPEAKER SPRITE BY CLASS
+  if (aud_is_muted) {
+    target.classList.add("aud_icon_muted");
+    target.classList.remove("aud_icon_loud");
+  } else {
+    target.classList.remove("aud_icon_muted");
+    target.classList.add("aud_icon_loud");
+  }
 }
 
 // =================================================================
@@ -110,7 +183,7 @@ function viz_init() {
 
   viz_init_bg();
 
-  crt_set_enabled(true);
+  crt_set_enabled(crt_get_enabled());    
 }
 
 // =================================================================
@@ -127,7 +200,7 @@ function crt_get_enabled() {
 }
 
 function crt_set_enabled(crt_enabled) {
-  console.log(`[COMMON][VIZ][CRT] SETTING ENABLED(${crt_enabled})`);
+  console.log(`[COMMON][VIZ][CRT] SETTING ENABLED(${crt_get_enabled()})`);
   localStorage.setItem(VIZ_CRT_ENABLED_KEY, crt_enabled);
   crt_update_dom();
 }
@@ -235,6 +308,7 @@ function common_page_init() {
 
   ui_init_events();
   viz_init();
+  aud_init();
 
   // TODO - ADD A LISTENER ON UNLOAD TO SAVE CHANGES???
   document.addEventListener("WindowUnload", () => {
