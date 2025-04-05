@@ -109,7 +109,7 @@ function aud_init() {
 
   var aud_mute = document.querySelector("#butt_aud_mute");
   if (!aud_mute) {
-    console.error("BAD");
+    console.error("Element with ID 'butt_aud_mute' not found.");
     return;
   }
 
