@@ -13,7 +13,7 @@
 
     <!-- TBD - MODULES -->
     <script type="module" src="js/common.js"></script>
-    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script type="module" src="js/index.js"></script>
 
     <!-- MISSION CONFIG -->
     <link rel="stylesheet" href="missionConfigure/missionConfigure.css" />
@@ -47,9 +47,8 @@
               <img src="img/title/cta_hero.png" class="mw-100" />
             </div>
 
-            <div class="tc">
+            <div id='mission_text_div' class="tc">
               <h2 class="cta_pulse">THE MISSION</h2>
-              <p id="typed_mission"></p>
             </div>
           </section>
 
@@ -129,33 +128,6 @@
         </footer>
       </div>
     </div>
-
-    <div id="typed-intro">
-      <p><span class="typed_bugs">BUGS</span> have inflitrated the System!</p>
-      <p><span class="typed_bugs">BUGS</span> advance on the CORE!</p>
-      <p><span class="typed_bugs">BUGS</span> want to CORRUPT MAINFRAMES!</p>
-      <p><span class="typed_duck">CYBO DUCK</span> must enter the CORE!</p>
-      <p><span class="typed_duck">CYBO DUCK</span> must protect MAINFRAMES!</p>
-      <p>Don't let <span class="typed_bugs">BUGS</span> DOUSE the FIREWALL!</p>
-      <p>
-        Don't let <span class="typed_bugs">BUGS</span> SEVER your CORE TETHER!
-      </p>
-      <p><span class="typed_duck">CYBO DUCK</span> be brave!</p>
-      <p>SAVE THE MAINFRAMES!</p>
-      <p>SAVE THE CORE!</p>
-    </div>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        // START TYPED_INTRO
-        // TODO - SHOW ALL TEXT, OR REPLACE
-        var typed_mission = new Typed("#typed_mission", {
-          stringsElement: "#typed-intro",
-          typeSpeed: 70,
-          smartBackspace: true,
-        });
-      });
-    </script>
 
     <!-- CREDITS / THANKS / ACKNOWLEDGEMENTS / EASTER EGGS MODAL -->
     <div class="hidden">
