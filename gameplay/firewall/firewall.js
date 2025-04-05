@@ -37,16 +37,16 @@ export class Firewall {
     this.gameScreen.appendChild(this.outerDiv);
 
     // (testing) show hp
-    this.hpDisplay = document.createElement("div");
-    this.hpDisplay.classList.add("mainframe-hp");
-    this.innerDiv.appendChild(this.hpDisplay);
-    this.hpDisplay.innerText = this.hp;
+    // this.hpDisplay = document.createElement("div");
+    // this.hpDisplay.classList.add("mainframe-hp");
+    // this.innerDiv.appendChild(this.hpDisplay);
+    // this.hpDisplay.innerText = this.hp;
 
     return this.outerDiv;
   }
   // (testing)
   updateHpDisplay() {
-    this.hpDisplay.innerText = this.hp
+    //this.hpDisplay.innerText = this.hp
   }
   getLocationX() {
     return this.outerDiv.getBoundingClientRect().right;

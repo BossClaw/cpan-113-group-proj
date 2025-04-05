@@ -25,7 +25,8 @@
   height: 100%;
   background: red;
   opacity: 0;
-  animation: on-firewall-hit 0.1s infinite;
+  animation: on-firewall-hit 0.2s linear;
+  animation-iteration-count: 2;
 }
 
 @keyframes on-firewall-hit {
