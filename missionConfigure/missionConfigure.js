@@ -1,3 +1,9 @@
+import { get_languages, get_difficulty, get_level } from "../game_settings.js";
+
+console.log("difficulty",get_difficulty())
+console.log("languages",get_languages())
+console.log("level",get_level())
+
 // Pick languages
 
 // Get Button Elements
@@ -66,7 +72,15 @@ export function add_new_high_score(
   // ENJOY BROCCOLI
 }
 
-let pickedLanguages = [];
+// Inital Language settings from local storage
+let pickedLanguages = get_languages();
+Array.from(languageButtons).forEach((button) => {
+  if(pickedLanguages.includes(button.innerHTML)){
+    button.classList.add("active-language")
+  }else{
+    button.classList.remove("active-language")
+  }
+})
 
 // Add event listener to each Language button
 Array.from(languageButtons).forEach((button) => {
@@ -101,11 +115,11 @@ function toggleAddToList(button) {
 startGame.addEventListener("click", function () {
   if (pickedLanguages.length != 0) {
     // Languages
-    localStorage.setItem("pickedLanguages", JSON.stringify(pickedLanguages));
+    localStorage.setItem("settings_languages", JSON.stringify(pickedLanguages));
     // Difficulty
-    localStorage.setItem("difficulty", pickedDifficulty);
+    localStorage.setItem("settings_difficulty", pickedDifficulty);
     // Level
-    localStorage.setItem("level", pickedLevel);
+    localStorage.setItem("settings_level", pickedLevel);
 
     // TEMPORARY REDIRECT
     window.location.href = "gameplay.html";
@@ -133,8 +147,10 @@ difficultySlider.addEventListener("input", function () {
 });
 
 // Initial difficulty display
-difficultyDisplay.textContent = difficultyValues[difficultySlider.value];
-
+let initalDifficulty = Object.keys(difficultyValues).find(key => difficultyValues[key] === get_difficulty());
+console.log("inital dif", initalDifficulty)
+difficultySlider.value = initalDifficulty
+difficultyDisplay.textContent = get_difficulty()
 // Initial picked difficulty
 let pickedDifficulty = difficultyValues[difficultySlider.value];
 
@@ -150,6 +166,7 @@ levelSlider.addEventListener("input", function () {
 });
 
 // Initial level display
+levelSlider.value = get_level()
 levelDisplay.textContent = levelSlider.value;
 
 // Initial picked level
