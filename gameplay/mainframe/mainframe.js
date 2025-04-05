@@ -4,8 +4,6 @@ export class Mainframe {
     // location/styles
     this.outerClass = "mainframe";
     this.innerClass = "mainframe-sprit";
-    this.width = "32px";
-    this.height = "100px";
 
     // divs
     this.outerDiv = null;
@@ -17,17 +15,16 @@ export class Mainframe {
   }
   spawn() {
     if (!this.gameScreen) {
+      console.warn('missing game screen')
       return;
     }
-    const x = 15;
-    const y = 70;
+    const x = 8;
+    const y = 45;
 
     // Creat outter div
     this.outerDiv = document.createElement("div");
     this.outerDiv.classList.add(this.outerClass);
     this.outerDiv.style.position = "absolute";
-    this.outerDiv.style.width = `${this.width}px`;
-    this.outerDiv.style.height = `${this.height}px`;
     this.outerDiv.style.left = `${x}px`;
     this.outerDiv.style.top = `${y}px`;
 

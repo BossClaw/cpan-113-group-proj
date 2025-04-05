@@ -6,6 +6,7 @@ import { initializeGameLogic } from "../gameplay.js";
 import { set_background_glitch } from "../background.js";
 import flaggedNames from "./flaggedNames.js";
 import { gameAudio } from "../game-audio/gameAudio.js";
+import { Mainframe } from "../mainframe/mainframe.js";
 
 
 // Get level state
@@ -80,6 +81,9 @@ export class Game {
     this.lastTimestamp = 0;
     this.spawnTimer = 0;
     this.animatedFrameId = null;
+
+    // mainframe related
+    this.mainframe = new Mainframe(this.gameScreen)
 
     // player related
     this.playerObject = playerObject;
@@ -260,6 +264,9 @@ export class Game {
     if (!currentGame) {
       scoreManager.removeCurrentCore()
     }
+    // spawn mainframe
+    this.mainframe.spawn()
+
     // spawn player
     if (this.playerObject) {
       const gun = this.playerObject.gun;
