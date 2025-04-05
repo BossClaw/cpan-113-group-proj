@@ -1,11 +1,12 @@
 import { startNewGame } from "./game/game.js";
 import { gameAudio } from "./game-audio/gameAudio.js";
+import { get_difficulty, get_languages, get_level } from "../game_settings.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // first game
   const gameScreen = document.querySelector("#game_screen");
-  const level = localStorage.getItem("level") || "1";
-  const difficulty = localStorage.getItem("difficulty") || "normal";
+  const level = get_level()
+  const difficulty = get_difficulty()
   startNewGame(gameScreen, level, difficulty);
 });
 
@@ -17,10 +18,9 @@ export async function initializeGameLogic(gameInstance) {
   const wordLetters = gameInstance.gameView.wordContainer;
 
   // Variables for game settings
-  let pickedLanguages = [];
 
   // Check local storage
-  pickedLanguages = JSON.parse(localStorage.getItem("pickedLanguages"));
+  let pickedLanguages = get_languages();
 
   // Import words.json
   async function importWords() {
