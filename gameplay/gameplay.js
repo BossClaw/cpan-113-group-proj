@@ -1,4 +1,5 @@
 import { startNewGame } from "./game/game.js";
+import { gameAudio } from "./game-audio/gameAudio.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // first game
@@ -105,10 +106,23 @@ export async function initializeGameLogic(gameInstance) {
       generateWord();
     } else if (event.key === "Escape" && gameInstance.isGame) {
       togglePause();
-    } else if (event.key === "Shift"){
-      return
+    } else if (event.key === "Shift") {
+      return;
     } else if (gameInstance.isGame) {
+      play_key_sound();
       attack(event.key);
     }
   });
+}
+
+// ==========================================================================
+// HANDLER FOR KEY SOUND PLAYER FEEDBACK
+
+function play_key_sound() {
+  const key_idx = (Math.random() * 9).toFixed(0).padStart(2, "0");
+  const key_url = `gameplay/audio/keys/key_${key_idx}.wav`;
+
+  console.log(`[GAMEPLAY][KEY] PLAY KEY SFX [${key_url}]`);
+
+  gameAudio.play(key_url);
 }
