@@ -1,0 +1,40 @@
+#leaderboard {
+  margin-bottom: 100px;
+}
+
+#leaderboard h2 {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 350px;
+  justify-content: space-between;
+  white-space: nowrap;
+  gap: 1rem;
+}
+
+#leaderboard h2 span {
+  display: inline-block;
+  width: 80px;
+  text-align: center;
+  color: rgb(52, 152, 246);
+}
+
+#leaderboard h2:nth-child(1) span {
+  color: rgb(254, 94, 69);
+}
+
+#leaderboard h2:nth-child(2) span {
+  color: yellow;
+}
+
+#leaderboard h2:nth-child(3) span {
+  color: rgb(91, 241, 91);
+}
+
+#leaderboard h2:nth-child(4) span {
+  color: rgb(91, 241, 181);
+}
+
+#leaderboard h2:nth-child(5) span {
+  color: rgb(91, 241, 241);
+}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TYPE DEFENDER</title>
+
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/bg.css" />
+    <link rel="stylesheet" href="css/anim.css" />
+    <link rel="stylesheet" href="css/crt.css" />
+    <link rel="stylesheet" href="css/leaderboard.css" />
+
+    <!-- TBD - MODULES -->
+    <script type="module" src="js/common.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+    <!-- MISSION CONFIG -->
+    <link rel="stylesheet" href="missionConfigure/missionConfigure.css" />
+    <script type="module" src="missionConfigure/missionConfigure.js"></script>
+
+    <!-- GAME SETTINGS -->
+    <script type="module" src="game_settings.js"></script>
+
+    <!--LEADERBOARD-->
+    <script type="module" src="leaderboard.js" defer></script>
+  </head>
+
+  <body>
+    <a name="top"></a>
+
+    <div id="parallax_container">
+      <div class="bodyContent">
+        <header>
+          <!-- GAME LOGO -->
+          <img src="img/title/type_defender_logo_c.png" class="mw-100 mi-c" />
+
+          <!-- NAV -->
+          <!-- TBD SPA -->
+          <!-- <nav>
+            <ul>
+              <li>
+                <button class="nav" id="butt_login">LOGIN</button>
+              </li>
+              <li>
+                <button class="nav" id="butt_guest">GUEST</button>
+              </li>
+              <li>
+                <a class="nav" href="gameplay.html">PLAY</a>
+              </li>
+              <li>
+                <button class="nav" href="leaderboard.html">
+                  SCORES (WIP)
+                </button>
+              </li>
+              <li>
+                <a class="nav" href="credits.html">CREDITS</a>
+              </li>
+            </ul>
+          </nav> -->
+        </header>
+
+        <!-- MAIN PAGE CONTENT -->
+        <main>
+          <section class="border_pixel content_half flex_response">
+            <div class="tc">
+              <img src="img/title/cta_hero.png" class="mw-100" />
+            </div>
+
+            <div class="tc">
+              <h2 class="cta_pulse">THE MISSION</h2>
+              <p id="typed_mission"></p>
+            </div>
+          </section>
+
+          <section>
+            <a name="mission_control"></a>
+            <div class="tc">
+              <div class="temp-container">
+                <!-- TODO - UPDATE THESE VALUES ON LOCAL STORAGE PAGE LOAD -->
+                <h2>Pick languages</h2>
+                <button class="language" id="JS">JavaScript</button>
+                <button class="language" id="Python">Python</button>
+                <button class="language" id="CSS">CSS</button>
+                <button class="language" id="HTML">HTML</button>
+                <button class="language" id="C#">C#</button>
+                <button class="language" id="C++">C++</button>
+              </div>
+              <div class="temp-container">
+                <h2 class="cta_pulse">Pick Difficulty</h2>
+                <input
+                  type="range"
+                  min="1"
+                  max="4"
+                  id="difficulty"
+                  name="Difficulty"
+                  value="1"
+                />
+                <div id="difficulty-display"></div>
+              </div>
+              <div class="temp-container">
+                <h2 class="cta_pulse">Pick Level</h2>
+                <input
+                  type="range"
+                  min="1"
+                  max="100"
+                  id="level"
+                  name="Level"
+                  value="1"
+                />
+                <div id="level-display"></div>
+              </div>
+
+              <button id="temp-start">PLAY GAME</button>
+            </div>
+          </section>
+
+          <!-- LEADERBOARD / HIGH SCORE -->
+          <section>
+            <div class="tc">
+              <h2 class="cta_pulse">LEADERBOARD</h2>
+              <div id="leaderboard">
+                <h2 class="cta_pulse">BUT - 2048</h2>
+                <h2 class="cta_pulse">JIZ - 1024</h2>
+                <h2 class="cta_pulse">OOO - 512</h2>
+                <h2 class="cta_pulse">OOO - 256</h2>
+                <h2 class="cta_pulse">OOO - 128</h2>
+                <h2 class="cta_pulse">OOO - 64</h2>
+                <h2 class="cta_pulse">OOO - 32</h2>
+                <h2 class="cta_pulse">OOO - 16</h2>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer id="footer">
+          <p>
+            <button id="ui_crt_toggle" type="button">TOGGLE CRT</button>
+            &copy; 20XX lujabo <span class="cursor"></span>
+
+            <a href="#">lu</a>
+            <a href="#">ja</a>
+            <a href="#">bo</a>
+
+            <!-- <a href="#top">Top</a> -->
+          </p>
+        </footer>
+      </div>
+    </div>
+
+    <div id="typed-intro">
+      <p><span class="typed_bugs">BUGS</span> have inflitrated the System!</p>
+      <p><span class="typed_bugs">BUGS</span> advance on the CORE!</p>
+      <p><span class="typed_bugs">BUGS</span> want to CORRUPT MAINFRAMES!</p>
+      <p><span class="typed_duck">CYBO DUCK</span> must enter the CORE!</p>
+      <p><span class="typed_duck">CYBO DUCK</span> must protect MAINFRAMES!</p>
+      <p>Don't let <span class="typed_bugs">BUGS</span> DOUSE the FIREWALL!</p>
+      <p>
+        Don't let <span class="typed_bugs">BUGS</span> SEVER your CORE TETHER!
+      </p>
+      <p><span class="typed_duck">CYBO DUCK</span> be brave!</p>
+      <p>SAVE THE MAINFRAMES!</p>
+      <p>SAVE THE CORE!</p>
+    </div>
+
+    <script>
+      // PAGE-SPECIFIC JS
+
+      // TODO - JASMINE READ VALUES FROM GAME SETTINGS
+      // update_value_on_div("level", game_settings.get_level());
+
+      // update_value_on_div("level", game_settings.get_level(666));
+
+      // TYPED_INTRO
+      var typed_mission = new Typed('#typed_mission', {
+        stringsElement: '#typed-intro',
+        typeSpeed: 70,
+        smartBackspace: true,
+      })
+
+      // WIP - COMMON MUSIC
+
+      function apply_game_settings() {}
+    </script>
+
+    <div class="hidden">
+      LIBRARIES Typed.js https://mattboldt.com/demos/typed-js/ ANIMATE.CSS
+      https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css
+      CRT.CSS AUDIO ASSETS FONT ASSETS
+    </div>
+  </body>
+</html>

@@ -1,0 +1,325 @@
+:root {
+  --brightest: #ffffff;
+  --bright: #cccccc;
+
+  --mid: #999900;
+  --mid_hover: #bbbb00;
+
+  --dark: #666666;
+  --dark_hover: #999999;
+
+  --page_border: #333333;
+  --page_bg: #000000;
+
+  --text_size: 16px;
+
+  --border_size: 4px;
+
+  --section_margin: 32px;
+  --pad_gap: 16px;
+
+  --footer_min_height: 32px;
+}
+
+@font-face {
+  font-family: "PixelFont";
+  src: url("../fonts/PressStart2P.ttf") format("truetype");
+}
+
+/* FORCE SAME FONT / CURSOR DEFAULT FOR EVERYTHING */
+* {
+  color: var(--brightest);
+  font-family: "PixelFont", sans-serif;
+  font-size: var(--text_size);
+  line-height: calc(var(--text_size) + 4px);
+  font-weight: normal;
+
+  cursor: url("../img/ui/cursor.png") 0 2, auto;
+}
+
+/* WIP - CURSOR HOVER */
+input,
+button,
+select,
+a {
+  cursor: url("../img/ui/cursor.png") 0 2, auto;
+}
+
+/* BODY LEVEL STYLING */
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--bright);
+}
+
+.bodyContent {
+  min-width: 425px;
+  max-width: 960px;
+
+  margin-inline: auto;
+  padding: var(--pad_gap);
+
+  background-color: var(--page_bg);
+
+  /* ENSURE THE CONTENT IS 'PUSHED UP' AND NOT HIDDEN BY FIXED FOOTER */
+  padding-bottom: calc(var(--footer_min_height) + (var(--pad_gap) * 3));
+}
+
+/* MAIN PAGE CONTENT */
+main {
+  min-height: calc(70vh);
+}
+
+/* NAV & LINKS */
+nav {
+  width: 100%;
+  margin-inline: auto;
+  text-align: center;
+  margin-block: var(--pad_gap / 2);
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin: 0 10px;
+}
+
+nav ul li a {
+  color: var(--bright);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+a,
+a:visited {
+  color: var(--mid);
+  text-decoration: none;
+  border-bottom: 2px solid #00000000;
+  text-align: center;
+}
+
+a:hover {
+  color: var(--mid_hover);
+  text-decoration: none;
+  border-bottom: 2px solid var(--mid_hover);
+}
+
+/* FORM ELEMENTS */
+.form_table {
+  width: 100%;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+.form_row {
+  border: 2px solid peachpuff;
+}
+
+.error {
+  color: orange;
+  font-size: small;
+}
+
+input {
+  border: 0;
+  background-color: var(--dark);
+  color: var(--bright);
+  padding: 4px;
+}
+
+input:focus {
+  color: var(--brightest);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  place-content: center;
+  appearance: none;
+  width: 32px;
+  height: 32px;
+  vertical-align: bottom;
+}
+
+input[type="radio"] {
+  border-radius: 8px;
+}
+
+input[type="radio"]:checked,
+input[type="checkbox"]:checked {
+  background-color: var(--mid);
+}
+
+button {
+  color: var(--bright);
+
+  border: 2px solid var(--brightest);
+  border-right-color: var(--bright);
+  border-bottom-color: var(--dark);
+  background-color: var(--mid);
+
+  padding: 4px;
+  margin-block: var(--pad_gap);
+}
+
+button:hover {
+  color: var(--brightest);
+  background-color: var(--mid_hover);
+  border-bottom-color: var(--dark_hover);
+}
+
+/* UI PANEL BORDERS */
+.border_pixel {
+  border: 16px solid transparent;
+  padding: 8px;
+  border-image: url("../img/ui/border.png") 16 round;
+}
+
+/* WIP - PAGE CONTENT LAYOUT */
+.content_auto,
+.content_half,
+.content_full {
+  display: flex;
+  align-items: stretch;
+  margin-inline: auto;
+  margin-block: var(--section_margin);
+  min-width: 540px;
+  max-width: 960px;
+  flex-direction: row;
+}
+
+.content_full {
+  flex-direction: column;
+}
+
+.content_half {
+  gap: var(--pad_gap);
+}
+
+.content_half div:first-child {
+  flex: 1 1 0;
+}
+
+.content_half div {
+  flex: 3 1 0;
+}
+
+.content_auto {
+  gap: var(--pad_gap);
+  justify-content: space-between;
+}
+
+.content_auto div {
+  flex: 1 1 0;
+}
+
+.content_auto h5 {
+  text-align: center;
+}
+
+/* GENERIC/MULTI_USE */
+.mi-c {
+  margin-inline: auto;
+  display: block;
+}
+
+.mw-100 {
+  max-width: 100%;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.tl {
+  text-align: left;
+}
+
+.tc {
+  text-align: center;
+}
+
+.tr {
+  text-align: right;
+}
+
+.m_block {
+  margin-block: var(--pad_gap);
+}
+
+/* FOOTER CONTENT */
+footer {
+  /* TODO - FF1 STYLE BATTLE MENU */
+  /* TODO - RESPONSIVE TO MATCH THE BODY CONTENT */
+  position: fixed;
+  width: 100%;
+  max-width: 960px;
+  min-height: var(--footer_min_height);
+  padding-block: var(--pad_gap);
+  left: translateY(-50%);
+  bottom: 0;
+  background-color: black;
+  text-align: center;
+}
+
+/* ======================================================================= */
+/* WIP - BREAKPOINTS */
+
+@media (max-width: 360px) {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* KEEP THE PADDING FOR THE FOOTER */
+  .bodyContent {
+    margin: 0;
+    padding: 0;
+    padding-bottom: calc(var(--footer_min_height) + (var(--pad_gap) * 3));
+  }
+}
+
+/* ======================================================================= */
+/* BREAKPOINT TESTING */
+
+@media (min-width: 360px) {
+  header {
+    background-color: green;
+  }
+}
+
+@media (min-width: 540px) {
+  header {
+    background-color: red;
+  }
+}
+
+@media (min-width: 680px) {
+  header {
+    background-color: blue;
+  }
+}
+
+@media (min-width: 720px) {
+  header {
+    background-color: black;
+  }
+}
+
+@media (min-width: 1280px) {
+  header {
+    background-color: orange;
+  }
+}
+
+/* DYNAMIC PAGE VIEWS / MODALS */
+.hidden {
+  display: none;
+}

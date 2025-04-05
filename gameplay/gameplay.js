@@ -1,92 +1,114 @@
-// Variables for word 
-let pickedLanguages = []
-let letterToTypeIndex = 0
-let displayedWord = ""
-const wordLetters = document.getElementById("word-container")
+import { startNewGame } from "./game/game.js";
 
+document.addEventListener("DOMContentLoaded", () => {
+  // first game
+  const gameScreen = document.querySelector("#game_screen");
+  const level = localStorage.getItem("level") || "1";
+  const difficulty = localStorage.getItem("difficulty") || "normal";
+  startNewGame(gameScreen, level, difficulty);
+});
 
+// Initialization function
+export async function initializeGameLogic(gameInstance) {
+  // Variables for word-to-type
+  let letterToTypeIndex = 0;
+  let displayedWord = "";
+  const wordLetters = gameInstance.gameView.wordContainer;
 
-// Import words.json
-async function importWords(){
-    try{
-       const response = await fetch("./gameplay/words.json")
-        const data = await response.json()
-        let wordList = data.words
-        return wordList
-    }catch(error){
-        console.error(error)
-        throw error
+  // Variables for game settings
+  let pickedLanguages = [];
+
+  // Check local storage
+  pickedLanguages = JSON.parse(localStorage.getItem("pickedLanguages"));
+
+  // Import words.json
+  async function importWords() {
+    try {
+      const response = await fetch("./gameplay/words.json");
+      const data = await response.json();
+      return data.words;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
-}
+  }
+  const wordList = await importWords();
 
-const wordList = await importWords()
-
-
-// Check local storage
-
-if(!localStorage.getItem("pickedLanguages")){
-    // TEMPORARY CODE - go back to mission configure page to pick languages
-    window.location.href = "http://127.0.0.1:5502/missionConfigure.html"
-}else {
-    pickedLanguages = JSON.parse(localStorage.getItem("pickedLanguages"))
-    generateWord()
-}
-
-// Display word function
-function displayWord(word){
-    for(let char of word){
-        const span = document.createElement("span")
-        const node = document.createTextNode(char)
-        span.appendChild(node)
-        wordLetters.appendChild(span)
+  // Display word function
+  function displayWord(word) {
+    for (let char of word) {
+      const span = document.createElement("span");
+      span.textContent = char;
+      wordLetters.appendChild(span);
     }
+  }
+
+  // Clear the word
+  function clearWordDisplay() {
+    wordLetters.innerHTML = "";
+    letterToTypeIndex = 0;
+  }
+
+  // Generate new word
+  function generateWord() {
+    const randomLang =
+      pickedLanguages[Math.floor(Math.random() * pickedLanguages.length)];
+    const languageWords = wordList[randomLang];
+    displayedWord =
+      languageWords[Math.floor(Math.random() * languageWords.length)];
+    displayWord(displayedWord);
+  }
+
+  // Typing attack
+  function attack(key) {
+    const letterSpan =
+      wordLetters.getElementsByTagName("span")[letterToTypeIndex];
+    if (key === letterSpan.innerHTML) {
+      letterSpan.style.color = "green";
+      letterToTypeIndex += 1;
+      gameInstance.onPlayerAttack();
+    } else {
+      gameInstance.onPlayerAttack(false);
+    }
+    checkForCompletion();
+  }
+
+  // Check if word is complete
+  function checkForCompletion() {
+    if (letterToTypeIndex === displayedWord.length) {
+      clearWordDisplay();
+      generateWord();
+    }
+  }
+
+  // Pause toggle
+  function togglePause() {
+    if (gameInstance.isPaused) {
+      gameInstance.resume();
+    } else {
+      gameInstance.pause();
+    }
+  }
+
+  // Key listener
+  const startingDisplay = gameInstance.gameView.startingDisplay;
+  document.addEventListener("keyup", (event) => {
+    if (
+      event.key === "Enter" &&
+      !gameInstance.gameView.overlay &&
+      !gameInstance.isGame
+    ) {
+      event.preventDefault();
+      gameInstance.start();
+      startingDisplay.style.visibility = "hidden";
+      clearWordDisplay();
+      generateWord();
+    } else if (event.key === "Escape" && gameInstance.isGame) {
+      togglePause();
+    } else if (event.key === "Shift"){
+      return
+    } else if (gameInstance.isGame) {
+      attack(event.key);
+    }
+  });
 }
-
-// Clear the word, reset word index
-function clearWordDisplay() {
-    wordLetters.innerHTML = ""
-    letterToTypeIndex = 0
-}
-
-// Generate a new word
-function generateWord(){
-    // Get random language from picked language
-    let randomIndex = Math.floor(Math.random() * pickedLanguages.length)
-    let randomLanguage = pickedLanguages[randomIndex]
-
-
-    // Get random word from language
-    let languageWords = wordList[randomLanguage]
-    randomIndex = Math.floor(Math.random() * languageWords.length)
-    displayedWord = languageWords[randomIndex]
-
-    displayWord(displayedWord)
-}
-
-
-// Update letter display, if correct letter typed, change color
-function updateDisplay(key){
-    let letterToType = wordLetters.getElementsByTagName("span")[letterToTypeIndex]
-    if (key === letterToType.innerHTML){
-            letterToType.style.color = "green"
-            letterToTypeIndex += 1
-        }
-
-    checkForCompletion(letterToTypeIndex)
-}
-
-
-// Check if word is fully typed, if it is then clear word and generate new word
-function checkForCompletion(letterToTypeIndex){
-    if (letterToTypeIndex === displayedWord.length){
-        clearWordDisplay()
-        generateWord()
-    } 
-}
-
-
-// EVENT LISTENER ON PAGE KEYDOWN
-document.addEventListener("keydown", event => {
-    event.preventDefault()
-    updateDisplay(event.key)
-})

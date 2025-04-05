@@ -42,6 +42,7 @@ const playerAttack = ["gameplay/audio/sfx/enemy_hit_hi.wav"];
 
 const playerMissed = ["gameplay/audio/sfx/player_reload.wav"];
 
+
 class GameAudio {
   constructor() {
     // user need to click on something to consent play audio
