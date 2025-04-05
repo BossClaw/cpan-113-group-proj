@@ -256,17 +256,32 @@ button:hover {
 
 /* FOOTER CONTENT */
 footer {
-  /* TODO - FF1 STYLE BATTLE MENU */
-  /* TODO - RESPONSIVE TO MATCH THE BODY CONTENT */
-  position: fixed;
-  width: 100%;
-  max-width: 960px;
-  min-height: var(--footer_min_height);
-  padding-block: var(--pad_gap);
-  left: translateY(-50%);
-  bottom: 0;
   background-color: black;
   text-align: center;
+}
+
+/* ON-SCREEN CONTROLS ON ALL PAGES, CRT & VOLUME*/
+#os_controls {
+  position: fixed;  
+  padding: var(--pad_sm);
+  right: 0;
+  top: 0;  
+}
+
+#butt_aud_mute{
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1;
+  background-position: center center;
+  background-repeat:  no-repeat no-repeat;
+}
+
+.aud_icon_muted {
+  background-image: url('../img/ui/aud_icon_muted.png');
+}
+
+.aud_icon_loud {
+  background-image: url('../img/ui/aud_icon_loud.png');
 }
 
 /* ======================================================================= */
@@ -282,7 +297,6 @@ footer {
   .bodyContent {
     margin: 0;
     padding: 0;
-    padding-bottom: calc(var(--footer_min_height) + (var(--pad_gap) * 3));
   }
 }
 
@@ -290,31 +304,31 @@ footer {
 /* BREAKPOINT TESTING */
 
 @media (min-width: 360px) {
-  header {
+  footer {
     background-color: green;
   }
 }
 
 @media (min-width: 540px) {
-  header {
+  footer {
     background-color: red;
   }
 }
 
 @media (min-width: 680px) {
-  header {
+  footer {
     background-color: blue;
   }
 }
 
 @media (min-width: 720px) {
-  header {
+  footer {
     background-color: black;
   }
 }
 
 @media (min-width: 1280px) {
-  header {
+  footer {
     background-color: orange;
   }
 }

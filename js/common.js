@@ -183,7 +183,7 @@ function viz_init() {
 
   viz_init_bg();
 
-  crt_set_enabled(true);
+  crt_set_enabled(crt_get_enabled);    
 }
 
 // =================================================================
@@ -200,7 +200,7 @@ function crt_get_enabled() {
 }
 
 function crt_set_enabled(crt_enabled) {
-  console.log(`[COMMON][VIZ][CRT] SETTING ENABLED(${crt_enabled})`);
+  console.log(`[COMMON][VIZ][CRT] SETTING ENABLED(${crt_get_enabled()})`);
   localStorage.setItem(VIZ_CRT_ENABLED_KEY, crt_enabled);
   crt_update_dom();
 }

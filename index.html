@@ -136,7 +136,6 @@
         <!-- FOOTER -->
         <footer id="footer">
           <p>
-            <button id="ui_crt_toggle" type="button">TOGGLE CRT</button>
             &copy; 20XX lujabo <span class="cursor"></span>
 
             <a href="#">lu</a>
@@ -177,17 +176,21 @@
         stringsElement: '#typed-intro',
         typeSpeed: 70,
         smartBackspace: true,
-      })
-
-      // WIP - COMMON MUSIC
-
-      function apply_game_settings() {}
+        });
+      });
     </script>
 
     <div class="hidden">
       LIBRARIES Typed.js https://mattboldt.com/demos/typed-js/ ANIMATE.CSS
       https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css
       CRT.CSS AUDIO ASSETS FONT ASSETS
+    </div>
+
+    <!-- OS CONTROL -->
+    <div id="os_controls">
+      <button id="ui_crt_toggle" type="button">CRT</button>
+
+      <button id="butt_aud_mute"></button>
     </div>
   </body>
 </html>
