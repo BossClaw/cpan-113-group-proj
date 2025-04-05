@@ -103,6 +103,7 @@ export class Mainframe {
     this.isAlive = false
     // change sprit image / color to destroyed
     // .... logic here ...
+    this.innerDiv.classList.remove("hit");
     this.innerDiv.classList.add("destroyed");
     void this.innerDiv.offsetWidth;
   }
