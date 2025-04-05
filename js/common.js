@@ -183,7 +183,7 @@ function viz_init() {
 
   viz_init_bg();
 
-  crt_set_enabled(crt_get_enabled);    
+  crt_set_enabled(crt_get_enabled());    
 }
 
 // =================================================================
