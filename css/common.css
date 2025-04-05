@@ -244,5 +244,5 @@ footer {
 
 /* DYNAMIC PAGE VIEWS / MODALS */
 .hidden {
-  display: none;
+  visibility: hidden;
 }
