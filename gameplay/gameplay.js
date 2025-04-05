@@ -119,7 +119,7 @@ export async function initializeGameLogic(gameInstance) {
 // HANDLER FOR KEY SOUND PLAYER FEEDBACK
 
 function play_key_sound() {
-  const key_idx = (Math.random() * 9).toFixed(0).padStart(2, "0");
+  const key_idx = Math.floor(Math.random() * 10).toString().padStart(2, "0");
   const key_url = `gameplay/audio/keys/key_${key_idx}.wav`;
 
   console.log(`[GAMEPLAY][KEY] PLAY KEY SFX [${key_url}]`);
