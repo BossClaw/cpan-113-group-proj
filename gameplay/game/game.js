@@ -84,6 +84,7 @@ export class Game {
 
     // mainframe related
     this.mainframe = new Mainframe(this.gameScreen)
+    this.mainframeDiv = null
 
     // player related
     this.playerObject = playerObject;
@@ -92,7 +93,7 @@ export class Game {
     this.baseHP = 3;
     this.firewallHP = 1;
     this.firewallLocationX = "100px";
-    this.firewall = null;
+    this.firewallDiv = null;
 
     // enemy related
     this.enemyArray = []; // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
@@ -164,17 +165,17 @@ export class Game {
   }
   onFirewallAttacked(damage) {
     this.firewallHP -= damage;
-    this.firewall.classList.remove("player-attack");
-    this.firewall.classList.remove("on-hit");
+    this.firewallDiv.classList.remove("player-attack");
+    this.firewallDiv.classList.remove("on-hit");
     // force reflow 
-    void this.firewall.offsetWidth;
-    this.firewall.classList.add("on-hit");
+    void this.firewallDiv.offsetWidth;
+    this.firewallDiv.classList.add("on-hit");
 
     // check is firewall destroyed
     // give a little time for possible animaiton
     if (this.firewallHP <= 0) {
-      const temp = this.firewall;
-      this.firewall = null;
+      const temp = this.firewallDiv;
+      this.firewallDiv = null;
       // SFX
       gameAudio.playFirewallDie()
       setTimeout(() => {
@@ -182,19 +183,19 @@ export class Game {
       }, 500);
     }
   }
-  onBasedAttacked(damage) {
-    this.baseHP -= damage;
+  onMainframeAttacked(damage) {
+
+    // mainframe
+    this.mainframe.takeDamage(damage)
+    this.mainframe.updateHpDisplay()
+
     this.gameScreen.classList.remove("player-attack");
     this.gameScreen.classList.remove("on-hit");
     // force reflow
     void this.gameScreen.offsetWidth;
     this.gameScreen.classList.add("on-hit");
-
-    // SFX
-    gameAudio.playBaseHit()
   }
   onPlayerAttack(isHit = true) {
-    console.log('player Attack:', isHit)
     if (!this.isGame) return;
     if (this.isPaused) return;
     if (!isHit) {
@@ -265,7 +266,7 @@ export class Game {
       scoreManager.removeCurrentCore()
     }
     // spawn mainframe
-    this.mainframe.spawn()
+    this.mainframeDiv = this.mainframe.spawn()
 
     // spawn player
     if (this.playerObject) {
@@ -289,7 +290,7 @@ export class Game {
     fireWall.style.height = this.gameScreen.offsetHeight + "px";
     fireWall.style.left = this.firewallLocationX;
     this.gameScreen.appendChild(fireWall);
-    this.firewall = fireWall;
+    this.firewallDiv = fireWall;
 
     // set up gameview buttons
     const buttons = this.gameView.getButtons();
@@ -425,19 +426,17 @@ export class Game {
       const enemyLocationX = enemy.getLocationX();
 
       // enemy reaching firewall
-      if (this.firewall) {
-        const fireWallDistance =
-          enemyLocationX -
-          (this.firewall.getBoundingClientRect().left -
-            this.gameScreen.getBoundingClientRect().left);
-        if (fireWallDistance <= 0) {
+      if (this.firewallDiv) {
+
+        if (enemyLocationX - this.firewallDiv.getBoundingClientRect().left <= 0) {
           this.onFirewallAttacked(enemy.attack());
+          continue;
         }
-        continue;
       }
-      // enemy reaching base
-      if (enemyLocationX <= 0) {
-        this.onBasedAttacked(enemy.attack());
+      // enemy reaching mainframe
+      if (enemyLocationX - this.mainframeDiv.getBoundingClientRect().right <= 0) {
+        this.onMainframeAttacked(enemy.attack());
+        continue;
       }
     }
 
@@ -488,7 +487,7 @@ export class Game {
     }
 
     // lose
-    if (this.baseHP <= 0) {
+    if (this.mainframe.hp <= 0) {
       this.isGame = false;
       // display
       this.gameView.displayLose(this.highScore);

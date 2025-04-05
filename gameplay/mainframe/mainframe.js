@@ -1,13 +1,18 @@
+import { gameAudio } from "../game-audio/gameAudio.js";
+
 export class Mainframe {
   constructor(gameScreen, hp = 10) {
     this.gameScreen = gameScreen
     // location/styles
     this.outerClass = "mainframe";
     this.innerClass = "mainframe-sprit";
+    this.locationX = 8,
+      this.locationY = 45
 
     // divs
     this.outerDiv = null;
     this.innerDiv = null;
+
 
     // stats
     this.hp = hp
@@ -18,15 +23,12 @@ export class Mainframe {
       console.warn('missing game screen')
       return;
     }
-    const x = 8;
-    const y = 45;
-
     // Creat outter div
     this.outerDiv = document.createElement("div");
     this.outerDiv.classList.add(this.outerClass);
     this.outerDiv.style.position = "absolute";
-    this.outerDiv.style.left = `${x}px`;
-    this.outerDiv.style.top = `${y}px`;
+    this.outerDiv.style.left = `${this.locationX}px`;
+    this.outerDiv.style.top = `${this.locationY}px`;
 
     // Create inner div
     this.innerDiv = document.createElement("div");
@@ -41,25 +43,33 @@ export class Mainframe {
     // put it on screen
     this.gameScreen.appendChild(this.outerDiv);
 
-    // (testing) show player gun damage
-    // this.playerInfo = document.createElement("div");
-    // this.playerInfo.classList.add("player-info");
-    // this.innerDiv.appendChild(this.playerInfo);
-    // this.playerInfo.innerText = this.gunDamage;
+    // (testing) show hp
+    this.hpDisplay = document.createElement("div");
+    this.hpDisplay.classList.add("mainframe-hp");
+    this.innerDiv.appendChild(this.hpDisplay);
+    this.hpDisplay.innerText = this.hp;
 
     return this.outerDiv;
   }
+  // (testing)
+  updateHpDisplay() {
+    this.hpDisplay.innerText = this.hp
+  }
   getLocationX() {
-    return this.outerDiv.getBoundingClientRect().left;
+    return this.outerDiv.getBoundingClientRect().right;
   }
   takeDamage(damage = 1) {
     this.hp -= damage
+    // SFX
+    gameAudio.playBaseHit()
 
     // change sprit image / color based on damage taken
     // .... logic here ...
 
     if (this.hp < 0) {
       this.isAlive = false
+      // change sprit image / color to destroyed
+      // .... logic here ...
     }
   }
 }

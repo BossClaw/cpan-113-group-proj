@@ -146,10 +146,8 @@ export class Enemy {
     this.outerDiv.classList.remove("stop");
   }
   getLocationX() {
-    return (
-      this.outerDiv.getBoundingClientRect().left -
-      this.gameScreen.getBoundingClientRect().left
-    );
+    return this.outerDiv.getBoundingClientRect().left
+
   }
   takeDamage(amount) {
     this.hp -= amount;

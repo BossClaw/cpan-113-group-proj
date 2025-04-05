@@ -3,12 +3,23 @@
   top: 100px; /* override with js */
   right: 30; /* override with js */
   z-index: 4;
+  width: 32px;
+  height: 80px;
+  border: 1px solid red;
 }
 
 .mainframe-sprit {
-  width: 32px;
-  height: 80px;
+  width: 100%;
+  height: 100%;
   background-color: rgb(255, 255, 255);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.mainframe-hp {
+  margin: auto;
+  color: black;
 }
 
 /* change sprit image / color based on damage taken */
