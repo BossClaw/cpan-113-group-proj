@@ -38,6 +38,8 @@ export class Player {
     // location/styles
     this.outerClass = "player";
     this.innerClass = "player-sprit";
+    this.locationX = 44;
+    this.locationY = 70;
 
     // divs
     this.outerDiv = null;
@@ -55,15 +57,13 @@ export class Player {
     if (!this.gameScreen) {
       return;
     }
-    const x = 44;
-    const y = 70;
 
     // Creat outter div
     this.outerDiv = document.createElement("div");
     this.outerDiv.classList.add(this.outerClass);
     this.outerDiv.style.position = "absolute";
-    this.outerDiv.style.left = `${x}px`;
-    this.outerDiv.style.top = `${y}px`;
+    this.outerDiv.style.left = `${this.locationX}px`;
+    this.outerDiv.style.top = `${this.locationY}px`;
 
     // Create inner div
     this.innerDiv = document.createElement("div");

@@ -65,11 +65,19 @@ export class Mainframe {
 
     // change sprit image / color based on damage taken
     // .... logic here ...
+    this.innerDiv.classList.remove("hit");
+    void this.innerDiv.offsetWidth; // Trigger reflow
+    this.innerDiv.classList.add("hit");
 
-    if (this.hp < 0) {
-      this.isAlive = false
-      // change sprit image / color to destroyed
-      // .... logic here ...
+    if (this.hp <= 0) {
+      this.destroy()
     }
+  }
+  destroy() {
+    this.isAlive = false
+    // change sprit image / color to destroyed
+    // .... logic here ...
+    this.innerDiv.classList.add("destroyed");
+    void this.innerDiv.offsetWidth;
   }
 }

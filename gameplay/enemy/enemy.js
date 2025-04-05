@@ -175,9 +175,8 @@ export class Enemy {
       "animate__faster"
     );
     this.innerDiv.style.animationDuration = "0.2s";
-    void this.innerDiv.offsetWidth; // Trigger reflow
-
     this.innerDiv.classList.remove("hit");
+    void this.innerDiv.offsetWidth; // Trigger reflow
     this.innerDiv.classList.add("hit");
 
     // is dead
