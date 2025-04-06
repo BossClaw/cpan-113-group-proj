@@ -18,8 +18,8 @@ function getEnemyStates(_level = 1) {
   const countIncrase = 15;
 
   // spawn time
-  const baseSpawnTime = 300;
-  const spawnTimeDecrase = 50;
+  const baseSpawnTime = 250;
+  const spawnTimeDecrase = 20;
   const minSpawnTime = 100;
 
   // speed
@@ -102,7 +102,8 @@ export class Game {
 
     // debug mode
     this.isDebugMode = true
-    this.debugDiv = document.createElement('div')
+    const oldDbug = document.querySelector('.debug')
+    this.debugDiv = oldDbug ? oldDbug : document.createElement('div')
     this.debugDiv.classList.add('debug')
     document.body.appendChild(this.debugDiv)
 

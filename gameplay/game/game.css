@@ -22,9 +22,9 @@
 
 /* debug div  */
 .debug {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  position: fixed;
+  top: 30%;
+  left: 5%;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 100;
 }
