@@ -7,6 +7,7 @@ import { set_background_glitch } from "../background.js";
 import flaggedNames from "./flaggedNames.js";
 import { gameAudio } from "../game-audio/gameAudio.js";
 import { Mainframe } from "../mainframe/mainframe.js";
+import { Firewall } from "../firewall/firewall.js";
 
 
 // Get level state
@@ -74,14 +75,15 @@ export class Game {
     this.mainframe = new Mainframe(this.gameScreen)
     this.mainframeDiv = null
 
+    // firewall related
+    this.firewall = new Firewall(this.gameScreen)
+    this.firewallDiv = null;
+
     // player related
     this.playerObject = playerObject;
     this.player = null;
     this.points = 0; // current level score
     this.baseHP = 3;
-    this.firewallHP = 1;
-    this.firewallLocationX = "100px";
-    this.firewallDiv = null;
 
     // enemy related
     this.enemyArray = []; // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
@@ -177,24 +179,8 @@ export class Game {
     }
   }
   onFirewallAttacked(damage) {
-    this.firewallHP -= damage;
-    this.firewallDiv.classList.remove("player-attack");
-    this.firewallDiv.classList.remove("on-hit");
-    // force reflow 
-    void this.firewallDiv.offsetWidth;
-    this.firewallDiv.classList.add("on-hit");
-
-    // check is firewall destroyed
-    // give a little time for possible animaiton
-    if (this.firewallHP <= 0) {
-      const temp = this.firewallDiv;
-      this.firewallDiv = null;
-      // SFX
-      gameAudio.playFirewallDie()
-      setTimeout(() => {
-        temp.remove();
-      }, 500);
-    }
+    this.firewall.takeDamage(damage)
+    this.firewall.updateHpDisplay()
   }
   onMainframeAttacked(damage) {
 
@@ -281,6 +267,9 @@ export class Game {
     // spawn mainframe
     this.mainframeDiv = this.mainframe.spawn()
 
+    // spawn fireWall
+    this.firewallDiv = this.firewall.spawn()
+
     // spawn player
     if (this.playerObject) {
       const gun = this.playerObject.gun;
@@ -297,13 +286,7 @@ export class Game {
       enemy.spawn(this.gameScreen);
       this.enemyArray.push(enemy);
     }
-    // spawn fireWall
-    const fireWall = document.createElement("div");
-    fireWall.classList.add("firewall");
-    fireWall.style.height = this.gameScreen.offsetHeight + "px";
-    fireWall.style.left = this.firewallLocationX;
-    this.gameScreen.appendChild(fireWall);
-    this.firewallDiv = fireWall;
+
 
     // set up gameview buttons
     const buttons = this.gameView.getButtons();
@@ -441,15 +424,14 @@ export class Game {
       const enemyLocationX = enemy.getLocationX();
 
       // enemy reaching firewall
-      if (this.firewallDiv) {
-
+      if (this.firewallDiv && this.firewall.isAlive) {
         if (enemyLocationX - this.firewallDiv.getBoundingClientRect().left <= 0) {
           this.onFirewallAttacked(enemy.attack());
           continue;
         }
       }
       // enemy reaching mainframe
-      if (enemyLocationX - this.mainframeDiv.getBoundingClientRect().right <= 0) {
+      if (this.mainframeDiv && this.mainframe.isAlive && enemyLocationX - this.mainframeDiv.getBoundingClientRect().right <= 0) {
         this.onMainframeAttacked(enemy.attack());
         continue;
       }
