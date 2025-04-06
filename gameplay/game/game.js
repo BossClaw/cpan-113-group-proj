@@ -12,20 +12,20 @@ import { Firewall } from "../firewall/firewall.js";
 
 // Get level state
 function getEnemyStates(_level = 1) {
-  let level = Math.min(1, _level)
+  let level = Math.max(1, _level)
 
   // count
   const baseCount = 80;
   const countIncrase = 15;
 
   // spawn time
-  const baseSpawnTime = 250;
+  const baseSpawnTime = 400;
   const spawnTimeDecrase = 20;
   const minSpawnTime = 100;
 
   // speed
   const baseSpeed = 0.5;
-  const speedIncrase = 0.05;
+  const speedIncrase = 0.02;
 
   // Math stuffs
   const count = baseCount + countIncrase * Math.log2(level)
