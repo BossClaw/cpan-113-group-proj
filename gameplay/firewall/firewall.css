@@ -1,23 +1,32 @@
 .firewall {
   position: relative;
-  background-color: red;
   width: 5px;
   z-index: 1;
 }
 
-.firewall.on-hit {
+.firewall-sprit {
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.firewall.on-hit::after {
+.firewall.hit {
+}
+
+.firewall.hit::after {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: white;
+  background: red;
   opacity: 0;
-  animation: on-firewall-hit 0.1s infinite;
+  animation: on-firewall-hit 0.2s linear;
+  animation-iteration-count: 2;
 }
 
 @keyframes on-firewall-hit {
