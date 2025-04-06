@@ -2,7 +2,7 @@
 const dummyScores = [
   {
     name: 'COW',
-    score: 39, // number
+    score: 112600, // number
     maxLevel: '10', // string
     language: ["Python"], // string array
     difficulty: 'easy',
@@ -10,7 +10,7 @@ const dummyScores = [
   },
   {
     name: 'DOG',
-    score: 59,
+    score: 138200,
     maxLevel: '12',
     language: ["Python", "JavaScript"],
     difficulty: 'easy',
@@ -18,7 +18,7 @@ const dummyScores = [
   },
   {
     name: 'CAT',
-    score: 22,
+    score: 27800,
     maxLevel: '3',
     language: ["Python", "JavaScript", "CSS"],
     difficulty: 'easy',
@@ -50,7 +50,7 @@ function updateLocalLeaderboard(limit = 10) {
   for (let i = 0; i < scores.length; i++) {
     // score text
     const scoreRecord = scores[i]
-    const scoreText = String(scoreRecord.score).padStart(5, '0')
+    const scoreText = String(scoreRecord.score).padStart(8, '0')
     // placement text
     let placement
     if (i === 0) {

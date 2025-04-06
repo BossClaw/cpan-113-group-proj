@@ -82,7 +82,10 @@ export class Game {
     // player related
     this.playerObject = playerObject;
     this.player = null;
-    this.points = 0; // current level score
+
+    // score
+    this.scoreIncrement = 100
+    this.scores = 0; // current level score
 
     // enemy related
     this.enemyArray = []; // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
@@ -127,7 +130,7 @@ export class Game {
     const enemyInfo = document.createElement('p')
     enemyInfo.innerText = `Enemy: ${this.enemyLeft} / ${this.enemyCount}`
     const scoreInfo = document.createElement('p')
-    scoreInfo.innerText = `Hight Score: ${this.points}`
+    scoreInfo.innerText = `Hight Score: ${this.scores}`
 
     const infoElements = [levelInfo, enemyInfo, scoreInfo]
     infoElements.forEach(e => {
@@ -251,13 +254,10 @@ export class Game {
     if (!target) return;
     target.takeDamage(this.player.attack());
     // gain points
-    this.points++;
+    this.scores += this.scoreIncrement;
   }
   // Setup enemies at the beginning
   async setup() {
-    // update game states display
-    // this.updateGameStats();
-
     // check if this is the first leve in a playthough
     // clear current score left over
     if (!currentGame) {
@@ -487,7 +487,7 @@ export class Game {
   }
   saveToLocalStorage() {
     // save scores
-    scoreManager.addToCurrentScore(this.points)
+    scoreManager.addToCurrentScore(this.scores)
     // save level
     localStorage.setItem('level', this.level)
     // save difficulty
