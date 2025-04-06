@@ -42,8 +42,8 @@ function getEnemyStates(_level = 1) {
 const difficultSpeedModifer = {
   easy: 0.5,
   normal: 1,
-  hard: 1.5,
-  hardcore: 2.5,
+  hard: 2,
+  hardcore: 3,
 };
 
 export class Game {
