@@ -203,7 +203,7 @@ export class Game {
       // missing the shot
       this.player.missed();
       // spawn new enemy (level: 0 the "error")
-      const enemy = new Enemy(this.gameScreen, 0, this.levelEnemySpeed);
+      const enemy = new Enemy(this.gameScreen, 'lv0', this.levelEnemySpeed);
       enemy.spawn();
       this.enemyArray.push(enemy);
       this.enemyCount++;
@@ -281,7 +281,7 @@ export class Game {
 
     // spawn enemy
     for (let i = 0; i < this.enemyCount; i++) {
-      const enemy = new Enemy(this.gameScreen, 1, this.levelEnemySpeed); // level 1
+      const enemy = new Enemy(this.gameScreen, 'lv1', this.levelEnemySpeed); // level 1
       enemy.spawn(this.gameScreen);
       this.enemyArray.push(enemy);
     }
