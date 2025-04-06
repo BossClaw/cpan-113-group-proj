@@ -83,7 +83,6 @@ export class Game {
     this.playerObject = playerObject;
     this.player = null;
     this.points = 0; // current level score
-    this.baseHP = 3;
 
     // enemy related
     this.enemyArray = []; // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
@@ -501,10 +500,6 @@ export class Game {
   }
   getGameStates() {
     // return everything about the current game
-    const CURRENT_SCORE_KEY = "settings_current_score";
-    const SCORES_KEY = "settings_scores";
-    const DIFFICULTY_KEY = 'difficulty';
-    const LEVEL_KEY = 'level';
     const LANGUAGES_KEY = 'pickedLanguages';
 
     this.languages = JSON.parse(localStorage.getItem(LANGUAGES_KEY) || '[]')
