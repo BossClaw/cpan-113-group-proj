@@ -39,7 +39,7 @@ function getEnemyStates(_level = 1) {
   };
 }
 
-const difficultSpeedModifer = {
+const difficultySpeedModifier = {
   easy: 0.5,
   normal: 1,
   hard: 2,
@@ -90,7 +90,7 @@ export class Game {
     this.enemyCount = getEnemyStates(level).count;
     this.enemyLeft = getEnemyStates(level).count;
     this.levelEnemySpeed =
-      getEnemyStates(level).speed * difficultSpeedModifer[difficulty];
+      getEnemyStates(level).speed * difficultySpeedModifier[difficulty];
     this.enemySpawnTime = getEnemyStates(level).spawnTime;
 
     // gameView
