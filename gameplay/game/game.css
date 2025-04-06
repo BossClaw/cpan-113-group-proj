@@ -20,6 +20,15 @@
   animation: on-firewall-hit 0.1s infinite;
 }
 
+/* debug div  */
+.debug {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 100;
+}
+
 @keyframes on-firewall-hit {
   0% {
     opacity: 0;

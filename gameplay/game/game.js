@@ -10,51 +10,39 @@ import { Mainframe } from "../mainframe/mainframe.js";
 
 
 // Get level state
-function getLevelState(level = 1) {
-  if (level < 1) level = 1;
-  // base
-  const baseEnemyCount = 15;
-  const baseEnemySpeed = 0.5;
-  const baseEnmeySpawnTime = 500;
+function getEnemyStates(_level = 1) {
+  let level = Math.min(1, _level)
 
-  // how many level to incrase
-  const levelToIncraseCount = 2;
-  const levelToIncraseSpeed = 1;
-  const levelToDecraseSpawnTime = 2;
+  // count
+  const baseCount = 80;
+  const countIncrase = 15;
 
-  // how much to incrase
-  const countIncrase = 2;
+  // spawn time
+  const baseSpawnTime = 300;
+  const spawnTimeDecrase = 50;
+  const minSpawnTime = 100;
+
+  // speed
+  const baseSpeed = 0.5;
   const speedIncrase = 0.05;
-  const spawnTimeDecrase = 100;
-  const minSpawnTime = 200;
 
-  const enemyCount =
-    baseEnemyCount +
-    Math.floor((level - 1) / levelToIncraseCount) * countIncrase;
-  const ememySpeed =
-    baseEnemySpeed +
-    Math.floor((level - 1) / levelToIncraseSpeed) * speedIncrase;
-  const spawnTime =
-    baseEnmeySpawnTime -
-    Math.floor((level - 1) / levelToDecraseSpawnTime) * spawnTimeDecrase;
-  let ememySpawnTime;
-  if (spawnTime < minSpawnTime) {
-    ememySpawnTime = minSpawnTime;
-  } else {
-    ememySpawnTime = spawnTime;
-  }
+  // Math stuffs
+  const count = baseCount + countIncrase * Math.log2(level)
+  const spawnTime = Math.max(minSpawnTime, baseSpawnTime - spawnTimeDecrase * Math.log2(level))
+  const speed = baseSpeed + speedIncrase * Math.log2(level)
+
   return {
-    enemyCount,
-    ememySpeed,
-    ememySpawnTime,
+    count,
+    speed,
+    spawnTime
   };
 }
 
 const difficultSpeedModifer = {
   easy: 0.5,
   normal: 1,
-  hard: 2,
-  hardcore: 3,
+  hard: 1.5,
+  hardcore: 2.5,
 };
 
 export class Game {
@@ -97,11 +85,11 @@ export class Game {
 
     // enemy related
     this.enemyArray = []; // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
-    this.enemyCount = getLevelState(level).enemyCount;
-    this.enemyLeft = getLevelState(level).enemyCount;
+    this.enemyCount = getEnemyStates(level).count;
+    this.enemyLeft = getEnemyStates(level).count;
     this.levelEnemySpeed =
-      getLevelState(level).ememySpeed * difficultSpeedModifer[difficulty];
-    this.enemySpawnTime = getLevelState(level).ememySpawnTime;
+      getEnemyStates(level).speed * difficultSpeedModifer[difficulty];
+    this.enemySpawnTime = getEnemyStates(level).spawnTime;
 
     // gameView
     this.gameView = new GameView(this.gameScreen);
@@ -112,6 +100,13 @@ export class Game {
     // sonund toggle button
     this.gameView.soundToggle.addEventListener('click', this.toggleSound)
 
+    // debug mode
+    this.isDebugMode = true
+    this.debugDiv = document.createElement('div')
+    this.debugDiv.classList.add('debug')
+    document.body.appendChild(this.debugDiv)
+
+
     // bind methods just in case
     this.start = this.start.bind(this);
     this.update = this.update.bind(this);
@@ -119,6 +114,23 @@ export class Game {
     this.onContinueBtnPress = this.onContinueBtnPress.bind(this);
     this.onRetryBtnPress = this.onRetryBtnPress.bind(this);
     this.onQuitBtnPress = this.onQuitBtnPress.bind(this);
+  }
+  setDebugMode(on = true) {
+    this.isDebugMode = on
+  }
+  updateDebugInfo() {
+    this.debugDiv.innerHTML = ''
+    const levelInfo = document.createElement('p')
+    levelInfo.innerText = `Level: ${this.level}`
+    const enemyInfo = document.createElement('p')
+    enemyInfo.innerText = `Enemy: ${this.enemyLeft} / ${this.enemyCount}`
+    const scoreInfo = document.createElement('p')
+    scoreInfo.innerText = `Hight Score: ${this.points}`
+
+    const infoElements = [levelInfo, enemyInfo, scoreInfo]
+    infoElements.forEach(e => {
+      this.debugDiv.appendChild(e)
+    })
   }
   pause() {
     if (!this.isGame || this.isPaused) return;
@@ -399,8 +411,10 @@ export class Game {
     // check is game over
     this.checkGameOver();
 
-    // update game states display
-    //this.updateGameStats();
+    // game debug info
+    if (this.isDebugMode) {
+      this.updateDebugInfo()
+    }
 
     // Check delta time
     if (!this.lastTimestamp) this.lastTimestamp = timestamp;
@@ -447,17 +461,6 @@ export class Game {
 
     // next frame
     this.animatedFrameId = requestAnimationFrame(this.update);
-  }
-  getGameStats() {
-    return {
-      baseHP: this.baseHP,
-      firewallHP: this.firewallHP,
-      points: this.points,
-      enemy: `${this.enemyLeft} / ${this.enemyCount}`,
-    };
-  }
-  updateGameStats() {
-    // this.gameView.updateGameStats(this.getGameStats());
   }
   checkEnemyLeftCount() {
     {
