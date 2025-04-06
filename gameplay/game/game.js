@@ -28,7 +28,7 @@ function getEnemyStates(_level = 1) {
   const speedIncrase = 0.02;
 
   // Math stuffs
-  const count = baseCount + countIncrase * Math.log2(level)
+  const count = Math.floor(baseCount + countIncrase * Math.log2(level))
   const spawnTime = Math.max(minSpawnTime, baseSpawnTime - spawnTimeDecrase * Math.log2(level))
   const speed = baseSpeed + speedIncrase * Math.log2(level)
 
