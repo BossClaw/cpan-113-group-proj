@@ -1,7 +1,17 @@
+import { get_languages, get_difficulty, get_level } from "../game_settings.js";
+import { gameAudio } from "../gameplay/game-audio/gameAudio.js";
+
+console.log("difficulty", get_difficulty());
+console.log("languages", get_languages());
+console.log("level", get_level());
+
 // Pick languages
 
-// Get Button Elements
+// GET BUTTON ELEMENTS
 const languageButtons = document.getElementsByClassName("language");
+console.log(`[MISSIONCONFIGURE] GOT LANGUAGE BUTTS[${languageButtons.length}]`);
+
+// GET START GAME
 const startGame = document.getElementById("temp-start");
 
 // TODO - DO THIS WHEN NECESSARY
@@ -15,7 +25,7 @@ export function clear_guest_scores() {
   /// localStorage.clear()
 }
 
-const LOCAL_SCORES_KEY = 'local_scores';
+const LOCAL_SCORES_KEY = "local_scores";
 
 export function add_new_high_score(
   _score,
@@ -50,7 +60,7 @@ export function add_new_high_score(
   score_arr.push(new_score_obj);
 
   // 3 ) CREATE A NEW ORDERED ARRY BY SCORE / IN PLACE TBD
-  score_arr.sort((a,b) => b.score - a.score);
+  score_arr.sort((a, b) => b.score - a.score);
 
   // 4 ) SLICE THE ARRAY FOR TOP 50
   score_arr.splice(50);
@@ -66,24 +76,42 @@ export function add_new_high_score(
   // ENJOY BROCCOLI
 }
 
-let pickedLanguages = [];
+// Inital Language settings from local storage
+let pickedLanguages = get_languages();
+Array.from(languageButtons).forEach((button) => {
+  if (pickedLanguages.includes(button.innerHTML)) {
+    button.classList.add("active-language");
+  } else {
+    button.classList.remove("active-language");
+  }
+});
+
 
 // Add event listener to each Language button
 Array.from(languageButtons).forEach((button) => {
   button.addEventListener("click", function (event) {
-    console.log(event.target);
+    console.log(`[MISSIONCONFINGURE] CLICKED LANGUAGE BUTTON[${event.target}]`);
+    // CALL METHODS
     toggleActive(event.target);
     toggleAddToList(event.target);
-    console.log(pickedLanguages);
+    // DUMP UPDATED LIST
+    console.log(`[MISSIONCONFIGURE] UPDATED PICKED LANG LIST[${pickedLanguages}]`);
   });
 });
 
 // Add / Remove language and CSSS
 function toggleActive(button) {
+  const animate_class_name = "animate__bounce";
+
   if (button.classList.contains("active-language")) {
     button.classList.remove("active-language");
+    button.classList.remove("animate__animated");
+    button.classList.remove(animate_class_name);
   } else {
     button.classList.add("active-language");
+    button.classList.add("animate__animated");
+    button.classList.add(animate_class_name);
+    gameAudio.play('../audio/sfx/menu_blip.wav')
   }
 }
 
@@ -108,9 +136,13 @@ startGame.addEventListener("click", function () {
     localStorage.setItem("level", pickedLevel);
 
     // TEMPORARY REDIRECT
+    // TODO - CONFIRM TEMP REDIRECT?
     window.location.href = "gameplay.html";
   } else {
-    alert("Please pick your languages");
+    // SHOW MESG
+    // alert("Please pick your languages");
+    const dialog_lang = document.querySelector("#dialog_lang");
+    dialog_lang.showModal();
   }
 });
 
@@ -135,6 +167,13 @@ difficultySlider.addEventListener("input", function () {
 // Initial difficulty display
 difficultyDisplay.textContent = difficultyValues[difficultySlider.value];
 
+let initalDifficulty = Object.keys(difficultyValues).find(
+  (key) => difficultyValues[key] === get_difficulty()
+);
+console.log("inital dif", initalDifficulty);
+difficultySlider.value = initalDifficulty;
+difficultyDisplay.textContent = get_difficulty();
+
 // Initial picked difficulty
 let pickedDifficulty = difficultyValues[difficultySlider.value];
 
@@ -150,6 +189,8 @@ levelSlider.addEventListener("input", function () {
 });
 
 // Initial level display
+levelSlider.value = get_level();
+
 levelDisplay.textContent = levelSlider.value;
 
 // Initial picked level
