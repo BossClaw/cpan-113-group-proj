@@ -133,8 +133,7 @@ export class Game {
     const enemyInfo = document.createElement('p')
     enemyInfo.innerText = `Enemy: ${this.enemyLeft} / ${this.enemyCount}`
     const scoreInfo = document.createElement('p')
-    scoreInfo.innerText = `Hight Score: ${this.scores}`
-
+    scoreInfo.innerText = `High Score: ${this.scores}`
     const infoElements = [levelInfo, enemyInfo, scoreInfo]
     infoElements.forEach(e => {
       this.debugDiv.appendChild(e)
