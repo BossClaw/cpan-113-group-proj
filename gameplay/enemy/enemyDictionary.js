@@ -31,7 +31,7 @@ export const enemyDictionary = {
   lv3: {
     name: "stack-overflow",
     level: 3,
-    hp: 5,
+    hp: 3,
     damage: 3,
     speed: 0.5,
     color: "black",
@@ -40,7 +40,7 @@ export const enemyDictionary = {
   lv4: {
     name: "infinite-loop",
     level: 4,
-    hp: 10,
+    hp: 4,
     damage: 4,
     speed: 0.3,
     color: "black",
