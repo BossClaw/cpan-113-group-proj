@@ -42,8 +42,8 @@ function getEnemyStates(_level = 1) {
 const difficultySpeedModifier = {
   easy: 0.5,
   normal: 1,
-  hard: 2,
-  hardcore: 3,
+  hard: 1.5,
+  hardcore: 2,
 };
 
 export class Game {
@@ -94,7 +94,7 @@ export class Game {
       getEnemyStates(level).speed * difficultySpeedModifier[difficulty];
     this.enemySpawnTime = getEnemyStates(level).spawnTime;
     // array of enemy level (number)
-    this.enemeySpawnList = enemeySpawnList(this.enemyCount, Number(this.level))
+    this.enemeySpawnList = enemeySpawnList(this.enemyCount, Number(this.level), this.difficulty)
     // for enemy instance
     this.enemyArray = []
 

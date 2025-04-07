@@ -3,9 +3,27 @@
 import { enemyDictionary } from "./enemyDictionary.js";
 
 
-export function enemeySpawnList(spawnCount, level) {
+export function enemeySpawnList(spawnCount, level = 1, difficult = 'normal') {
   const spawnDistribution = {}
-  const addOnLevels = 2 // more enemies sooner
+  let addOnLevels = 1 // more enemies sooner
+
+  // check difficulty
+  switch (difficult) {
+    case 'easy':
+    case 'normal':
+      addOnLevels = 1;
+      break;
+    case 'hard':
+      addOnLevels = 2;
+      break;
+    case 'hardcore':
+      addOnLevels = 3;
+      break;
+    default:
+      addOnLevels = 1;
+  }
+
+  console.log('addOnLevels:', addOnLevels)
 
   for (const [key, enemy] of Object.entries(enemyDictionary)) {
     const enemyLevel = enemy.level;
