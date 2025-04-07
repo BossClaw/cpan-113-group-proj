@@ -122,11 +122,6 @@ export class GameView {
     this.nameInputMessage.innerText = 'Message here'
     this.nameInputDiv.appendChild(this.nameInputMessage)
 
-    // sound toggle
-    this.soundToggle = document.createElement('button')
-    this.soundToggle.classList.add('sound-toggle')
-    this.gameScreen.appendChild(this.soundToggle)
-
     // (Test) game stats
     // this.gameStates = document.createElement('div')
     // this.gameStates.classList.add('game-states')

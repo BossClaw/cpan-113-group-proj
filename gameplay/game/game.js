@@ -111,8 +111,6 @@ export class Game {
     // show start message display
     this.gameView.showStartMessage(this.level, this.difficulty)
 
-    // sonund toggle button
-    this.gameView.soundToggle.addEventListener('click', this.toggleSound)
 
     // bind methods just in case
     this.start = this.start.bind(this);
@@ -153,17 +151,6 @@ export class Game {
 
     //  Restart the game loop
     this.animationId = requestAnimationFrame(this.update);
-  }
-  toggleSound() {
-    if (gameAudio.playerConsent) {
-      // turn off
-      gameAudio.setConsent(false)
-      gameAudio.toggleMusic()
-    } else {
-      // turn on
-      gameAudio.setConsent(true)
-      gameAudio.toggleMusic()
-    }
   }
   onFirewallAttacked(damage) {
     this.firewall.takeDamage(damage)
