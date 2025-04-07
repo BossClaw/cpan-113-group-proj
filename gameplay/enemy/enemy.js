@@ -1,89 +1,42 @@
 import { gameAudio } from "../game-audio/gameAudio.js";
-
-
-const enemyList = [
-  {
-    name: "error",
-    hp: 1,
-    damage: 1,
-    speed: 0.7,
-    color: "red",
-    size: "16",
-  },
-  {
-    name: "bug",
-    hp: 1,
-    damage: 1,
-    speed: 1,
-    color: "blue",
-    size: "16",
-  },
-  {
-    name: "underrun",
-    hp: 5,
-    damage: 2,
-    speed: 1,
-    color: "green",
-    size: "16",
-  },
-  {
-    name: "infinite-loop",
-    hp: 20,
-    damage: 2,
-    speed: 1,
-    color: "black",
-    size: "16",
-  },
-  {
-    name: "stack-overflow",
-    hp: 20,
-    damage: 2,
-    speed: 1,
-    color: "black",
-    size: "16",
-  },
-];
-
-function getEnemyData(level) {
-  if (level < 0) level = 0;
-  if (level >= enemyList.length) level = enemyList.length - 1;
-  return enemyList[level];
-}
+import { enemyDictionary } from "./enemyDictionary.js";
 
 // gameScreen is the #game_screen div
 // speed is calculated by game's difficult, game's level and enemy's own speed
 export class Enemy {
   static nextId = 1;
-  constructor(gameScreen, enemyLevel = 1, gameSpeed = 1) {
-    // id
+  constructor(gameScreen, enemyKey = "lv1", gameSpeed = 1) {
     this.id = Enemy.nextId++;
 
-    // location/styles
+    // base info
     this.gameScreen = gameScreen;
+    const enemyData = enemyDictionary[enemyKey] || enemyDictionary["lv1"];
+
+    // styles & layout
     this.outerClass = "enemy";
     this.innerClass = "enemy-sprit";
     this.outerDiv = null;
     this.innerDiv = null;
-    this.width = getEnemyData(enemyLevel).size;
-    this.height = getEnemyData(enemyLevel).size;
+    this.width = enemyData.size;
+    this.height = enemyData.size;
 
-    // states
+    // state
     this.isAlive = true;
-    this.name = getEnemyData(enemyLevel).name;
-    this.hp = getEnemyData(enemyLevel).hp;
-    this.speed = getEnemyData(enemyLevel).speed * gameSpeed;
-    this.damage = getEnemyData(enemyLevel).damage;
-    this.innerColor = getEnemyData(enemyLevel).color;
+    this.name = enemyData.name;
+    this.hp = enemyData.hp;
+    this.speed = enemyData.speed * gameSpeed;
+    this.damage = enemyData.damage;
+    this.innerColor = enemyData.color;
 
     // movement
     this.isMoving = false;
     this.defaultMovementDuration = 3;
     this.actualMovementDuratrion = this.defaultMovementDuration / this.speed;
 
-    // testing info
+    // test info
     this.enemyInfo = null;
 
-    // bind methods just in case
+    // bind methods
     this.spawn = this.spawn.bind(this);
     this.move = this.move.bind(this);
     this.takeDamage = this.takeDamage.bind(this);
@@ -112,7 +65,6 @@ export class Enemy {
     // TODO - COMMON STYLE FOR BACKGROUND
     this.innerDiv.classList.add("enemy_inner");
     this.innerDiv.classList.add(this.innerClass);
-    // this.innerDiv.style.backgroundColor = this.innerColor;
     let bg_str = `url("gameplay/enemy/${this.name}.gif")`;
     this.innerDiv.style.backgroundImage = bg_str;
 
@@ -152,6 +104,7 @@ export class Enemy {
   takeDamage(amount) {
     this.hp -= amount;
     this.innerDiv.classList.remove("hit");
+    void this.innerDiv.offsetWidth; // Trigger reflow
     this.innerDiv.classList.add("hit");
 
     // play SFX
@@ -163,7 +116,7 @@ export class Enemy {
     }
   }
   attack() {
-    this.destroy();
+    this.takeDamage(this.damage)
     return this.damage;
   }
   destroy() {

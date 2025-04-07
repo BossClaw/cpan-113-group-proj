@@ -26,7 +26,17 @@
   background: red;
   opacity: 0;
   animation: on-firewall-hit 0.2s linear;
-  animation-iteration-count: 2;
+  animation-iteration-count: 2;  
+  animation-fill-mode: none; 
+}
+
+/* debug div  */
+.debug {
+  position: fixed;
+  top: 30%;
+  left: 5%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 100;
 }
 
 @keyframes on-firewall-hit {
