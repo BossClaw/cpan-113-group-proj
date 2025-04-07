@@ -4,45 +4,6 @@
 import { viz_init_bg } from "./bg.js";
 import { gameAudio } from "../gameplay/game-audio/gameAudio.js";
 
-// TBD - ONLY 2 .HTML FILES, index.html & play.html
-
-// READ THE HTML STORAGE
-
-// EVAL IF LOGGED IN USER / FLAT USER DATA FILE
-
-// REDIRECT IF NECESSARY
-
-// LOAD USER PROFILE DATA
-
-// PROCEED TO REGULAR PAGE LOAD
-
-// =================================================================
-// WIP - TEMPLATE STYLE
-
-// react style
-// export function addCommonToElement(elementId, componentFunction) {
-//   document.addEventListener("DOMContentLoaded", () => {
-//     const element = document.getElementById(elementId);
-//     if (element) {
-//       element.innerHTML = componentFunction();
-//     } else {
-//       console.warn(`Element with ID '${elementId}' not found.`);
-//     }
-//   });
-// }
-
-// FETCH STYLE
-export function addCommonToElement(elementId) {
-  const element = document.getElementById(elementId);
-  console.log(`[COMMON][DOM] FETCHING[${elementId}] ELEMENT[${element}]`);
-
-  if (element) {
-    element.innerHTML = fetch(`./common/${elementId}.html`);
-  } else {
-    console.warn(`Element with ID '${elementId}' not found.`);
-  }
-}
-
 // =================================================================
 // HANDLE THE LOGGED IN CHECK
 
@@ -113,20 +74,23 @@ function update_aud_dom() {
 // =================================================================
 // AUD WRAPPER
 
-function aud_init() {
-  console.log("[COMMON][PAGE][AUD] INIT");
-
-  // COMMON PAGE BG MUSIC
-  gameAudio.setConsent();
+function play_common_bg_music() {
+  gameAudio.setConsent(true);
   gameAudio.play(
     "audio/music/Phat_Phrog_Studios_Retro_Fragments.mp3",
     true,
     true
   );
+}
 
+function aud_init() {
+  console.log("[COMMON][PAGE][AUD] INIT");
+
+  // COMMON PAGE BG MUSIC
   aud_update_dom();
 
   var aud_mute = document.querySelector("#butt_aud_mute");
+
   if (!aud_mute) {
     console.error("Element with ID 'butt_aud_mute' not found.");
     return;
@@ -146,9 +110,10 @@ function aud_get_muted() {
 }
 
 function aud_set_muted(aud_muted) {
+  // TODO - ALIGN ALL THESE VALUES PROPERLY
   console.log(`[COMMON][AUD] set_muted(${aud_muted})`);
   localStorage.setItem(VIZ_AUD_MUTED_KEY, aud_muted);
-  
+
   // UPDATE THE PLAYING
   gameAudio.setConsent(true);
   gameAudio.toggleMusic();
@@ -182,7 +147,9 @@ function aud_update_dom() {
 
   const aud_is_muted = aud_get_muted();
 
-  console.log(`[COMMON][AUD] UPDATING DOM[${target.id}] MUTED(${aud_is_muted})`);
+  console.log(
+    `[COMMON][AUD] UPDATING DOM[${target.id}] MUTED(${aud_is_muted})`
+  );
 
   // SET SPEAKER SPRITE BY CLASS
   if (aud_is_muted) {
@@ -202,7 +169,7 @@ function viz_init() {
 
   viz_init_bg();
 
-  crt_set_enabled(crt_get_enabled());    
+  crt_set_enabled(crt_get_enabled());
 }
 
 // =================================================================
@@ -329,7 +296,6 @@ function common_page_init() {
   osc_init();
   ui_init_events();
   viz_init();
-  aud_init();
 
   // TODO - ADD A LISTENER ON UNLOAD TO SAVE CHANGES???
   document.addEventListener("WindowUnload", () => {
