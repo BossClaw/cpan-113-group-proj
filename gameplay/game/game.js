@@ -8,54 +8,42 @@ import flaggedNames from "./flaggedNames.js";
 import { gameAudio } from "../game-audio/gameAudio.js";
 import { Mainframe } from "../mainframe/mainframe.js";
 import { Firewall } from "../firewall/firewall.js";
-
+import { enemySpawnList } from "../enemy/enemySpawnList.js";
 
 // Get level state
-function getLevelState(level = 1) {
-  if (level < 1) level = 1;
-  // base
-  const baseEnemyCount = 15;
-  const baseEnemySpeed = 0.5;
-  const baseEnmeySpawnTime = 500;
+function getEnemyStates(_level = 1) {
+  let level = Math.max(1, _level)
 
-  // how many level to incrase
-  const levelToIncraseCount = 2;
-  const levelToIncraseSpeed = 1;
-  const levelToDecraseSpawnTime = 2;
+  // count
+  const baseCount = 80;
+  const countIncrase = 15;
 
-  // how much to incrase
-  const countIncrase = 2;
-  const speedIncrase = 0.05;
-  const spawnTimeDecrase = 100;
-  const minSpawnTime = 200;
+  // spawn time
+  const baseSpawnTime = 400;
+  const spawnTimeDecrase = 20;
+  const minSpawnTime = 100;
 
-  const enemyCount =
-    baseEnemyCount +
-    Math.floor((level - 1) / levelToIncraseCount) * countIncrase;
-  const ememySpeed =
-    baseEnemySpeed +
-    Math.floor((level - 1) / levelToIncraseSpeed) * speedIncrase;
-  const spawnTime =
-    baseEnmeySpawnTime -
-    Math.floor((level - 1) / levelToDecraseSpawnTime) * spawnTimeDecrase;
-  let ememySpawnTime;
-  if (spawnTime < minSpawnTime) {
-    ememySpawnTime = minSpawnTime;
-  } else {
-    ememySpawnTime = spawnTime;
-  }
+  // speed
+  const baseSpeed = 0.5;
+  const speedIncrase = 0.02;
+
+  // Math stuffs
+  const count = Math.floor(baseCount + countIncrase * Math.log2(level))
+  const spawnTime = Math.max(minSpawnTime, baseSpawnTime - spawnTimeDecrase * Math.log2(level))
+  const speed = baseSpeed + speedIncrase * Math.log2(level)
+
   return {
-    enemyCount,
-    ememySpeed,
-    ememySpawnTime,
+    count,
+    speed,
+    spawnTime
   };
 }
 
-const difficultSpeedModifer = {
+const difficultySpeedModifier = {
   easy: 0.5,
   normal: 1,
-  hard: 2,
-  hardcore: 3,
+  hard: 1.5,
+  hardcore: 2,
 };
 
 export class Game {
@@ -94,16 +82,21 @@ export class Game {
     // player related
     this.playerObject = playerObject;
     this.player = null;
-    this.points = 0; // current level score
-    this.baseHP = 3;
+
+    // score
+    this.scoreIncrement = 100
+    this.scores = 0; // current level score
 
     // enemy related
-    this.enemyArray = []; // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
-    this.enemyCount = getLevelState(level).enemyCount;
-    this.enemyLeft = getLevelState(level).enemyCount;
+    this.enemyCount = getEnemyStates(level).count;
+    this.enemyLeft = getEnemyStates(level).count;
     this.levelEnemySpeed =
-      getLevelState(level).ememySpeed * difficultSpeedModifer[difficulty];
-    this.enemySpawnTime = getLevelState(level).ememySpawnTime;
+      getEnemyStates(level).speed * difficultySpeedModifier[difficulty];
+    this.enemySpawnTime = getEnemyStates(level).spawnTime;
+    // array of enemy level (number)
+    this.enemeySpawnList = enemySpawnList(this.enemyCount, Number(this.level), this.difficulty)
+    // for enemy instance
+    this.enemyArray = []
 
     // gameView
     this.gameView = new GameView(this.gameScreen);
@@ -114,6 +107,14 @@ export class Game {
     // sonund toggle button
     this.gameView.soundToggle.addEventListener('click', this.toggleSound)
 
+    // debug mode
+    this.isDebugMode = true
+    const oldDbug = document.querySelector('.debug')
+    this.debugDiv = oldDbug ? oldDbug : document.createElement('div')
+    this.debugDiv.classList.add('debug')
+    document.body.appendChild(this.debugDiv)
+
+
     // bind methods just in case
     this.start = this.start.bind(this);
     this.update = this.update.bind(this);
@@ -121,6 +122,22 @@ export class Game {
     this.onContinueBtnPress = this.onContinueBtnPress.bind(this);
     this.onRetryBtnPress = this.onRetryBtnPress.bind(this);
     this.onQuitBtnPress = this.onQuitBtnPress.bind(this);
+  }
+  setDebugMode(on = true) {
+    this.isDebugMode = on
+  }
+  updateDebugInfo() {
+    this.debugDiv.innerHTML = ''
+    const levelInfo = document.createElement('p')
+    levelInfo.innerText = `Level: ${this.level}`
+    const enemyInfo = document.createElement('p')
+    enemyInfo.innerText = `Enemy: ${this.enemyLeft} / ${this.enemyCount}`
+    const scoreInfo = document.createElement('p')
+    scoreInfo.innerText = `High Score: ${this.scores}`
+    const infoElements = [levelInfo, enemyInfo, scoreInfo]
+    infoElements.forEach(e => {
+      this.debugDiv.appendChild(e)
+    })
   }
   pause() {
     if (!this.isGame || this.isPaused) return;
@@ -188,7 +205,7 @@ export class Game {
       // missing the shot
       this.player.missed();
       // spawn new enemy (level: 0 the "error")
-      const enemy = new Enemy(this.gameScreen, 0, this.levelEnemySpeed);
+      const enemy = new Enemy(this.gameScreen, 'lv0', this.levelEnemySpeed);
       enemy.spawn();
       this.enemyArray.push(enemy);
       this.enemyCount++;
@@ -239,13 +256,10 @@ export class Game {
     if (!target) return;
     target.takeDamage(this.player.attack());
     // gain points
-    this.points++;
+    this.scores += this.scoreIncrement;
   }
   // Setup enemies at the beginning
   async setup() {
-    // update game states display
-    // this.updateGameStats();
-
     // check if this is the first leve in a playthough
     // clear current score left over
     if (!currentGame) {
@@ -268,12 +282,11 @@ export class Game {
     this.player.spawn(this.gameScreen);
 
     // spawn enemy
-    for (let i = 0; i < this.enemyCount; i++) {
-      const enemy = new Enemy(this.gameScreen, 1, this.levelEnemySpeed); // level 1
+    this.enemeySpawnList.forEach(level => {
+      const enemy = new Enemy(this.gameScreen, `lv${level}`, this.levelEnemySpeed); // level 1
       enemy.spawn(this.gameScreen);
       this.enemyArray.push(enemy);
-    }
-
+    })
 
     // set up gameview buttons
     const buttons = this.gameView.getButtons();
@@ -382,8 +395,10 @@ export class Game {
     // check is game over
     this.checkGameOver();
 
-    // update game states display
-    //this.updateGameStats();
+    // game debug info
+    if (this.isDebugMode) {
+      this.updateDebugInfo()
+    }
 
     // Check delta time
     if (!this.lastTimestamp) this.lastTimestamp = timestamp;
@@ -430,17 +445,6 @@ export class Game {
     // next frame
     this.animatedFrameId = requestAnimationFrame(this.update);
   }
-  getGameStats() {
-    return {
-      mainframeHP: this.mainframe.hp,
-      firewallHP: this.firewall.hp,
-      points: this.points,
-      enemy: `${this.enemyLeft} / ${this.enemyCount}`,
-    };
-  }
-  updateGameStats() {
-    // this.gameView.updateGameStats(this.getGameStats());
-  }
   checkEnemyLeftCount() {
     {
       let count = 0;
@@ -484,7 +488,7 @@ export class Game {
   }
   saveToLocalStorage() {
     // save scores
-    scoreManager.addToCurrentScore(this.points)
+    scoreManager.addToCurrentScore(this.scores)
     // save level
     localStorage.setItem('level', this.level)
     // save difficulty
@@ -497,10 +501,6 @@ export class Game {
   }
   getGameStates() {
     // return everything about the current game
-    const CURRENT_SCORE_KEY = "settings_current_score";
-    const SCORES_KEY = "settings_scores";
-    const DIFFICULTY_KEY = 'difficulty';
-    const LEVEL_KEY = 'level';
     const LANGUAGES_KEY = 'pickedLanguages';
 
     this.languages = JSON.parse(localStorage.getItem(LANGUAGES_KEY) || '[]')

@@ -32,6 +32,7 @@
   opacity: 0;
   animation: strong-flash 0.2s linear;
   animation-iteration-count: 2;
+  animation-fill-mode: none;
 }
 
 .mainframe-sprit.destroyed {

@@ -17,6 +17,7 @@
 
 .player-sprite.shoot {
   animation: shoot 0.2s ease-in-out;
+  animation-fill-mode: none;
   filter: drop-shadow(0 0 4px rgba(255, 255, 0, 0.5))
     drop-shadow(0 0 10px rgba(255, 255, 0, 0.3))
     drop-shadow(0 0 20px rgba(255, 255, 0, 0.1));

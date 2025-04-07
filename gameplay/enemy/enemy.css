@@ -34,7 +34,8 @@
   height: 100%;
   background: white;
   opacity: 0;
-  animation: strong-flash 0.1s infinite both;
+  animation: strong-flash 0.1s;
+  animation-fill-mode: none;
 }
 
 .enemy.move.stop {
