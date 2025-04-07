@@ -24,6 +24,12 @@
 
     <!--LEADERBOARD-->
     <script type="module" src="leaderboard.js" defer></script>
+
+    <!-- 3RD PARTY -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
   </head>
 
   <body>
@@ -47,7 +53,7 @@
               <img src="img/title/cta_hero.png" class="mw-100" />
             </div>
 
-            <div id='mission_text_div' class="tc">
+            <div id="mission_text_div" class="tc">
               <h2 class="cta_pulse">THE MISSION</h2>
             </div>
           </section>
@@ -67,7 +73,7 @@
                 <button class="language" id="C++">C++</button>
               </div>
               <div class="temp-container">
-                <h2 class="cta_pulse">Pick Difficulty</h2>
+                <h2>Pick Difficulty</h2>
                 <input
                   type="range"
                   min="1"
@@ -79,7 +85,7 @@
                 <div id="difficulty-display"></div>
               </div>
               <div class="temp-container">
-                <h2 class="cta_pulse">Pick Level</h2>
+                <h2>Pick Level</h2>
                 <input
                   type="range"
                   min="1"
@@ -100,31 +106,32 @@
 
           <section class="border_pixel mb_md">
             <div class="tc">
-              <h2 class="cta_pulse">LEADERBOARD</h2>
+              <h2>LEADERBOARD</h2>
               <div id="leaderboard">
-                <h2 class="cta_pulse">BUT - 2048</h2>
-                <h2 class="cta_pulse">WHY - 1024</h2>
-                <h2 class="cta_pulse">DOU - 512</h2>
-                <h2 class="cta_pulse">BOM - 256</h2>
-                <h2 class="cta_pulse">DEZ - 128</h2>
-                <h2 class="cta_pulse">NUT - 64</h2>
-                <h2 class="cta_pulse">BGZ - 32</h2>
-                <h2 class="cta_pulse">THO - 16</h2>
+                <h5>BUT - 2048</h5>
+                <h5>WHY - 1024</h5>
+                <h5>DOU - 512</h5>
+                <h5>BOM - 256</h5>
+                <h5>DEZ - 128</h5>
+                <h5>NUT - 64</h5>
+                <h5>BGZ - 32</h5>
+                <h5>THO - 16</h5>
               </div>
             </div>
           </section>
         </main>
+
         <!-- FOOTER -->
-        <footer id="footer" class="border_pixel">
-          <p>
-            &copy; 20XX lujabo <span class="cursor"></span>
+        <footer id="footer" class="border_pixel horiz_flex">
+          &copy; 20XX lujabo <span class="cursor"></span>
 
-            <a href="#">lu</a>
-            <a href="#">ja</a>
-            <a href="#">bo</a>
+          <button id="butt_credits">Credits</button>
 
-            <!-- <a href="#top">Top</a> -->
-          </p>
+          <a href="#">lu</a>
+          <a href="#">ja</a>
+          <a href="#">bo</a>
+
+          <a href="#top">Top</a>
         </footer>
       </div>
     </div>
