@@ -1,13 +1,18 @@
 // return an array of enemy (eg: "lv1", "lv1", "lv2")
 // created in Game class when constructed
-import { enemyDictionary } from "./enemyDictionary";
+import { enemyDictionary } from "./enemyDictionary.js";
 
 
-export function enemeySpawnList(spawnCount, currentLevel) {
+export function enemeySpawnList(spawnCount, level) {
+  console.log('spawnCount:', spawnCount)
+  console.log('level', level)
+
   const spawnDistribution = {}
+  const addOnLevels = 2 // more enemies sooner
 
   for (const [key, enemy] of Object.entries(enemyDictionary)) {
     const enemyLevel = enemy.level;
+    const currentLevel = level + addOnLevels
 
     // Skip level 0 (spawn on player mis-typed)
     if (enemyLevel == 0) continue;
@@ -15,7 +20,7 @@ export function enemeySpawnList(spawnCount, currentLevel) {
     if (enemyLevel == 1) continue;
 
     // All level 2 and above enemy
-    spawnDistribution[enemyLevel] = Math.floor(currentLevel / enemyLevel);
+    spawnDistribution[enemyLevel] = Math.floor(currentLevel * Math.log2(currentLevel) / enemyLevel);
   }
 
   // calcuate higher level enemies count
@@ -52,5 +57,9 @@ export function enemeySpawnList(spawnCount, currentLevel) {
 
   // return array 
   // eg: [1, 1, 1, 1, 2, 2, 3, ...]
+  console.log('enemiesArray:', enemiesArray)
   return enemiesArray
 }
+
+
+enemeySpawnList(80, 1)

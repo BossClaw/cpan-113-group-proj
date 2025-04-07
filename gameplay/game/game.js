@@ -8,7 +8,7 @@ import flaggedNames from "./flaggedNames.js";
 import { gameAudio } from "../game-audio/gameAudio.js";
 import { Mainframe } from "../mainframe/mainframe.js";
 import { Firewall } from "../firewall/firewall.js";
-
+import { enemeySpawnList } from "../enemy/enemySpawnList.js";
 
 // Get level state
 function getEnemyStates(_level = 1) {
@@ -88,12 +88,15 @@ export class Game {
     this.scores = 0; // current level score
 
     // enemy related
-    this.enemyArray = []; // all the enemy in this level (add level control later eg: [1, 1, 1, 2, 1, 1])
     this.enemyCount = getEnemyStates(level).count;
     this.enemyLeft = getEnemyStates(level).count;
     this.levelEnemySpeed =
       getEnemyStates(level).speed * difficultySpeedModifier[difficulty];
     this.enemySpawnTime = getEnemyStates(level).spawnTime;
+    // array of enemy level (number)
+    this.enemeySpawnList = enemeySpawnList(this.enemyCount, Number(this.level))
+    // for enemy instance
+    this.enemyArray = []
 
     // gameView
     this.gameView = new GameView(this.gameScreen);
@@ -280,12 +283,11 @@ export class Game {
     this.player.spawn(this.gameScreen);
 
     // spawn enemy
-    for (let i = 0; i < this.enemyCount; i++) {
-      const enemy = new Enemy(this.gameScreen, 'lv1', this.levelEnemySpeed); // level 1
+    this.enemeySpawnList.forEach(level => {
+      const enemy = new Enemy(this.gameScreen, `lv${level}`, this.levelEnemySpeed); // level 1
       enemy.spawn(this.gameScreen);
       this.enemyArray.push(enemy);
-    }
-
+    })
 
     // set up gameview buttons
     const buttons = this.gameView.getButtons();
