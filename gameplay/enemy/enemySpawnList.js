@@ -4,9 +4,6 @@ import { enemyDictionary } from "./enemyDictionary.js";
 
 
 export function enemeySpawnList(spawnCount, level) {
-  console.log('spawnCount:', spawnCount)
-  console.log('level', level)
-
   const spawnDistribution = {}
   const addOnLevels = 2 // more enemies sooner
 
