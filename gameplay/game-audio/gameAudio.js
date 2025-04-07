@@ -86,6 +86,9 @@ class GameAudio {
   }
   play(path, isMusic = false, loop = false) {
     if (!this.playerConsent) return;
+    // check localstorage audio muted
+    const isMuted = localStorage.getItem('aud_muted')
+    if (isMuted && isMuted === 'true') return
 
     // find audio / create audio
     let audio;
