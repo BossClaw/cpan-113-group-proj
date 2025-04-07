@@ -3,27 +3,27 @@
 import { enemyDictionary } from "./enemyDictionary.js";
 
 
-export function enemeySpawnList(spawnCount, level = 1, difficult = 'normal') {
+export function enemySpawnList(spawnCount, level = 1, difficult = 'normal') {
   const spawnDistribution = {}
-  let addOnLevels = 1 // more enemies sooner
+  let addOnLevels = 2 // more enemies sooner
 
   // check difficulty
   switch (difficult) {
     case 'easy':
-    case 'normal':
       addOnLevels = 1;
+      break
+    case 'normal':
+      addOnLevels = 2;
       break;
     case 'hard':
-      addOnLevels = 2;
+      addOnLevels = 3;
       break;
     case 'hardcore':
       addOnLevels = 3;
       break;
     default:
-      addOnLevels = 1;
+      addOnLevels = 2;
   }
-
-  console.log('addOnLevels:', addOnLevels)
 
   for (const [key, enemy] of Object.entries(enemyDictionary)) {
     const enemyLevel = enemy.level;
@@ -67,14 +67,21 @@ export function enemeySpawnList(spawnCount, level = 1, difficult = 'normal') {
       enemiesArray.push(level)
     }
   }
-  // sort array just in case
-  enemiesArray.sort((a, b) => a - b)
+  // shuffle enemy list
+  function shuffle(array) {
+    // shuffle from end -> start
+    for (let i = array.length - 1; i > 0; i--) {
+      // shuffle 
+      let randomIndex = Math.floor(Math.random() * (i + 1))
+      let temp = array[i]
+      array[i] = array[randomIndex]
+      array[randomIndex] = temp
+    }
+  }
+  shuffle(enemiesArray)
 
   // return array 
   // eg: [1, 1, 1, 1, 2, 2, 3, ...]
   console.log('enemiesArray:', enemiesArray)
   return enemiesArray
 }
-
-
-enemeySpawnList(80, 1)

@@ -8,7 +8,7 @@ import flaggedNames from "./flaggedNames.js";
 import { gameAudio } from "../game-audio/gameAudio.js";
 import { Mainframe } from "../mainframe/mainframe.js";
 import { Firewall } from "../firewall/firewall.js";
-import { enemeySpawnList } from "../enemy/enemySpawnList.js";
+import { enemySpawnList } from "../enemy/enemySpawnList.js";
 
 // Get level state
 function getEnemyStates(_level = 1) {
@@ -94,7 +94,7 @@ export class Game {
       getEnemyStates(level).speed * difficultySpeedModifier[difficulty];
     this.enemySpawnTime = getEnemyStates(level).spawnTime;
     // array of enemy level (number)
-    this.enemeySpawnList = enemeySpawnList(this.enemyCount, Number(this.level), this.difficulty)
+    this.enemeySpawnList = enemySpawnList(this.enemyCount, Number(this.level), this.difficulty)
     // for enemy instance
     this.enemyArray = []
 
