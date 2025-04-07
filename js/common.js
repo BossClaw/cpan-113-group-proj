@@ -67,6 +67,25 @@ function ui_init_events() {
   document.querySelector("#ui_crt_toggle").addEventListener("click", () => {
     crt_toggle();
   });
+
+  // ADD SHOW MODAL TO BUTTS
+  const butt_credits = document.querySelector("#butt_credits");
+  const dialog_credits = document.querySelector("#dialog_credits");
+  if (butt_credits && dialog_credits) {
+    butt_credits.addEventListener("click", () => {
+      dialog_credits.showModal();
+    });
+  }
+
+  // ADD 'CLOSE PARENT' TO ALL DIALOGUES
+  document.querySelectorAll(".butt_dialog").forEach((el) => {
+    el.addEventListener("click", () => {
+      // FIND PARENT DIALOG & CLOSE
+      const parent_dialog = el.parentNode;
+      console.log(`[COMMON][DIALOG] TRY CLOSING DIALOG[${parent_dialog.id}]`);
+      parent_dialog.close();
+    });
+  });
 }
 
 // =================================================================
@@ -316,6 +335,51 @@ function common_page_init() {
   document.addEventListener("WindowUnload", () => {
     common_page_unload();
   });
+
+  // FIRST TIME, CHECK SESSION STORAGE, ASK ABOUT AUDIO
+  const aud_shown = sessionStorage.getItem("AUD_SHOWN");
+
+  // SHOW MODAL WHICH PROVIDES A CHOICE AN FORCES AN INTERACTION
+  if (!aud_shown) {
+    sessionStorage.setItem("AUD_SHOWN", "Y");
+
+    // GET AUD MODAL
+    const aud_dialog = document.querySelector("#dialog_aud");
+
+    // ADD UPDATE ON CLOSE
+    aud_dialog.addEventListener("close", () => {
+      aud_init();
+    });
+
+    // ENSURE LOGIC EXISTS ON AUD MODAL BUTTS
+    aud_dialog.querySelector("#butt_aud_yes").addEventListener("click", () => {
+      // USER CHOSE YES
+      play_common_bg_music();
+    });
+    aud_dialog.querySelector("#butt_aud_no").addEventListener("click", () => {
+      // USER CHOSE NO
+      gameAudio.stopMusic();
+    });
+
+    // FINALLY, SHOW MODAL
+    aud_dialog.showModal();
+  } else {
+    // CALL EVAL MUSIC START WHICH RESPECTS THEIR CHOICE
+    play_common_bg_music();
+    aud_init();
+  }
+}
+
+// When user clicks "Yes" or "No"
+function handleAudioChoice(choice) {
+  sessionStorage.setItem("audioConfirmed", choice);
+
+  // Hide modal
+  document.getElementById("audio-modal").style.display = "none";
+
+  if (choice === "yes") {
+    startMusic(); // This is inside a click handler, so it will work
+  }
 }
 
 function common_page_unload() {

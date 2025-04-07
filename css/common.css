@@ -246,3 +246,68 @@ footer {
 .hidden {
   visibility: hidden;
 }
+
+/* DIALOG STYLES */
+
+dialog {
+  background-color: black;
+  padding: var(--pad_sm);
+  margin: auto;
+  min-width: 526px;
+  min-height: 64px;
+}
+
+dialog::backdrop {
+  background-color: black;
+  opacity: 0.75;
+}
+
+dialog#dialog_credits {
+  width: 100%;
+  max-width: 960px;
+  height: 80%;
+
+  margin: var(--pad_lg) auto;
+}
+
+footer button,
+footer a,
+dialog a {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-decoration: underline !important;
+  color: magenta !important;
+}
+
+footer button,
+footer a {
+  line-height: var(--text_size);
+}
+
+dialog a {
+  line-height: calc(var(--text_size) * 2);
+}
+
+footer button:hover,
+footer a,
+dialog a:hover {
+  color: cyan !important;
+}
+
+dialog#dialog_credits::backdrop {
+  background-image: linear-gradient(
+    45deg,
+    magenta,
+    rebeccapurple,
+    dodgerblue,
+    green
+  );
+  opacity: 0.75;
+}
+
+/* ADJ ACTIVE LANGUAGE SELECTION ANIM */
+.active-language {
+  --animate-duration: 0.7s;
+}
