@@ -26,7 +26,8 @@
   background: red;
   opacity: 0;
   animation: on-firewall-hit 0.2s linear;
-  animation-iteration-count: 2;
+  animation-iteration-count: 2;  
+  animation-fill-mode: none; 
 }
 
 /* debug div  */

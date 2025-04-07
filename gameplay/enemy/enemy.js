@@ -104,6 +104,7 @@ export class Enemy {
   takeDamage(amount) {
     this.hp -= amount;
     this.innerDiv.classList.remove("hit");
+    void this.innerDiv.offsetWidth; // Trigger reflow
     this.innerDiv.classList.add("hit");
 
     // play SFX
@@ -115,7 +116,7 @@ export class Enemy {
     }
   }
   attack() {
-    this.destroy();
+    this.takeDamage(this.damage)
     return this.damage;
   }
   destroy() {
