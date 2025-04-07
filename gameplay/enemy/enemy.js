@@ -65,7 +65,6 @@ export class Enemy {
     // TODO - COMMON STYLE FOR BACKGROUND
     this.innerDiv.classList.add("enemy_inner");
     this.innerDiv.classList.add(this.innerClass);
-    // this.innerDiv.style.backgroundColor = this.innerColor;
     let bg_str = `url("gameplay/enemy/${this.name}.gif")`;
     this.innerDiv.style.backgroundImage = bg_str;
 
