@@ -37,9 +37,9 @@ export class Player {
 
     // location/styles
     this.outerClass = "player";
-    this.innerClass = "player-sprit";
-    this.width = "32px";
-    this.height = "32px";
+    this.innerClass = "player-sprite";
+    this.locationX = 44;
+    this.locationY = 70;
 
     // divs
     this.outerDiv = null;
@@ -50,6 +50,13 @@ export class Player {
     this.gunDamage = getGun(gun).damage;
     this.gunSound = getGun(gun).sound;
 
+    // sprites
+    this.idleSprite = 'gameplay/player/player_idle.gif'
+    this.fireSprite = 'gameplay/player/player_fire.gif'
+
+    // shooting
+    this.attackTimeout = null
+
     // (testing)
     this.playerInfo = null;
   }
@@ -57,22 +64,23 @@ export class Player {
     if (!this.gameScreen) {
       return;
     }
-    const x = 35;
-    const y = 70;
 
     // Creat outter div
     this.outerDiv = document.createElement("div");
     this.outerDiv.classList.add(this.outerClass);
     this.outerDiv.style.position = "absolute";
-    this.outerDiv.style.width = `${this.width}px`;
-    this.outerDiv.style.height = `${this.height}px`;
-    this.outerDiv.style.left = `${x}px`;
-    this.outerDiv.style.top = `${y}px`;
+    this.outerDiv.style.left = `${this.locationX}px`;
+    this.outerDiv.style.top = `${this.locationY}px`;
 
     // Create inner div
     this.innerDiv = document.createElement("div");
     this.innerDiv.classList.add(this.innerClass);
     this.outerDiv.appendChild(this.innerDiv);
+
+    // create inner div's image 
+    this.spriteImage = document.createElement('img')
+    this.spriteImage.src = this.idleSprite
+    this.innerDiv.appendChild(this.spriteImage)
 
     // create misss-div
     this.missedDiv = document.createElement("div");
@@ -94,6 +102,24 @@ export class Player {
     return this.outerDiv.getBoundingClientRect().left;
   }
   attack() {
+    // change close
+    this.innerDiv.classList.remove('shoot')
+    void this.innerDiv.offsetWidth; // Trigger reflow
+    this.innerDiv.classList.add('shoot')
+    this.spriteImage.src = this.fireSprite
+
+    // clean
+    if (this.attackTimeout) {
+      clearTimeout(this.attackTimeout)
+    }
+
+    // timeout
+    this.attackTimeout = setTimeout(() => {
+      this.innerDiv.classList.remove('shoot')
+      this.spriteImage.src = this.idleSprite
+      this.attackTimeout = null
+    }, 200)
+
     // play SFX
     gameAudio.playPlayerAttack()
     return this.gunDamage;

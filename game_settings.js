@@ -1,7 +1,7 @@
 export function get_languages() {
   var local_languages_str = localStorage.getItem("settings_languages");
   if (!local_languages_str) {
-    local_languages = "[\"Javascript\"]";
+    return []
   }
 
   // PARSE
@@ -21,7 +21,7 @@ export function get_difficulty() {
   if (local_difficulty) {
     return local_difficulty;
   }
-  return "1";
+  return "easy";
 }
 
 export function get_intials() {

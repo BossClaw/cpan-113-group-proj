@@ -254,23 +254,6 @@
   margin: 0;
 }
 
-/* game states */
-.game-states {
-  position: absolute;
-  display: none;
-  flex-direction: column;
-  top: 110px;
-  left: 5px;
-  gap: 0;
-  font-size: 8px;
-  color: rgb(252, 73, 73);
-  z-index: 12;
-}
-
-.game-states p {
-  margin: 0;
-}
-
 /* word container  */
 #word-container {
   position: absolute;

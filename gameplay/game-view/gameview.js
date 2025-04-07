@@ -121,16 +121,6 @@ export class GameView {
     this.nameInputMessage.classList.add('name-input-message')
     this.nameInputMessage.innerText = 'Message here'
     this.nameInputDiv.appendChild(this.nameInputMessage)
-
-    // sound toggle
-    this.soundToggle = document.createElement('button')
-    this.soundToggle.classList.add('sound-toggle')
-    this.gameScreen.appendChild(this.soundToggle)
-
-    // (Test) game stats
-    // this.gameStates = document.createElement('div')
-    // this.gameStates.classList.add('game-states')
-    // this.gameScreen.appendChild(this.gameStates)
   }
   getButtons() {
     return {
@@ -147,19 +137,6 @@ export class GameView {
   hideScreenOverley() {
     this.gameScreenOverlay.style.display = 'none'
     this.overlay = false
-  }
-  hideGameStats() {
-    this.gameStates.style.display = 'none'
-  }
-  // (Test) clear, and update stats
-  updateGameStats(gameStateObject) {
-    this.gameStates.style.display = 'flex'
-    this.gameStates.innerHTML = ''
-    for (const key in gameStateObject) {
-      const p = document.createElement('p')
-      p.innerText = `${key} : ${gameStateObject[key]}`
-      this.gameStates.appendChild(p)
-    }
   }
   displayWin(_highscroe = 0) {
     // hide name input

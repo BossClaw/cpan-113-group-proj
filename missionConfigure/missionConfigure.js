@@ -129,11 +129,11 @@ function toggleAddToList(button) {
 startGame.addEventListener("click", function () {
   if (pickedLanguages.length != 0) {
     // Languages
-    localStorage.setItem("pickedLanguages", JSON.stringify(pickedLanguages));
+    localStorage.setItem("settings_languages", JSON.stringify(pickedLanguages));
     // Difficulty
-    localStorage.setItem("difficulty", pickedDifficulty);
+    localStorage.setItem("settings_difficulty", pickedDifficulty);
     // Level
-    localStorage.setItem("level", pickedLevel);
+    localStorage.setItem("settings_level", pickedLevel);
 
     // TEMPORARY REDIRECT
     // TODO - CONFIRM TEMP REDIRECT?
@@ -165,14 +165,10 @@ difficultySlider.addEventListener("input", function () {
 });
 
 // Initial difficulty display
-difficultyDisplay.textContent = difficultyValues[difficultySlider.value];
-
-let initalDifficulty = Object.keys(difficultyValues).find(
-  (key) => difficultyValues[key] === get_difficulty()
-);
-console.log("inital dif", initalDifficulty);
-difficultySlider.value = initalDifficulty;
-difficultyDisplay.textContent = get_difficulty();
+let initalDifficulty = Object.keys(difficultyValues).find(key => difficultyValues[key] === get_difficulty());
+console.log("inital dif", initalDifficulty)
+difficultySlider.value = initalDifficulty
+difficultyDisplay.textContent = get_difficulty()
 
 // Initial picked difficulty
 let pickedDifficulty = difficultyValues[difficultySlider.value];
@@ -189,7 +185,7 @@ levelSlider.addEventListener("input", function () {
 });
 
 // Initial level display
-levelSlider.value = get_level();
+levelSlider.value = get_level()
 
 levelDisplay.textContent = levelSlider.value;
 
