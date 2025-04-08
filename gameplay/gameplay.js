@@ -5,8 +5,8 @@ import { get_difficulty, get_languages, get_level } from "../game_settings.js";
 document.addEventListener("DOMContentLoaded", () => {
   // first game
   const gameScreen = document.querySelector("#game_screen");
-  const level = get_level()
-  const difficulty = get_difficulty()
+  const level = get_level();
+  const difficulty = get_difficulty();
   startNewGame(gameScreen, level, difficulty);
 });
 
@@ -33,7 +33,19 @@ export async function initializeGameLogic(gameInstance) {
       throw error;
     }
   }
+
   const wordList = await importWords();
+
+  function validateLanguages() {
+    let allowedLanguages = Object.keys(wordList);
+    for (const language of pickedLanguages) {
+      if (!allowedLanguages.includes(language)) {
+        localStorage.setItem("settings_languages", "[]");
+        window.location.href = "index.html#mission_control";
+      }
+    }
+  }
+  validateLanguages();
 
   // Display word function
   function displayWord(word) {
@@ -119,7 +131,9 @@ export async function initializeGameLogic(gameInstance) {
 // HANDLER FOR KEY SOUND PLAYER FEEDBACK
 
 function play_key_sound() {
-  const key_idx = Math.floor(Math.random() * 10).toString().padStart(2, "0");
+  const key_idx = Math.floor(Math.random() * 10)
+    .toString()
+    .padStart(2, "0");
   const key_url = `gameplay/audio/keys/key_${key_idx}.wav`;
 
   console.log(`[GAMEPLAY][KEY] PLAY KEY SFX [${key_url}]`);
