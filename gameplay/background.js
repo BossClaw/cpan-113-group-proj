@@ -1,13 +1,15 @@
 // =================================================================
 // DUCK - BACKGROUND.JS FOR DYNAMIC BACKGROUND STUFF
-// HANDLES RETURNING A BACKGROUND FROM A SET
-// HANDLES GLITCHY EFFECTS
-// TODO ... ?
-// CALLED FROM gameview.js AND ...?
+// CALLED FROM gameview.js AND game.js
 
 export function set_background_glitch(gameScreen) {
-  let bg_idx = `` + (Math.random() * 10).toFixed(0);
+  let bg_idx = `` + Math.floor(Math.random() * 8).toFixed(0);
   bg_idx = bg_idx.padStart(2, "0");
+  
+  // HACK - TEST SPECIFIC
+  bg_idx = '05';  
+  
+  // TODO - FIX URL FOR LOCAL AND GITHUB
   const bg_url = `url("../gameplay/background/bg_${bg_idx}_glitch.gif")`;
   console.log(
     `[GAMEVIEW] MADE RAND BG[${bg_url}] FOR[${gameScreen}] ID[${gameScreen.id}]`
