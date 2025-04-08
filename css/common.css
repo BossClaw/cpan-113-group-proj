@@ -65,7 +65,9 @@ header {
   width: 100%;
 }
 
-header, section, footer {
+header,
+section,
+footer {
   width: 100%;
   min-width: 425px;
   max-width: 960px;
@@ -95,7 +97,8 @@ a[href]:visited {
 button:hover,
 a[href]:hover {
   color: var(--brightest);
-  background-color: var(--mid_hover);
+  /* NOTE - NO BG COLOR CHANGE ON HOVER TO MAINTAIN VIZ OF SELECTED STATE */
+  /* background-color: var(--mid_hover); */
 
   border-bottom-color: var(--dark_hover);
 }
@@ -116,7 +119,7 @@ section {
   display: flex;
   align-items: stretch;
   margin-inline: auto;
-  margin-block: var(--pad_lg);  
+  margin-block: var(--pad_lg);
   flex-direction: row;
   gap: var(--pad_sm);
 }
@@ -130,6 +133,18 @@ section {
 }
 
 /* GENERIC/MULTI_USE */
+.horiz_flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: var(--pad_md);
+  align-items: stretch;
+}
+
+.horiz_flex * {
+  flex: 1 1 0;
+}
+
 .mb_md {
   margin-bottom: var(--pad_md);
 }
@@ -171,78 +186,94 @@ footer {
 
 /* ON-SCREEN CONTROLS ON ALL PAGES, CRT & VOLUME*/
 #os_controls {
-  position: fixed;  
+  position: fixed;
   padding: var(--pad_sm);
   right: 0;
-  top: 0;  
+  top: 0;
 }
 
-#butt_aud_mute{
+#butt_aud_mute {
   width: auto;
   height: 100%;
   aspect-ratio: 1;
   background-position: center center;
-  background-repeat:  no-repeat no-repeat;
+  background-repeat: no-repeat no-repeat;
 }
 
 .aud_icon_muted {
-  background-image: url('../img/ui/aud_icon_muted.png');
+  background-image: url("../img/ui/aud_icon_muted.png");
 }
 
 .aud_icon_loud {
-  background-image: url('../img/ui/aud_icon_loud.png');
-}
-
-/* ======================================================================= */
-/* WIP - BREAKPOINTS */
-
-@media (max-width: 360px) {
-  body {
-    margin: 0;
-    padding: 0;
-  }
-
-  /* KEEP THE PADDING FOR THE FOOTER */
-  .bodyContent {
-    margin: 0;
-    padding: 0;    
-  }
-}
-
-/* ======================================================================= */
-/* BREAKPOINT TESTING */
-
-@media (min-width: 360px) {
-  footer {
-    background-color: green;
-  }
-}
-
-@media (min-width: 540px) {
-  footer {
-    background-color: red;
-  }
-}
-
-@media (min-width: 680px) {
-  footer {
-    background-color: blue;
-  }
-}
-
-@media (min-width: 720px) {
-  footer {
-    background-color: black;
-  }
-}
-
-@media (min-width: 1280px) {
-  footer {
-    background-color: orange;    
-  }
+  background-image: url("../img/ui/aud_icon_loud.png");
 }
 
 /* DYNAMIC PAGE VIEWS / MODALS */
 .hidden {
   visibility: hidden;
+}
+
+/* DIALOG STYLES */
+
+dialog {
+  background-color: black;
+  padding: var(--pad_sm);
+  margin: auto;
+  min-width: 526px;
+  min-height: 64px;
+}
+
+dialog::backdrop {
+  background-color: black;
+  opacity: 0.75;
+}
+
+dialog#dialog_credits {
+  width: 100%;
+  max-width: 960px;
+  height: 80%;
+
+  margin: var(--pad_lg) auto;
+}
+
+footer button,
+footer a,
+dialog a {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-decoration: underline !important;
+  color: magenta !important;
+}
+
+footer button,
+footer a {
+  line-height: var(--text_size);
+}
+
+dialog a {
+  line-height: calc(var(--text_size) * 2);
+}
+
+footer button:hover,
+footer a,
+dialog a:hover {
+  color: cyan !important;
+}
+
+dialog#dialog_credits::backdrop {
+  background-image: linear-gradient(
+    45deg,
+    magenta,
+    rebeccapurple,
+    dodgerblue,
+    green
+  );
+  opacity: 0.75;
+}
+
+/* ADJ ACTIVE LANGUAGE SELECTION ANIM */
+.active-language {
+  --animate-duration: 0.7s;
 }

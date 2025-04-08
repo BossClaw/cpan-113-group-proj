@@ -346,7 +346,7 @@ export class Game {
 
         // back to home page
         setTimeout(() => {
-          window.location.href = 'index.html'
+          window.location.href = 'index.html#leaderboard'
         }, 1000)
 
       } catch (err) {
@@ -493,6 +493,7 @@ export class Game {
     this.languages = JSON.parse(localStorage.getItem(LANGUAGES_KEY) || '[]')
     this.highScore = scoreManager.getCurrentScore().score
 
+    // TODO - ???? Check for valid language here?
     const gameStates = {
       level: this.level,
       difficulty: this.difficulty,
