@@ -32,7 +32,7 @@
   line-height: calc(var(--text_size) + 4px);
   font-weight: normal;
 
-  cursor: url("../img/ui/cursor_ref.gif") 4 4, auto;
+  cursor: url("../img/ui/cursor_ref.gif") 17 17, auto;
 }
 
 /* CURSOR HOVER OVER INTERACTABLES */
@@ -41,7 +41,7 @@ button,
 select,
 textarea,
 a {
-  cursor: url("../img/ui/cursor_hvr.gif") 4 4, auto;
+  cursor: url("../img/ui/cursor_hvr.gif") 17 17, auto;
 }
 
 /* BLANK BUTTON */
