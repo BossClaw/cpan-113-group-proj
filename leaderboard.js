@@ -1,28 +1,37 @@
 // to get localStorage scores and update the leaderboard 
 const dummyScores = [
   {
-    name: 'COW',
-    score: 112600, // number
+    // not recorded
+    name: 'BOS',
+    score: 112300, // number
     maxLevel: '10', // string
-    language: ["Python"], // string array
+    language: ["Python", "JavaScript", "CSS"],
     difficulty: 'easy',
-    date: new Date()
+    date: new Date(2025, 4, 8)
   },
   {
-    name: 'DOG',
-    score: 138200,
+    name: 'JAS',
+    score: 57900,
+    maxLevel: '6',
+    language: ["Python", "JavaScript", "CSS"],
+    difficulty: 'normal',
+    date: new Date(2025, 4, 8)
+  },
+  {
+    name: 'LOL',
+    score: 74200,
+    maxLevel: '7',
+    language: ["JavaScript"],
+    difficulty: 'normal',
+    date: new Date(2025, 4, 7)
+  },
+  {
+    name: 'CHO',
+    score: 133900,
     maxLevel: '12',
     language: ["Python", "JavaScript"],
     difficulty: 'easy',
-    date: new Date()
-  },
-  {
-    name: 'CAT',
-    score: 27800,
-    maxLevel: '3',
-    language: ["Python", "JavaScript", "CSS"],
-    difficulty: 'easy',
-    date: new Date()
+    date: new Date(2025, 4, 8)
   }
 ]
 
