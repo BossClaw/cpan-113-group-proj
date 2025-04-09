@@ -79,6 +79,7 @@ export class Game {
     this.isGame = false;
     this.isPaused = false;
     this.isEnterName = false;
+    this.isWon = false;
 
     // mainframe related
     this.mainframe = new Mainframe(this.gameScreen)
@@ -284,12 +285,17 @@ export class Game {
 
     // continue btn
     buttons.continue.addEventListener("click", this.onContinueBtnPress);
+    document.addEventListener('keydown', this.onContinueBtnPress)
     // retry btn
     buttons.retry.addEventListener("click", this.onRetryBtnPress);
+    document.addEventListener('keydown', this.onRetryBtnPress)
+
     // quit btn
     buttons.quit.addEventListener("click", this.onQuitBtnPress);
+    document.addEventListener('keydown', this.onQuitBtnPress)
   }
   onContinueBtnPress(e) {
+    if (this.isGame || !this.isWon) return
     if (this.isEnterName) return  // ignore if entering name
     if (e?.key && e.key !== 'c') return
     document.removeEventListener('keydown', this.onContinueBtnPress)
@@ -298,6 +304,7 @@ export class Game {
     startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject)
   }
   onRetryBtnPress(e) {
+    if (this.isGame || this.isWon) return
     if (this.isEnterName) return  // ignore if entering name
     if (e?.key && e.key !== 'r') return
     document.removeEventListener('keydown', this.onRetryBtnPress)
@@ -306,6 +313,7 @@ export class Game {
     startNewGame(this.gameScreen, this.level, this.difficulty, this.playerObject)
   }
   onQuitBtnPress(e) {
+    if (this.isGame && !this.isPaused) return
     if (this.isEnterName) return  // ignore if entering name
     if (e?.key && e.key !== 'q') {
       return
@@ -313,7 +321,7 @@ export class Game {
       e.preventDefault()
     }
     // if no score, leave game
-    if (this.scores <= 0) {
+    if (this.scores <= 0 || this.isPaused) {
       // back to home page
       setTimeout(() => {
         window.location.href = 'index.html#leaderboard'
@@ -377,19 +385,6 @@ export class Game {
         onNameEnter()
       }
     })
-  }
-  // (BUG) this can cause problem 
-  addEndGameButtonsListeners(isWon = true) {
-
-    if (isWon) {
-      // add continue
-      document.addEventListener('keydown', this.onContinueBtnPress)
-    } else {
-      // add retry
-      document.addEventListener('keydown', this.onRetryBtnPress)
-    }
-    // add quit
-    document.addEventListener('keydown', this.onQuitBtnPress)
   }
   // Main game loop
   update(timestamp) {
@@ -463,6 +458,7 @@ export class Game {
     // win
     if (this.enemyLeft === 0) {
       this.isGame = false;
+      this.isWon = true;
       // store current points
       this.saveToLocalStorage()
       // display

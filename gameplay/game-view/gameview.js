@@ -174,6 +174,9 @@ export class GameView {
     this.highScore.innerText = _highscroe
     this.gameScreenOverlay.style.display = 'flex'
     this.overlay = true
+
+    // add back quite button
+    this.buttonsDiv.style.display = 'flex'
   }
   displayNameInput() {
     // show name input
