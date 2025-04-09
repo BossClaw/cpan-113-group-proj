@@ -478,32 +478,55 @@ export class Game {
     this.checkEnemyLeftCount();
     // win
     if (this.enemyLeft === 0) {
-      this.isGame = false;
-      this.isWon = true;
       // store current points
       this.saveToLocalStorage()
-      // display
-      this.gameView.displayWin(this.highScore);
 
-      // add buttons listener
-      this.addEndGameButtonsListeners(true)
+      // prevent keypress
+      this.canKeyboardPress = false
+
+      // set game state
+      this.isGame = false;
+      this.isWon = true;
 
       // WIN MUSIC
       gameAudio.playWinMusic()
+
+      // player exit animation
+      this.player.exit(true)
+
+      // player is out, display win screen
+      setTimeout(() => {
+        // enable keypress
+        this.canKeyboardPress = true
+
+        // display win screen
+        this.gameView.displayWin(this.highScore);
+      }, this.player.sprites.exit.duration)
       return;
     }
 
     // lose
     if (this.mainframe.hp <= 0) {
-      this.isGame = false;
-      // display
-      this.gameView.displayLose(this.highScore);
+      // prevent keypress
+      this.canKeyboardPress = false
 
-      // add buttons listener
-      this.addEndGameButtonsListeners(false)
+      // set game state
+      this.isGame = false;
 
       // LOSE MUSIC
       gameAudio.playLoseMusic()
+
+      // player exit animation
+      this.player.exit(false)
+
+      // player is out, display win screen
+      setTimeout(() => {
+        // enable keypress
+        this.canKeyboardPress = true
+
+        // display lose screen
+        this.gameView.displayLose(this.highScore);
+      }, this.player.sprites.exit.duration)
       return;
     }
   }

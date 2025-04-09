@@ -38,8 +38,8 @@ export class Player {
     this.states = {
       PORTING: 'porting',
       READY: 'ready',
-      WIN: 'win',
-      LOSE: 'lose'
+      EXITING: 'exiting',
+      OUT: 'out'
     }
     this.currentState = null;
 
@@ -130,17 +130,27 @@ export class Player {
   }
   exit(isWin = true) {
     // change game state
+    this.currentState = this.states.EXITING
+
+    // clean attack timeout
+    if (this.attackTimeout) {
+      clearTimeout(this.attackTimeout)
+      this.attackTimeout = null;
+    }
+
     if (isWin) {
-      this.currentState = this.states.WIN
       this.spriteImage.src = this.sprites.exit.image
     } else {
-      this.currentState = this.states.LOSE
       this.spriteImage.src = this.sprites.exit.image
     }
 
     // change state when porting-in animation finished
     setTimeout(() => {
-      this.currentState = this.states.READY
+      this.currentState = this.states.OUT
+
+      // (TODO) 
+      // remove the player image for now
+      this.spriteImage.remove()
     }, this.sprites.exit.duration)
   }
   getLocationX() {
@@ -153,9 +163,10 @@ export class Player {
     this.innerDiv.classList.add('shoot')
     this.spriteImage.src = this.sprites.fire.image
 
-    // clean
+    // clean attack timeout
     if (this.attackTimeout) {
       clearTimeout(this.attackTimeout)
+      this.attackTimeout = null
     }
 
     // timeout
