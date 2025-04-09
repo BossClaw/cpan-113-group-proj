@@ -221,6 +221,7 @@ dialog {
   margin: auto;
   min-width: 526px;
   min-height: 64px;
+  overscroll-behavior: contain;
 }
 
 dialog::backdrop {
