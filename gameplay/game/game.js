@@ -312,8 +312,17 @@ export class Game {
     } else {
       e.preventDefault()
     }
-    // add player name
-    this.isEnterName = true // enter name mode turn
+    // if no score, leave game
+    if (this.scores <= 0) {
+      // back to home page
+      setTimeout(() => {
+        window.location.href = 'index.html#leaderboard'
+      }, 1000)
+      return
+    }
+
+    // else, enter name mode turn
+    this.isEnterName = true
     this.gameView.displayNameInput()
 
     const nameInput = this.gameView.nameInput
