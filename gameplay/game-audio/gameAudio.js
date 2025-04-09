@@ -42,7 +42,6 @@ const playerAttack = ["gameplay/audio/sfx/enemy_hit_hi.wav"];
 
 const playerMissed = ["gameplay/audio/sfx/player_reload.wav"];
 
-
 class GameAudio {
   constructor() {
     // user need to click on something to consent play audio
@@ -75,6 +74,7 @@ class GameAudio {
     this.currentMusic.currentTime = 0;
     this.currentMusic = null;
   }
+
   toggleMusic() {
     if (!this.currentMusic) return;
 
@@ -84,11 +84,41 @@ class GameAudio {
       this.currentMusic.pause();
     }
   }
+
+  play_ui_set() {
+    this.play("../audio/sfx/menu_set.wav");
+  }
+
+  play_ui_unset() {
+    this.play("../audio/sfx/menu_unset.wav");
+  }
+
+  setMusicPaused(be_paused) {
+    // RETURN IF NONE
+    if (!this.currentMusic) {
+      return;
+    }
+
+    console.log(`[GAMEAUDIO] SETTING MUSIC PAUSED(${be_paused})`);
+
+    // PLAY IF PAUSED
+    if (!be_paused && this.currentMusic.paused) {
+      this.currentMusic.play().catch(console.warn);
+      return;
+    }
+
+    // UNPAUSE IF PAUSED
+    if (be_paused && !this.currentMusic.paused) {
+      this.currentMusic.pause();
+      return;
+    }
+  }
+
   play(path, isMusic = false, loop = false) {
     if (!this.playerConsent) return;
     // check localstorage audio muted
-    const isMuted = localStorage.getItem('aud_muted')
-    if (isMuted && isMuted === 'true') return
+    const isMuted = localStorage.getItem("aud_muted");
+    if (isMuted && isMuted === "true") return;
 
     // find audio / create audio
     let audio;

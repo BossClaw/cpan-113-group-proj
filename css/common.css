@@ -40,7 +40,8 @@ input,
 button,
 select,
 textarea,
-a {
+a,
+.osc_butt {
   cursor: url("../img/ui/cursor_hvr.gif") 17 17, auto;
 }
 
@@ -186,18 +187,24 @@ footer {
 
 /* ON-SCREEN CONTROLS ON ALL PAGES, CRT & VOLUME*/
 #os_controls {
-  position: fixed;
-  padding: var(--pad_sm);
+  position: fixed;  
   right: 0;
   top: 0;
+  z-index: 9999; 
 }
 
-#butt_aud_mute {
-  width: auto;
-  height: 100%;
-  aspect-ratio: 1;
+.osc_butt {
+  height: 24px;
+  width: 48px;
+
+  margin: 0 4px 0 0 !important;
   background-position: center center;
   background-repeat: no-repeat no-repeat;
+
+  border: 2px solid white;
+  border-radius: 4px;
+
+  background-color: black;
 }
 
 .aud_icon_muted {
@@ -206,6 +213,14 @@ footer {
 
 .aud_icon_loud {
   background-image: url("../img/ui/aud_icon_loud.png");
+}
+
+.viz_icon_fx_on {
+  background-image: url("../img/ui/viz_icon_fx_on.png");
+}
+
+.viz_icon_fx_off {
+  background-image: url("../img/ui/viz_icon_fx_off.png");
 }
 
 /* DYNAMIC PAGE VIEWS / MODALS */
