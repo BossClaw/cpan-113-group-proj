@@ -166,6 +166,9 @@ export class Game {
       if (e.isAlive) e.pause();
     });
 
+    // hide words container
+    this.gameView.hideWordContainer()
+
     // Show pause screen
     this.gameView.displayPause(this.highScore);
   }
@@ -181,6 +184,9 @@ export class Game {
 
     // Hide pause screen
     this.gameView.hideScreenOverley();
+
+    // show words container
+    this.gameView.showWordContainer()
 
     //  Restart the game loop
     this.animationId = requestAnimationFrame(this.update);
@@ -418,6 +424,8 @@ export class Game {
     } else {
       if (!this.canKeyboardPress) {
         this.canKeyboardPress = true
+        // show word container
+        this.gameView.showWordContainer()
       }
     }
     // Check delta time
@@ -481,12 +489,15 @@ export class Game {
       // store current points
       this.saveToLocalStorage()
 
-      // prevent keypress
-      this.canKeyboardPress = false
-
       // set game state
       this.isGame = false;
       this.isWon = true;
+
+      // prevent keypress
+      this.canKeyboardPress = false
+
+      // hide words container
+      this.gameView.hideWordContainer()
 
       // WIN MUSIC
       gameAudio.playWinMusic()
@@ -498,7 +509,6 @@ export class Game {
       setTimeout(() => {
         // enable keypress
         this.canKeyboardPress = true
-
         // display win screen
         this.gameView.displayWin(this.highScore);
       }, this.player.sprites.exit.duration)
@@ -507,11 +517,14 @@ export class Game {
 
     // lose
     if (this.mainframe.hp <= 0) {
+      // set game state
+      this.isGame = false;
+
       // prevent keypress
       this.canKeyboardPress = false
 
-      // set game state
-      this.isGame = false;
+      // hide words container
+      this.gameView.hideWordContainer()
 
       // LOSE MUSIC
       gameAudio.playLoseMusic()
@@ -578,6 +591,9 @@ export class Game {
     this.getGameStates() // update game states
     // concent gameAudio
     gameAudio.setConsent()
+
+    // hide words container
+    this.gameView.hideWordContainer()
 
     // play backgronud music
     gameAudio.playBackgroundMusic(false)

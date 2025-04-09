@@ -137,6 +137,8 @@ export class GameView {
   hideScreenOverley() {
     this.gameScreenOverlay.style.display = 'none'
     this.overlay = false
+    // remove pause
+    this.gameScreenOverlay.classList.remove('pause')
   }
   displayWin(_highscroe = 0) {
     // hide name input
@@ -184,5 +186,17 @@ export class GameView {
 
     // hide buttons
     this.buttonsDiv.style.display = 'none'
+  }
+  hideWordContainer() {
+    const wordContainer = document.querySelector('#word-container')
+    if (wordContainer) {
+      wordContainer.style.display = 'none'
+    }
+  }
+  showWordContainer() {
+    const wordContainer = document.querySelector('#word-container')
+    if (wordContainer) {
+      wordContainer.style.display = 'flex'
+    }
   }
 }
