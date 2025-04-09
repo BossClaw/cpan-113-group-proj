@@ -1,6 +1,7 @@
 // COMMON JS TO EVERY PAGE IN THE PROJECT
 // TBD - SPLIT .JS UP INTO FOCUSED FILES : backend.js, audio.js, video.js, etc...
 
+import { dev_init, dev_add_fps, dev_log_mesg } from "./dev.js";
 import { viz_init_bg } from "./bg.js";
 import { gameAudio } from "../gameplay/game-audio/gameAudio.js";
 
@@ -22,7 +23,7 @@ function redirect_to_login() {
 // ATTACH UI
 
 function ui_init_events() {
-  console.log("[COMMON][PAGE][UI] INIT");
+  dev_log_mesg("[COMMON][PAGE][UI] INIT");
 
   // ADD CRT TOGGLE
   document.querySelector("#ui_crt_toggle").addEventListener("click", () => {
@@ -43,7 +44,7 @@ function ui_init_events() {
     el.addEventListener("click", () => {
       // FIND PARENT DIALOG & CLOSE
       const parent_dialog = el.parentNode;
-      console.log(`[COMMON][DIALOG] TRY CLOSING DIALOG[${parent_dialog.id}]`);
+      dev_log_mesg(`[COMMON][DIALOG] TRY CLOSING DIALOG[${parent_dialog.id}]`);
       parent_dialog.close();
     });
   });
@@ -56,12 +57,12 @@ const AUD_VOLUME_KEY = "aud_volume";
 
 function aud_get_volume() {
   var cur_volume = parseFloat(localStorage.getItem(AUD_VOLUME));
-  console.log(`[COMMON][AUD] get_volume(${cur_volume})`);
+  dev_log_mesg(`[COMMON][AUD] get_volume(${cur_volume})`);
   return cur_volume;
 }
 
 function aud_set_volume(volume_val) {
-  console.log(`[COMMON][AUD] set_volume(${volume_val})`);
+  dev_log_mesg(`[COMMON][AUD] set_volume(${volume_val})`);
   localStorage.setItem(AUD_VOLUME, volume_val);
 
   update_aud_dom();
@@ -84,7 +85,7 @@ function play_common_bg_music() {
 }
 
 function aud_init() {
-  console.log("[COMMON][PAGE][AUD] INIT");
+  dev_log_mesg("[COMMON][PAGE][AUD] INIT");
 
   // COMMON PAGE BG MUSIC
   aud_update_dom();
@@ -105,13 +106,13 @@ const VIZ_AUD_MUTED_KEY = "aud_muted";
 
 function aud_get_muted() {
   var cur_aud_val = localStorage.getItem(VIZ_AUD_MUTED_KEY) == "true";
-  console.log(`[COMMON][AUD] get_muted(${cur_aud_val})`);
+  dev_log_mesg(`[COMMON][AUD] get_muted(${cur_aud_val})`);
   return cur_aud_val;
 }
 
 function aud_set_muted(aud_muted) {
   // TODO - ALIGN ALL THESE VALUES PROPERLY
-  console.log(`[COMMON][AUD] set_muted(${aud_muted})`);
+  dev_log_mesg(`[COMMON][AUD] set_muted(${aud_muted})`);
   localStorage.setItem(VIZ_AUD_MUTED_KEY, aud_muted);
 
   // UPDATE THE PLAYING
@@ -123,11 +124,11 @@ function aud_set_muted(aud_muted) {
 }
 
 function aud_mute_toggle() {
-  console.log("[COMMON][AUD] TOGGLE MUTED CLICKED");
+  dev_log_mesg("[COMMON][AUD] TOGGLE MUTED CLICKED");
 
   // CALC INVERSE
   const mute_inverse = !aud_get_muted();
-  console.log(
+  dev_log_mesg(
     `[COMMON][AUD] CUR(${aud_get_muted()}) TOGGLING TO(${mute_inverse})`
   );
 
@@ -141,13 +142,13 @@ function aud_update_dom() {
   var target = document.querySelector("#butt_aud_mute");
 
   if (!target) {
-    console.log(`[COMMON][AUD] NO DOM FOUND TO UPDATE`);
+    dev_log_mesg(`[COMMON][AUD] NO DOM FOUND TO UPDATE`);
     return;
   }
 
   const aud_is_muted = aud_get_muted();
 
-  console.log(
+  dev_log_mesg(
     `[COMMON][AUD] UPDATING DOM[${target.id}] MUTED(${aud_is_muted})`
   );
 
@@ -165,7 +166,7 @@ function aud_update_dom() {
 // VIZ WRAPPER
 
 function viz_init() {
-  console.log("[COMMON][PAGE][VIZ] INIT");
+  dev_log_mesg("[COMMON][PAGE][VIZ] INIT");
 
   viz_init_bg();
 
@@ -180,22 +181,22 @@ const VIZ_CRT_ENABLED_KEY = "viz_crt_enabled";
 function crt_get_enabled() {
   // TRY GET VAL FROM STORAGE
   var cur_crt_val = localStorage.getItem(VIZ_CRT_ENABLED_KEY) == "true";
-  console.log(`[COMMON][VIZ][CRT] get_enabled(${cur_crt_val})`);
+  dev_log_mesg(`[COMMON][VIZ][CRT] get_enabled(${cur_crt_val})`);
 
   return cur_crt_val;
 }
 
 function crt_set_enabled(crt_enabled) {
-  console.log(`[COMMON][VIZ][CRT] SETTING ENABLED(${crt_get_enabled()})`);
+  dev_log_mesg(`[COMMON][VIZ][CRT] SETTING ENABLED(${crt_get_enabled()})`);
   localStorage.setItem(VIZ_CRT_ENABLED_KEY, crt_enabled);
   crt_update_dom();
 }
 
 function crt_toggle() {
-  console.log("[COMMON][VIZ][CRT] TOGGLE CLICKED");
+  dev_log_mesg("[COMMON][VIZ][CRT] TOGGLE CLICKED");
   // CALC INVERSE
   const crt_inverse = !crt_get_enabled();
-  console.log(
+  dev_log_mesg(
     `[COMMON][VIZ][CRT] CUR(${crt_get_enabled()}) TOGGLING TO(${crt_inverse})`
   );
 
@@ -209,7 +210,7 @@ function crt_update_dom() {
   var target = document.querySelector("body");
   const crt_is_enabled = crt_get_enabled();
 
-  console.log(
+  dev_log_mesg(
     `[COMMON][VIZ][CRT] UPDATING DOM[${target}] ENABLED(${crt_is_enabled})`
   );
 
@@ -237,13 +238,13 @@ function ui_helper_init() {
 
     // GET VIEW BUTT, AHREF & INFO ARRS
     view_info_arr = document.querySelectorAll(".view_info");
-    console.log(`GOT INFOS(${view_info_arr.length})`);
+    dev_log_mesg(`GOT INFOS(${view_info_arr.length})`);
 
     view_button_arr = document.querySelectorAll(".viewect_butt");
-    console.log(`GOT BUTTONS(${view_button_arr.length})`);
+    dev_log_mesg(`GOT BUTTONS(${view_button_arr.length})`);
 
     view_ahref_arr = document.querySelectorAll(".view_ahref");
-    console.log(`GOT AHREFS(${view_ahref_arr.length})`);
+    dev_log_mesg(`GOT AHREFS(${view_ahref_arr.length})`);
 
     // ADD CLICK LOGIC TO BUTTONS
     view_button_arr.forEach((button) => {
@@ -275,12 +276,12 @@ function show_view(viewIndex) {
 
   for (let pi = 0; pi < view_button_arr.length + 1; pi++) {
     if (pi == viewIndex) {
-      console.log("SHOWING " + pi);
+      dev_log_mesg("SHOWING " + pi);
       view_info_arr[pi].style.display = "flex";
 
       targ_div = view_info_arr[pi];
     } else {
-      console.log("HIDING " + pi);
+      dev_log_mesg("HIDING " + pi);
       view_info_arr[pi].style.display = "none";
     }
   }
@@ -290,7 +291,12 @@ function show_view(viewIndex) {
 // COMMON PAGE STUFF
 
 function common_page_init() {
-  console.log("[COMMON][PAGE] INIT");
+  dev_log_mesg("[COMMON][PAGE] INIT");
+
+  // ENABLE DEV BY CHECKING LOCAL STORAGE
+  if (localStorage.getItem("dev_enable_fps")) {
+    dev_init();    
+  }
 
   // OSC FIRST TO THEN GET ELEMENT EVENTS
   osc_init();
@@ -378,7 +384,7 @@ function osc_init() {
 // =============================================================================
 // RUN ASAP ON SCRIPT LOAD
 
-console.log("[COMMON] PAGE LOAD");
+dev_log_mesg("[COMMON] PAGE LOAD");
 
 if (!redirect_to_login()) {
   // REACHING HERE, IT DETERMINED USER LOGGED IN, SO REGISTER LOAD ON DOM
