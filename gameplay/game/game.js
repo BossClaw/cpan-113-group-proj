@@ -80,6 +80,11 @@ export class Game {
     this.isPaused = false;
     this.isEnterName = false;
     this.isWon = false;
+    this.canKeyboardPress = true
+
+    // player related
+    this.playerObject = playerObject;
+    this.player = null;
 
     // mainframe related
     this.mainframe = new Mainframe(this.gameScreen)
@@ -88,10 +93,6 @@ export class Game {
     // firewall related
     this.firewall = new Firewall(this.gameScreen)
     this.firewallDiv = null;
-
-    // player related
-    this.playerObject = playerObject;
-    this.player = null;
 
     // enemy related
     this.enemyCount = getEnemyStates(level).count;
@@ -116,6 +117,16 @@ export class Game {
     this.debugDiv = oldDbug ? oldDbug : document.createElement('div')
     this.debugDiv.classList.add('debug')
     document.body.appendChild(this.debugDiv)
+
+    // prevent keypress if needed
+    function preventKeypress(e) {
+      if (!this.canKeyboardPress) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    }
+    document.addEventListener("keyup", preventKeypress.bind(this))
+    document.addEventListener("keypress", preventKeypress.bind(this))
 
     // bind methods just in case
     this.start = this.start.bind(this);
@@ -321,7 +332,7 @@ export class Game {
       e.preventDefault()
     }
     // if no score, leave game
-    if (this.scores <= 0 ) {
+    if (this.scores <= 0) {
       // back to home page
       setTimeout(() => {
         window.location.href = 'index.html#leaderboard'
@@ -399,6 +410,16 @@ export class Game {
       this.updateDebugInfo()
     }
 
+    // wait for player to port in
+    if (this.player.currentState != this.player.states.READY) {
+      // next frame
+      this.animatedFrameId = requestAnimationFrame(this.update);
+      return
+    } else {
+      if (!this.canKeyboardPress) {
+        this.canKeyboardPress = true
+      }
+    }
     // Check delta time
     if (!this.lastTimestamp) this.lastTimestamp = timestamp;
     const delta = timestamp - this.lastTimestamp;
@@ -528,8 +549,9 @@ export class Game {
     // add current score (local) to scores array (local)
   }
   start() {
-    this.setup();
-    this.isGame = true;
+    this.setup()
+    this.isGame = true
+    this.canKeyboardPress = false
     this.getGameStates() // update game states
     // concent gameAudio
     gameAudio.setConsent()
