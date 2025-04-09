@@ -31,27 +31,33 @@ function ui_init_events() {
   });
 
   // ADD SHOW MODAL TO BUTTS
-  const butt_credits = document.querySelector("#butt_credits");
-  const dialog_credits = document.querySelector("#dialog_credits");
-  if (butt_credits && dialog_credits) {
-    butt_credits.addEventListener("click", () => {
-      dialog_credits.showModal();
+  // HACK, CHECKING IF NOT GAMEPLAY PAGE.  A MORE MODULAR, ELEGANT SOLUTION EXISTS
+  if (!is_gameplay_page) {
+    const butt_credits = document.querySelector("#butt_credits");
+    const dialog_credits = document.querySelector("#dialog_credits");
+    if (butt_credits && dialog_credits) {
+      butt_credits.addEventListener("click", () => {
+        dialog_credits.showModal();
+      });
+    }
+
+    // ADD 'CLOSE PARENT' TO ALL DIALOGUES
+    document.querySelectorAll(".butt_dialog").forEach((el) => {
+      el.addEventListener("click", () => {
+        // FIND PARENT DIALOG & CLOSE
+        const parent_dialog = el.parentNode;
+        dev_log_mesg(
+          `[COMMON][DIALOG] TRY CLOSING DIALOG[${parent_dialog.id}]`
+        );
+        parent_dialog.close();
+      });
     });
   }
-
-  // ADD 'CLOSE PARENT' TO ALL DIALOGUES
-  document.querySelectorAll(".butt_dialog").forEach((el) => {
-    el.addEventListener("click", () => {
-      // FIND PARENT DIALOG & CLOSE
-      const parent_dialog = el.parentNode;
-      dev_log_mesg(`[COMMON][DIALOG] TRY CLOSING DIALOG[${parent_dialog.id}]`);
-      parent_dialog.close();
-    });
-  });
 }
 
 // =================================================================
 // AUDIO WRAPPER
+// TODO - EVAL AND USE OR REMOVE THIS COD
 
 const AUD_VOLUME_KEY = "aud_volume";
 
@@ -76,6 +82,12 @@ function update_aud_dom() {
 // AUD WRAPPER
 
 function play_common_bg_music() {
+  if (is_gameplay_page) {
+    console.log("[COMMON][AUD] NO BG MUSIC ON GAMEPLAY PAGE");
+    return;
+  }
+
+  console.log("[COMMON][AUD] PLAYING BG MUSIC");
   gameAudio.setConsent(true);
   gameAudio.play(
     "audio/music/Phat_Phrog_Studios_Retro_Fragments.mp3",
@@ -93,7 +105,7 @@ function aud_init() {
   var aud_mute = document.querySelector("#butt_aud_mute");
 
   if (!aud_mute) {
-    console.error("Element with ID 'butt_aud_mute' not found.");
+    console.error("[COMMON][AUD] CAN'T GET FIND 'butt_aud_mute'.");
     return;
   }
 
@@ -115,10 +127,13 @@ function aud_set_muted(aud_muted) {
   dev_log_mesg(`[COMMON][AUD] set_muted(${aud_muted})`);
   localStorage.setItem(VIZ_AUD_MUTED_KEY, aud_muted);
 
-  // UPDATE THE PLAYING
+  // UPDATE THE CONSENT
   gameAudio.setConsent(true);
-  gameAudio.toggleMusic();
 
+  // SET THE VALUE EXPLICITLY
+  gameAudio.setMusicPaused(aud_muted);
+
+  // PLAY NOISE
   // UPDATE THE ICON
   aud_update_dom();
 }
@@ -289,14 +304,19 @@ function show_view(viewIndex) {
 
 // =======================================================================
 // COMMON PAGE STUFF
+let is_gameplay_page = false;
 
 function common_page_init() {
   dev_log_mesg("[COMMON][PAGE] INIT");
 
   // ENABLE DEV BY CHECKING LOCAL STORAGE
   if (localStorage.getItem("dev_enable_fps")) {
-    dev_init();    
+    dev_init();
   }
+
+  // SET GAMEPLAY BOOL
+  is_gameplay_page = window.location.pathname.endsWith("gameplay.html");
+  dev_log_mesg(`[COMMON] IS GAMEPLAY PAGE(${is_gameplay_page}`);
 
   // OSC FIRST TO THEN GET ELEMENT EVENTS
   osc_init();
@@ -336,9 +356,9 @@ function common_page_init() {
     // FINALLY, SHOW MODAL
     aud_dialog.showModal();
   } else {
-    // CALL EVAL MUSIC START WHICH RESPECTS THEIR CHOICE
-    play_common_bg_music();
+    // CALL AUD INIT & PLAY MUSIC WHICH RESPECTS THEIR CHOICE VIA gameAudio
     aud_init();
+    play_common_bg_music();
   }
 }
 
