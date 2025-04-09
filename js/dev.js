@@ -1,13 +1,13 @@
 // =================================================================
 // DUCK - DEV DEBUG HELPER TOOLS
 
-let dev_enabled = false;
 let dev_viz = false;
 
-export function dev_init() {
-  dev_enabled = true;
+export function dev_init() {  
+  // ENABLE DEV BY CHECKING LOCAL STORAGE
+  
   dev_add_fps();
-  dev_viz_set(true);
+  dev_viz_set(localStorage.getItem("dev_visible") ?? false);
 
   document.addEventListener("keyup", (e) => {
     if (e.key === "`") {
@@ -17,9 +17,11 @@ export function dev_init() {
 }
 
 export function dev_viz_set(new_viz) {
-  dev_viz = new_viz;
+  dev_viz = new_viz ?? false;
+  localStorage.setItem("dev_viz", dev_viz);
 
-  dev_log_mesg(`[DEV] VIZ SET TO(${dev_viz})`);
+  console.log(`[DEV] SETTING VIZ NEW[${new_viz}] DEV[${dev_viz}]`)
+  dev_log_mesg(`[DEV] SETTING VIZ NEW[${new_viz}] DEV[${dev_viz}]`)
 
   if (fps_div) {
     fps_div.style.visibility = dev_viz ? "visible" : "hidden";
@@ -39,9 +41,9 @@ let fps_div;
 
 export function dev_add_fps() {
   fps_div = document.createElement("div");
-  fps_div.classList.add('dev_div'); 
-  fps_div.classList.add('dev_div_fps'); 
-  
+  fps_div.classList.add("dev_div");
+  fps_div.classList.add("dev_div_fps");
+
   document.body.appendChild(fps_div);
 
   function updateFPS(currentTime) {
@@ -69,14 +71,17 @@ let mesg_div;
 // ADD DOM IF NOT ALREADY
 export function dev_log_mesg(mesg_str) {
   if (!mesg_div) {
-    mesg_div = document.createElement("div");    
+    mesg_div = document.createElement("div");
     mesg_div.classList.add("dev_div");
     mesg_div.classList.add("dev_div_mesg");
 
-    
     document.body.appendChild(mesg_div);
   }
 
   // ADD AND OVERFLOW
   mesg_div.textContent += mesg_str + "\n";
 }
+
+
+// RUN AND INIT
+dev_init();
