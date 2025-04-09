@@ -40,7 +40,7 @@ function getEnemyStates(_level = 1) {
 }
 
 const difficultySpeedModifier = {
-  easy: 0.5,
+  easy: 0.3,
   normal: 1,
   hard: 1.5,
   hardcore: 2,
