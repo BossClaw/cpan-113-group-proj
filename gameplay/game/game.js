@@ -64,12 +64,20 @@ export class Game {
     this.level = level
     this.difficulty = difficulty
     this.languages = []
+
+    // score
+    this.scoreIncrement = 100
+    this.scores = 0; // current level score
     this.highScore = 0 // all levels added up
-    this.isGame = false;
-    this.isPaused = false;
+
+    // time / frame
+    this.animatedFrameId = null;
     this.lastTimestamp = 0;
     this.spawnTimer = 0;
-    this.animatedFrameId = null;
+
+    // game states
+    this.isGame = false;
+    this.isPaused = false;
 
     // mainframe related
     this.mainframe = new Mainframe(this.gameScreen)
@@ -82,10 +90,6 @@ export class Game {
     // player related
     this.playerObject = playerObject;
     this.player = null;
-
-    // score
-    this.scoreIncrement = 100
-    this.scores = 0; // current level score
 
     // enemy related
     this.enemyCount = getEnemyStates(level).count;
@@ -104,14 +108,12 @@ export class Game {
     // show start message display
     this.gameView.showStartMessage(this.level, this.difficulty)
 
-
     // debug mode
     this.isDebugMode = true
     const oldDbug = document.querySelector('.debug')
     this.debugDiv = oldDbug ? oldDbug : document.createElement('div')
     this.debugDiv.classList.add('debug')
     document.body.appendChild(this.debugDiv)
-
 
     // bind methods just in case
     this.start = this.start.bind(this);
