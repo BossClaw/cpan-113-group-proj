@@ -78,6 +78,7 @@ export class Game {
     // game states
     this.isGame = false;
     this.isPaused = false;
+    this.isEnterName = false;
 
     // mainframe related
     this.mainframe = new Mainframe(this.gameScreen)
@@ -140,6 +141,7 @@ export class Game {
     })
   }
   pause() {
+    if (this.isEnterName) return // ignore when enter name
     if (!this.isGame || this.isPaused) return;
 
     this.isPaused = true;
@@ -288,6 +290,7 @@ export class Game {
     buttons.quit.addEventListener("click", this.onQuitBtnPress);
   }
   onContinueBtnPress(e) {
+    if (this.isEnterName) return  // ignore if entering name
     if (e?.key && e.key !== 'c') return
     document.removeEventListener('keydown', this.onContinueBtnPress)
 
@@ -295,6 +298,7 @@ export class Game {
     startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject)
   }
   onRetryBtnPress(e) {
+    if (this.isEnterName) return  // ignore if entering name
     if (e?.key && e.key !== 'r') return
     document.removeEventListener('keydown', this.onRetryBtnPress)
 
@@ -302,12 +306,14 @@ export class Game {
     startNewGame(this.gameScreen, this.level, this.difficulty, this.playerObject)
   }
   onQuitBtnPress(e) {
+    if (this.isEnterName) return  // ignore if entering name
     if (e?.key && e.key !== 'q') {
       return
     } else {
       e.preventDefault()
     }
     // add player name
+    this.isEnterName = true // enter name mode turn
     this.gameView.displayNameInput()
 
     const nameInput = this.gameView.nameInput
