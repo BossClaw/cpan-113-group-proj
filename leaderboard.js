@@ -1,40 +1,47 @@
 // to get localStorage scores and update the leaderboard 
 const dummyScores = [
   {
-    name: 'COW',
-    score: 112600, // number
+    // not recorded
+    name: 'BOS',
+    score: 112300, // number
     maxLevel: '10', // string
-    language: ["Python"], // string array
+    language: ["Python", "JavaScript", "CSS"],
     difficulty: 'easy',
-    date: new Date()
+    date: new Date(2025, 4, 8)
   },
   {
-    name: 'DOG',
-    score: 138200,
+    name: 'JAS',
+    score: 57900,
+    maxLevel: '6',
+    language: ["Python", "JavaScript", "CSS"],
+    difficulty: 'normal',
+    date: new Date(2025, 4, 8)
+  },
+  {
+    name: 'LOL',
+    score: 74200,
+    maxLevel: '7',
+    language: ["JavaScript"],
+    difficulty: 'normal',
+    date: new Date(2025, 4, 7)
+  },
+  {
+    name: 'CHO',
+    score: 133900,
     maxLevel: '12',
     language: ["Python", "JavaScript"],
     difficulty: 'easy',
-    date: new Date()
-  },
-  {
-    name: 'CAT',
-    score: 27800,
-    maxLevel: '3',
-    language: ["Python", "JavaScript", "CSS"],
-    difficulty: 'easy',
-    date: new Date()
+    date: new Date(2025, 4, 8)
   }
 ]
 
 function updateLocalLeaderboard(limit = 10) {
-  let scores
-  const scoresString = localStorage.getItem('settings_scores')
+  // get local scores
+  const localScoresString = localStorage.getItem('settings_scores')
+  const localScores = JSON.parse(localScoresString) || []
 
-  if (scoresString) {
-    scores = JSON.parse(scoresString)
-  } else {
-    scores = dummyScores
-  }
+  // combine dummy score with local scores
+  const scores = [...localScores, ...dummyScores]
 
   // sort highest score on top
   scores.sort((a, b) => b.score - a.score)
@@ -64,16 +71,27 @@ function updateLocalLeaderboard(limit = 10) {
     }
 
     // create elements
+    // place
     const placeSpan = document.createElement('span')
     placeSpan.innerText = placement
+    // level
+    const levelSpan = document.createElement('span')
+    levelSpan.innerText = `lv.${scoreRecord.maxLevel}`
+    // difficulty
+    const diffSpan = document.createElement('span')
+    diffSpan.innerText = scoreRecord.difficulty
+    // score
     const scoreSpan = document.createElement('span')
     scoreSpan.innerText = scoreText
+    // name
     const nameSpan = document.createElement('span')
     nameSpan.innerText = scoreRecord.name
 
     // create h2
     const scoreH2 = document.createElement('h2')
     scoreH2.appendChild(placeSpan)
+    scoreH2.appendChild(levelSpan)
+    scoreH2.appendChild(diffSpan)
     scoreH2.appendChild(scoreSpan)
     scoreH2.appendChild(nameSpan)
 
