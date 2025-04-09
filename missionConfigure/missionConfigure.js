@@ -86,7 +86,6 @@ Array.from(languageButtons).forEach((button) => {
   }
 });
 
-
 // Add event listener to each Language button
 Array.from(languageButtons).forEach((button) => {
   button.addEventListener("click", function (event) {
@@ -95,8 +94,10 @@ Array.from(languageButtons).forEach((button) => {
     toggleActive(event.target);
     toggleAddToList(event.target);
     // DUMP UPDATED LIST
-    console.log(`[MISSIONCONFIGURE] UPDATED PICKED LANG LIST[${pickedLanguages}]`);
-    checkDisableButton()
+    console.log(
+      `[MISSIONCONFIGURE] UPDATED PICKED LANG LIST[${pickedLanguages}]`
+    );
+    checkDisableButton();
   });
 });
 
@@ -108,11 +109,12 @@ function toggleActive(button) {
     button.classList.remove("active-language");
     button.classList.remove("animate__animated");
     button.classList.remove(animate_class_name);
+    gameAudio.play_ui_unset();
   } else {
     button.classList.add("active-language");
     button.classList.add("animate__animated");
     button.classList.add(animate_class_name);
-    gameAudio.play('../audio/sfx/menu_blip.wav')
+    gameAudio.play_ui_set();
   }
 }
 
@@ -125,27 +127,26 @@ function toggleAddToList(button) {
     pickedLanguages.push(selected);
   }
   localStorage.setItem("settings_languages", JSON.stringify(pickedLanguages));
-  updateDisableStart()
+  updateDisableStart();
 }
 
-function isPickedLanguage(){
-  if(get_languages().length != 0){
-    return true
-  }else{
-    return false
-  }
-}
-
-function updateDisableStart(){
-  if(isPickedLanguage()){
-    startGame.disabled = false
-    startGame.style.backgroundColor = "#3399aa"
+function isPickedLanguage() {
+  if (get_languages().length != 0) {
+    return true;
   } else {
-    startGame.disabled = true
-    startGame.style.backgroundColor = "grey"
+    return false;
   }
 }
 
+function updateDisableStart() {
+  if (isPickedLanguage()) {
+    startGame.disabled = false;
+    startGame.style.backgroundColor = "#3399aa";
+  } else {
+    startGame.disabled = true;
+    startGame.style.backgroundColor = "grey";
+  }
+}
 
 // Save to local storage
 startGame.addEventListener("click", function () {
@@ -186,10 +187,12 @@ difficultySlider.addEventListener("input", function () {
 });
 
 // Initial difficulty display
-let initalDifficulty = Object.keys(difficultyValues).find(key => difficultyValues[key] === get_difficulty());
-console.log("inital dif", initalDifficulty)
-difficultySlider.value = initalDifficulty
-difficultyDisplay.textContent = get_difficulty()
+let initalDifficulty = Object.keys(difficultyValues).find(
+  (key) => difficultyValues[key] === get_difficulty()
+);
+console.log("inital dif", initalDifficulty);
+difficultySlider.value = initalDifficulty;
+difficultyDisplay.textContent = get_difficulty();
 
 // Initial picked difficulty
 let pickedDifficulty = difficultyValues[difficultySlider.value];
@@ -206,7 +209,7 @@ levelSlider.addEventListener("input", function () {
 });
 
 // Initial level display
-levelSlider.value = get_level()
+levelSlider.value = get_level();
 
 levelDisplay.textContent = levelSlider.value;
 
@@ -216,4 +219,4 @@ let pickedLevel = levelSlider.value;
 console.log(pickedLevel);
 
 // Initial check disable start button
-updateDisableStart()
+updateDisableStart();
