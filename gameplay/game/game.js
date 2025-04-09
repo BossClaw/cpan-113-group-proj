@@ -332,7 +332,7 @@ export class Game {
       e.preventDefault()
     }
     // if no score, leave game
-    if (this.scores <= 0) {
+    if (this.highScore <= 0) {
       // back to home page
       setTimeout(() => {
         window.location.href = 'index.html#leaderboard'
