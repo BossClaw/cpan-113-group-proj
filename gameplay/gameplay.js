@@ -106,6 +106,7 @@ export async function initializeGameLogic(gameInstance) {
   // Key listener
   const startingDisplay = gameInstance.gameView.startingDisplay;
   document.addEventListener("keyup", (event) => {
+    console.log(event.key)
     if (
       event.key === "Enter" &&
       !gameInstance.gameView.overlay &&
@@ -124,7 +125,17 @@ export async function initializeGameLogic(gameInstance) {
       play_key_sound();
       attack(event.key);
     }
+    console.log(event)
   });
+
+  // Stop scrolling with spacebar
+  document.addEventListener("keydown", function(event){
+    if (event.code === "Space") {
+      event.preventDefault()
+      console.log("YAYY")
+      return;
+    }
+  })
 }
 
 // ==========================================================================

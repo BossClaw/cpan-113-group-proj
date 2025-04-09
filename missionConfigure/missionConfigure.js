@@ -96,6 +96,7 @@ Array.from(languageButtons).forEach((button) => {
     toggleAddToList(event.target);
     // DUMP UPDATED LIST
     console.log(`[MISSIONCONFIGURE] UPDATED PICKED LANG LIST[${pickedLanguages}]`);
+    checkDisableButton()
   });
 });
 
@@ -123,13 +124,33 @@ function toggleAddToList(button) {
   } else {
     pickedLanguages.push(selected);
   }
+  localStorage.setItem("settings_languages", JSON.stringify(pickedLanguages));
+  updateDisableStart()
 }
+
+function isPickedLanguage(){
+  if(get_languages().length != 0){
+    return true
+  }else{
+    return false
+  }
+}
+
+function updateDisableStart(){
+  if(isPickedLanguage()){
+    startGame.disabled = false
+    startGame.style.backgroundColor = "#3399aa"
+  } else {
+    startGame.disabled = true
+    startGame.style.backgroundColor = "grey"
+  }
+}
+
 
 // Save to local storage
 startGame.addEventListener("click", function () {
   if (pickedLanguages.length != 0) {
-    // Languages
-    localStorage.setItem("settings_languages", JSON.stringify(pickedLanguages));
+    // Languages Stored when selected
     // Difficulty
     localStorage.setItem("settings_difficulty", pickedDifficulty);
     // Level
@@ -193,3 +214,6 @@ levelDisplay.textContent = levelSlider.value;
 let pickedLevel = levelSlider.value;
 
 console.log(pickedLevel);
+
+// Initial check disable start button
+updateDisableStart()

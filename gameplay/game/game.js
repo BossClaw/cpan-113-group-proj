@@ -40,7 +40,7 @@ function getEnemyStates(_level = 1) {
 }
 
 const difficultySpeedModifier = {
-  easy: 0.5,
+  easy: 0.3,
   normal: 1,
   hard: 1.5,
   hardcore: 2,
@@ -64,12 +64,27 @@ export class Game {
     this.level = level
     this.difficulty = difficulty
     this.languages = []
+
+    // score
+    this.scoreIncrement = 100
+    this.scores = 0; // current level score
     this.highScore = 0 // all levels added up
-    this.isGame = false;
-    this.isPaused = false;
+
+    // time / frame
+    this.animatedFrameId = null;
     this.lastTimestamp = 0;
     this.spawnTimer = 0;
-    this.animatedFrameId = null;
+
+    // game states
+    this.isGame = false;
+    this.isPaused = false;
+    this.isEnterName = false;
+    this.isWon = false;
+    this.canKeyboardPress = true
+
+    // player related
+    this.playerObject = playerObject;
+    this.player = null;
 
     // mainframe related
     this.mainframe = new Mainframe(this.gameScreen)
@@ -78,14 +93,6 @@ export class Game {
     // firewall related
     this.firewall = new Firewall(this.gameScreen)
     this.firewallDiv = null;
-
-    // player related
-    this.playerObject = playerObject;
-    this.player = null;
-
-    // score
-    this.scoreIncrement = 100
-    this.scores = 0; // current level score
 
     // enemy related
     this.enemyCount = getEnemyStates(level).count;
@@ -104,7 +111,6 @@ export class Game {
     // show start message display
     this.gameView.showStartMessage(this.level, this.difficulty)
 
-
     // debug mode
     this.isDebugMode = true
     const oldDbug = document.querySelector('.debug')
@@ -112,6 +118,15 @@ export class Game {
     this.debugDiv.classList.add('debug')
     document.body.appendChild(this.debugDiv)
 
+    // prevent keypress if needed
+    function preventKeypress(e) {
+      if (!this.canKeyboardPress) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    }
+    document.addEventListener("keyup", preventKeypress.bind(this))
+    document.addEventListener("keypress", preventKeypress.bind(this))
 
     // bind methods just in case
     this.start = this.start.bind(this);
@@ -138,6 +153,7 @@ export class Game {
     })
   }
   pause() {
+    if (this.isEnterName) return // ignore when enter name
     if (!this.isGame || this.isPaused) return;
 
     this.isPaused = true;
@@ -149,6 +165,9 @@ export class Game {
     this.enemyArray.forEach((e) => {
       if (e.isAlive) e.pause();
     });
+
+    // hide words container
+    this.gameView.hideWordContainer()
 
     // Show pause screen
     this.gameView.displayPause(this.highScore);
@@ -165,6 +184,9 @@ export class Game {
 
     // Hide pause screen
     this.gameView.hideScreenOverley();
+
+    // show words container
+    this.gameView.showWordContainer()
 
     //  Restart the game loop
     this.animationId = requestAnimationFrame(this.update);
@@ -280,12 +302,18 @@ export class Game {
 
     // continue btn
     buttons.continue.addEventListener("click", this.onContinueBtnPress);
+    document.addEventListener('keydown', this.onContinueBtnPress)
     // retry btn
     buttons.retry.addEventListener("click", this.onRetryBtnPress);
+    document.addEventListener('keydown', this.onRetryBtnPress)
+
     // quit btn
     buttons.quit.addEventListener("click", this.onQuitBtnPress);
+    document.addEventListener('keydown', this.onQuitBtnPress)
   }
   onContinueBtnPress(e) {
+    if (this.isGame || !this.isWon) return
+    if (this.isEnterName) return  // ignore if entering name
     if (e?.key && e.key !== 'c') return
     document.removeEventListener('keydown', this.onContinueBtnPress)
 
@@ -293,6 +321,8 @@ export class Game {
     startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject)
   }
   onRetryBtnPress(e) {
+    if (this.isGame || this.isWon) return
+    if (this.isEnterName) return  // ignore if entering name
     if (e?.key && e.key !== 'r') return
     document.removeEventListener('keydown', this.onRetryBtnPress)
 
@@ -300,12 +330,24 @@ export class Game {
     startNewGame(this.gameScreen, this.level, this.difficulty, this.playerObject)
   }
   onQuitBtnPress(e) {
+    if (this.isGame && !this.isPaused) return
+    if (this.isEnterName) return  // ignore if entering name
     if (e?.key && e.key !== 'q') {
       return
     } else {
       e.preventDefault()
     }
-    // add player name
+    // if no score, leave game
+    if (this.highScore <= 0) {
+      // back to home page
+      setTimeout(() => {
+        window.location.href = 'index.html#leaderboard'
+      }, 1000)
+      return
+    }
+
+    // else, enter name mode turn
+    this.isEnterName = true
     this.gameView.displayNameInput()
 
     const nameInput = this.gameView.nameInput
@@ -361,19 +403,6 @@ export class Game {
       }
     })
   }
-  // (BUG) this can cause problem 
-  addEndGameButtonsListeners(isWon = true) {
-
-    if (isWon) {
-      // add continue
-      document.addEventListener('keydown', this.onContinueBtnPress)
-    } else {
-      // add retry
-      document.addEventListener('keydown', this.onRetryBtnPress)
-    }
-    // add quit
-    document.addEventListener('keydown', this.onQuitBtnPress)
-  }
   // Main game loop
   update(timestamp) {
     // check is game running
@@ -387,6 +416,18 @@ export class Game {
       this.updateDebugInfo()
     }
 
+    // wait for player to port in
+    if (this.player.currentState != this.player.states.READY) {
+      // next frame
+      this.animatedFrameId = requestAnimationFrame(this.update);
+      return
+    } else {
+      if (!this.canKeyboardPress) {
+        this.canKeyboardPress = true
+        // show word container
+        this.gameView.showWordContainer()
+      }
+    }
     // Check delta time
     if (!this.lastTimestamp) this.lastTimestamp = timestamp;
     const delta = timestamp - this.lastTimestamp;
@@ -445,31 +486,60 @@ export class Game {
     this.checkEnemyLeftCount();
     // win
     if (this.enemyLeft === 0) {
-      this.isGame = false;
       // store current points
       this.saveToLocalStorage()
-      // display
-      this.gameView.displayWin(this.highScore);
 
-      // add buttons listener
-      this.addEndGameButtonsListeners(true)
+      // set game state
+      this.isGame = false;
+      this.isWon = true;
+
+      // prevent keypress
+      this.canKeyboardPress = false
+
+      // hide words container
+      this.gameView.hideWordContainer()
 
       // WIN MUSIC
       gameAudio.playWinMusic()
+
+      // player exit animation
+      this.player.exit(true)
+
+      // player is out, display win screen
+      setTimeout(() => {
+        // enable keypress
+        this.canKeyboardPress = true
+        // display win screen
+        this.gameView.displayWin(this.highScore);
+      }, this.player.sprites.exit.duration)
       return;
     }
 
     // lose
     if (this.mainframe.hp <= 0) {
+      // set game state
       this.isGame = false;
-      // display
-      this.gameView.displayLose(this.highScore);
 
-      // add buttons listener
-      this.addEndGameButtonsListeners(false)
+      // prevent keypress
+      this.canKeyboardPress = false
+
+      // hide words container
+      this.gameView.hideWordContainer()
 
       // LOSE MUSIC
       gameAudio.playLoseMusic()
+
+      // player exit animation
+      this.player.exit(false)
+
+      // player is out, display win screen
+      setTimeout(() => {
+        // enable keypress
+        this.canKeyboardPress = true
+
+        // display lose screen
+        this.gameView.displayLose(this.highScore);
+      }, this.player.sprites.exit.duration)
       return;
     }
   }
@@ -515,11 +585,15 @@ export class Game {
     // add current score (local) to scores array (local)
   }
   start() {
-    this.setup();
-    this.isGame = true;
+    this.setup()
+    this.isGame = true
+    this.canKeyboardPress = false
     this.getGameStates() // update game states
     // concent gameAudio
     gameAudio.setConsent()
+
+    // hide words container
+    this.gameView.hideWordContainer()
 
     // play backgronud music
     gameAudio.playBackgroundMusic(false)

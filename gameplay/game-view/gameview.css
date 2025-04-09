@@ -137,11 +137,13 @@
 
 /* game buttons */
 /* hide continute when lose  */
+.screen-overlay.pause #continue-btn,
 .screen-overlay.lose #continue-btn {
   display: none;
 }
 
 /* hide retry when win */
+.screen-overlay.pause #retry-btn,
 .screen-overlay.win #retry-btn {
   display: none;
 }

@@ -30,10 +30,18 @@ function getGun(gun = "debugger") {
     return theGunDictionary[gun];
   }
 }
-
 export class Player {
   constructor(gameScreen, gun = null, hat = null) {
     this.gameScreen = gameScreen;
+
+    // player states
+    this.states = {
+      PORTING: 'porting',
+      READY: 'ready',
+      EXITING: 'exiting',
+      OUT: 'out'
+    }
+    this.currentState = null;
 
     // location/styles
     this.outerClass = "player";
@@ -46,13 +54,29 @@ export class Player {
     this.innerDiv = null;
     this.missedDiv = null;
 
-    // states
+    // gun
     this.gunDamage = getGun(gun).damage;
     this.gunSound = getGun(gun).sound;
 
     // sprites
-    this.idleSprite = 'gameplay/player/player_idle.gif'
-    this.fireSprite = 'gameplay/player/player_fire.gif'
+    this.sprites = {
+      porting: {
+        image: 'gameplay/player/player_intro.gif',
+        duration: 6300, // ms
+      },
+      idle: {
+        image: 'gameplay/player/player_idle.gif',
+        duration: 660,
+      },
+      fire: {
+        image: 'gameplay/player/player_fire.gif',
+        duration: 530,
+      },
+      exit: {
+        image: 'gameplay/player/player_outro.gif',
+        duration: 4200,
+      }
+    }
 
     // shooting
     this.attackTimeout = null
@@ -79,7 +103,6 @@ export class Player {
 
     // create inner div's image 
     this.spriteImage = document.createElement('img')
-    this.spriteImage.src = this.idleSprite
     this.innerDiv.appendChild(this.spriteImage)
 
     // create misss-div
@@ -90,13 +113,45 @@ export class Player {
     // put it on screen
     this.gameScreen.appendChild(this.outerDiv);
 
-    // (testing) show player gun damage
-    // this.playerInfo = document.createElement("div");
-    // this.playerInfo.classList.add("player-info");
-    // this.innerDiv.appendChild(this.playerInfo);
-    // this.playerInfo.innerText = this.gunDamage;
+    // change game state
+    this.currentState = this.states.PORTING
+
+    // play porting-in animation
+    this.spriteImage.src = this.sprites.porting.image
+
+    // change state when porting-in animation finished
+    setTimeout(() => {
+      this.currentState = this.states.READY
+      this.spriteImage.src = this.sprites.idle.image
+
+    }, this.sprites.porting.duration)
 
     return this.outerDiv;
+  }
+  exit(isWin = true) {
+    // change game state
+    this.currentState = this.states.EXITING
+
+    // clean attack timeout
+    if (this.attackTimeout) {
+      clearTimeout(this.attackTimeout)
+      this.attackTimeout = null;
+    }
+
+    if (isWin) {
+      this.spriteImage.src = this.sprites.exit.image
+    } else {
+      this.spriteImage.src = this.sprites.exit.image
+    }
+
+    // change state when porting-in animation finished
+    setTimeout(() => {
+      this.currentState = this.states.OUT
+
+      // (TODO) 
+      // remove the player image for now
+      this.spriteImage.remove()
+    }, this.sprites.exit.duration)
   }
   getLocationX() {
     return this.outerDiv.getBoundingClientRect().left;
@@ -106,17 +161,18 @@ export class Player {
     this.innerDiv.classList.remove('shoot')
     void this.innerDiv.offsetWidth; // Trigger reflow
     this.innerDiv.classList.add('shoot')
-    this.spriteImage.src = this.fireSprite
+    this.spriteImage.src = this.sprites.fire.image
 
-    // clean
+    // clean attack timeout
     if (this.attackTimeout) {
       clearTimeout(this.attackTimeout)
+      this.attackTimeout = null
     }
 
     // timeout
     this.attackTimeout = setTimeout(() => {
       this.innerDiv.classList.remove('shoot')
-      this.spriteImage.src = this.idleSprite
+      this.spriteImage.src = this.sprites.idle.image
       this.attackTimeout = null
     }, 200)
 
