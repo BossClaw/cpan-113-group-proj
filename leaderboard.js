@@ -36,14 +36,12 @@ const dummyScores = [
 ]
 
 function updateLocalLeaderboard(limit = 10) {
-  let scores
-  const scoresString = localStorage.getItem('settings_scores')
+  // get local scores
+  const localScoresString = localStorage.getItem('settings_scores')
+  const localScores = JSON.parse(localScoresString) || []
 
-  if (scoresString) {
-    scores = JSON.parse(scoresString)
-  } else {
-    scores = dummyScores
-  }
+  // combine dummy score with local scores
+  const scores = [...localScores, ...dummyScores]
 
   // sort highest score on top
   scores.sort((a, b) => b.score - a.score)
@@ -73,16 +71,27 @@ function updateLocalLeaderboard(limit = 10) {
     }
 
     // create elements
+    // place
     const placeSpan = document.createElement('span')
     placeSpan.innerText = placement
+    // level
+    const levelSpan = document.createElement('span')
+    levelSpan.innerText = `lv.${scoreRecord.maxLevel}`
+    // difficulty
+    const diffSpan = document.createElement('span')
+    diffSpan.innerText = scoreRecord.difficulty
+    // score
     const scoreSpan = document.createElement('span')
     scoreSpan.innerText = scoreText
+    // name
     const nameSpan = document.createElement('span')
     nameSpan.innerText = scoreRecord.name
 
     // create h2
     const scoreH2 = document.createElement('h2')
     scoreH2.appendChild(placeSpan)
+    scoreH2.appendChild(levelSpan)
+    scoreH2.appendChild(diffSpan)
     scoreH2.appendChild(scoreSpan)
     scoreH2.appendChild(nameSpan)
 
