@@ -106,7 +106,7 @@ export async function initializeGameLogic(gameInstance) {
   // Key listener
   const startingDisplay = gameInstance.gameView.startingDisplay;
   document.addEventListener("keyup", (event) => {
-    console.log(event.key)
+    console.log(event.key);
     if (
       event.key === "Enter" &&
       !gameInstance.gameView.overlay &&
@@ -125,17 +125,46 @@ export async function initializeGameLogic(gameInstance) {
       play_key_sound();
       attack(event.key);
     }
-    console.log(event)
+    console.log(event);
   });
 
   // Stop scrolling with spacebar
-  document.addEventListener("keydown", function(event){
+  document.addEventListener("keydown", function (event) {
     if (event.code === "Space") {
-      event.preventDefault()
-      console.log("YAYY")
+      event.preventDefault();
+      console.log("YAYY");
       return;
     }
-  })
+  });
+}
+
+function add_keyboard_presskey_active() {
+  document.addEventListener("keydown", (event) => {
+    // PREVENT KEY FROM INTERACTING WITH THE PAGE
+    event.preventDefault();
+
+    // GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
+    const el = document.getElementById(event.code);
+    if (el) {
+      el.classList.add("active");
+    } else {
+      console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
+    }
+  });
+
+  document.addEventListener("keyup", (event) => {
+    // PREVENT KEY FROM INTERACTING WITH THE PAGE
+    // TBD - WHAT WOULD LISTEN FOR KEYUP THAT WE DON'T ACTUALLY SET?
+    event.preventDefault();
+
+    // GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
+    const el = document.getElementById(event.code);
+    if (el) {
+      el.classList.remove("active");
+    } else {
+      console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
+    }
+  });
 }
 
 // ==========================================================================
@@ -151,3 +180,9 @@ function play_key_sound() {
 
   gameAudio.play(key_url);
 }
+
+
+// ===================================================================
+// RUN THESE FUNCS ON SCRIPT LOAD
+
+add_keyboard_presskey_active();
