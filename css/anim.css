@@ -27,33 +27,6 @@
   animation: pulse 2.1s infinite;
 }
 
-/* WORD BUGS IN TYPED */
-/* TODO - MOVE TO DEDICATED index.css */
-@keyframes typed_bugs {  
-    0% {
-      color: green;
-    }
-
-    20% {
-      color: yellow;
-    }
-
-    40% {
-      color: red;
-    }
-
-    60% {
-      color: orange;
-    }
-
-    100% {
-      color: yellow;
-    }
-  }
-
-  .typed_bugs {
-    animation: typed_bugs 2.1s infinite;
-  }
 
 
 /* SPIN CURSOR  */
