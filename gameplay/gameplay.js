@@ -5,8 +5,8 @@ import { get_difficulty, get_languages, get_level } from "../game_settings.js";
 document.addEventListener("DOMContentLoaded", () => {
   // first game
   const gameScreen = document.querySelector("#game_screen");
-  const level = get_level()
-  const difficulty = get_difficulty()
+  const level = get_level();
+  const difficulty = get_difficulty();
   startNewGame(gameScreen, level, difficulty);
 });
 
@@ -33,7 +33,19 @@ export async function initializeGameLogic(gameInstance) {
       throw error;
     }
   }
+
   const wordList = await importWords();
+
+  function validateLanguages() {
+    let allowedLanguages = Object.keys(wordList);
+    for (const language of pickedLanguages) {
+      if (!allowedLanguages.includes(language)) {
+        localStorage.setItem("settings_languages", "[]");
+        window.location.href = "index.html#mission_control";
+      }
+    }
+  }
+  validateLanguages();
 
   // Display word function
   function displayWord(word) {
@@ -94,7 +106,7 @@ export async function initializeGameLogic(gameInstance) {
   // Key listener
   const startingDisplay = gameInstance.gameView.startingDisplay;
   document.addEventListener("keyup", (event) => {
-    console.log(event.key)
+    console.log(event.key);
     if (
       event.key === "Enter" &&
       !gameInstance.gameView.overlay &&
@@ -113,27 +125,64 @@ export async function initializeGameLogic(gameInstance) {
       play_key_sound();
       attack(event.key);
     }
-    console.log(event)
+    console.log(event);
   });
 
   // Stop scrolling with spacebar
-  document.addEventListener("keydown", function(event){
+  document.addEventListener("keydown", function (event) {
     if (event.code === "Space") {
-      event.preventDefault()
-      console.log("YAYY")
+      event.preventDefault();
+      console.log("YAYY");
       return;
     }
-  })
+  });
+}
+
+function add_keyboard_presskey_active() {
+  document.addEventListener("keydown", (event) => {
+    // PREVENT KEY FROM INTERACTING WITH THE PAGE
+    event.preventDefault();
+
+    // GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
+    const el = document.getElementById(event.code);
+    if (el) {
+      el.classList.add("active");
+    } else {
+      console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
+    }
+  });
+
+  document.addEventListener("keyup", (event) => {
+    // PREVENT KEY FROM INTERACTING WITH THE PAGE
+    // TBD - WHAT WOULD LISTEN FOR KEYUP THAT WE DON'T ACTUALLY SET?
+    event.preventDefault();
+
+    // GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
+    const el = document.getElementById(event.code);
+    if (el) {
+      el.classList.remove("active");
+    } else {
+      console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
+    }
+  });
 }
 
 // ==========================================================================
 // HANDLER FOR KEY SOUND PLAYER FEEDBACK
 
 function play_key_sound() {
-  const key_idx = Math.floor(Math.random() * 10).toString().padStart(2, "0");
+  const key_idx = Math.floor(Math.random() * 10)
+    .toString()
+    .padStart(2, "0");
   const key_url = `gameplay/audio/keys/key_${key_idx}.wav`;
 
   console.log(`[GAMEPLAY][KEY] PLAY KEY SFX [${key_url}]`);
 
   gameAudio.play(key_url);
 }
+
+
+// ===================================================================
+// RUN THESE FUNCS ON SCRIPT LOAD
+
+add_keyboard_presskey_active();
