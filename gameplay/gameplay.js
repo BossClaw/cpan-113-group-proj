@@ -140,9 +140,6 @@ export async function initializeGameLogic(gameInstance) {
 
 function add_keyboard_presskey_active() {
   document.addEventListener("keydown", (event) => {
-    // PREVENT KEY FROM INTERACTING WITH THE PAGE
-    event.preventDefault();
-
     // GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
     const el = document.getElementById(event.code);
     if (el) {
@@ -153,10 +150,6 @@ function add_keyboard_presskey_active() {
   });
 
   document.addEventListener("keyup", (event) => {
-    // PREVENT KEY FROM INTERACTING WITH THE PAGE
-    // TBD - WHAT WOULD LISTEN FOR KEYUP THAT WE DON'T ACTUALLY SET?
-    event.preventDefault();
-
     // GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
     const el = document.getElementById(event.code);
     if (el) {
