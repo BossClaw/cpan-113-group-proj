@@ -1,29 +1,29 @@
 import { get_languages, get_difficulty, get_level } from "../game_settings.js";
 import { gameAudio } from "../gameplay/game-audio/gameAudio.js";
 
-console.log("difficulty", get_difficulty());
-console.log("languages", get_languages());
-console.log("level", get_level());
+// ===================================================================================
+// DUMP VALS ON SCRIPT START
 
-// Pick languages
+console.log(`[MISSION][DIFFICULTY] [${get_difficulty()}]`);
+console.log(`[MISSION][LANGUAGES] [${get_languages()}]`);
+console.log(`[MISSION][LEVEL] [${get_level()}]`);
 
-// GET BUTTON ELEMENTS
+
+// ===================================================================================
+// COLLECT UI ELEMENTS 
+
+// START GAME BUTTON
+const startGame = document.getElementById("start_game_butt");
+
+// GET LANGUAGE BUTTONS
 const languageButtons = document.getElementsByClassName("language");
 console.log(`[MISSIONCONFIGURE] GOT LANGUAGE BUTTS[${languageButtons.length}]`);
 
-// GET START GAME
-const startGame = document.getElementById("temp-start");
 
-// TODO - DO THIS WHEN NECESSARY
-export function clear_guest_scores() {
-  console.log("[SCORES] CLEARING HIGH SCORE");
 
-  // A) TITLE PAGE FIRST TIME
-  // B) START NEW GAME
-  // C) AFTER YOU ENTER YOUR NAME FOR HIGH SCORE
-  localStorage.setItem("guest_score", -1);
-  /// localStorage.clear()
-}
+// =============================================================================
+// SCORES
+// TODO - MOVE THIS INTO THE game_settings TO BE FULLY ABSTRACTED FROM CALLING SCRIPT 
 
 const LOCAL_SCORES_KEY = "local_scores";
 
@@ -76,8 +76,14 @@ export function add_new_high_score(
   // ENJOY BROCCOLI
 }
 
+// ===================================================================================
+// LANGUAGE
+
 // Inital Language settings from local storage
 let pickedLanguages = get_languages();
+console.log(`[UI][LANGUAGES] LANG PICKED (${pickedLanguages.length}) [${pickedLanguages}]`);
+console.log(`[UI][LANGUAGES] LANG BUTT (${languageButtons.length}) [${languageButtons}]`);
+
 Array.from(languageButtons).forEach((button) => {
   if (pickedLanguages.includes(button.innerHTML)) {
     button.classList.add("active-language");
@@ -97,11 +103,10 @@ Array.from(languageButtons).forEach((button) => {
     console.log(
       `[MISSIONCONFIGURE] UPDATED PICKED LANG LIST[${pickedLanguages}]`
     );
-    checkDisableButton();
   });
 });
 
-// Add / Remove language and CSSS
+// Add / Remove language and CSS
 function toggleActive(button) {
   const animate_class_name = "animate__bounce";
 
@@ -138,6 +143,75 @@ function isPickedLanguage() {
   }
 }
 
+// =============================================================================
+// DIFFICULTY SLIDER
+
+// Temporary Difficulty Slider CSS
+const difficultyDisplay = document.getElementById("difficulty-display");
+const difficultySlider = document.getElementById("difficulty");
+
+const difficultyValues = {
+  1: "easy",
+  2: "normal",
+  3: "hard",
+  4: "hardcore",
+};
+
+// Get difficulty value from input DOM and set it
+difficultySlider.addEventListener("input", function () {
+  let value = difficultyValues[this.value];
+  difficultyDisplay.textContent = value;
+  pickedDifficulty = value;
+  gameAudio.play_ui_set();
+});
+
+// Initial difficulty display
+let initalDifficulty = Object.keys(difficultyValues).find(
+  (key) => difficultyValues[key] === get_difficulty()
+);
+
+console.log(`[UI][DIFFICULTY] inital dif(${initalDifficulty})`);
+difficultySlider.value = initalDifficulty;
+difficultyDisplay.textContent = get_difficulty();
+
+// Initial picked difficulty
+let pickedDifficulty = difficultyValues[difficultySlider.value];
+
+// ================================================================================================
+// LEVEL SLIDER
+
+let last_slider_play = 0;
+
+// Temporary Level Slider Css
+const levelDisplay = document.getElementById("level-display");
+const levelSlider = document.getElementById("level");
+
+// Get level value
+levelSlider.addEventListener("input", function () {
+  levelDisplay.textContent = this.value;
+  pickedLevel = this.value;
+  console.log(`[UI][LEVEL] PICKED LEVEL(${pickedLevel})`);
+
+  // TIME CHECK TO AVOID STACKING
+  if (Date.now() - last_slider_play > 100) {
+    gameAudio.play_ui_set();
+    last_slider_play = Date.now();
+  }
+});
+
+// Initial level display
+levelSlider.value = get_level();
+
+levelDisplay.textContent = levelSlider.value;
+
+// Initial picked level
+let pickedLevel = levelSlider.value;
+
+console.log(`[UI][LEVEL] INITIAL LEVEL(${pickedLevel})`);
+
+// ============================================================================================
+// START GAME BUTTON LOGIC
+
 function updateDisableStart() {
   if (isPickedLanguage()) {
     startGame.disabled = false;
@@ -148,7 +222,8 @@ function updateDisableStart() {
   }
 }
 
-// Save to local storage
+// Save to local storage on startGame click
+
 startGame.addEventListener("click", function () {
   if (pickedLanguages.length != 0) {
     // Languages Stored when selected
@@ -168,55 +243,8 @@ startGame.addEventListener("click", function () {
   }
 });
 
-// Temporary Difficulty Slider CSS
-const difficultyDisplay = document.getElementById("difficulty-display");
-const difficultySlider = document.getElementById("difficulty");
-
-const difficultyValues = {
-  1: "easy",
-  2: "normal",
-  3: "hard",
-  4: "hardcore",
-};
-
-// Get difficulty value
-difficultySlider.addEventListener("input", function () {
-  let value = difficultyValues[this.value];
-  difficultyDisplay.textContent = value;
-  pickedDifficulty = value;
-});
-
-// Initial difficulty display
-let initalDifficulty = Object.keys(difficultyValues).find(
-  (key) => difficultyValues[key] === get_difficulty()
-);
-console.log("inital dif", initalDifficulty);
-difficultySlider.value = initalDifficulty;
-difficultyDisplay.textContent = get_difficulty();
-
-// Initial picked difficulty
-let pickedDifficulty = difficultyValues[difficultySlider.value];
-
-// Temporary Level Slider Css
-const levelDisplay = document.getElementById("level-display");
-const levelSlider = document.getElementById("level");
-
-// Get level value
-levelSlider.addEventListener("input", function () {
-  levelDisplay.textContent = this.value;
-  pickedLevel = this.value;
-  console.log(pickedLevel);
-});
-
-// Initial level display
-levelSlider.value = get_level();
-
-levelDisplay.textContent = levelSlider.value;
-
-// Initial picked level
-let pickedLevel = levelSlider.value;
-
-console.log(pickedLevel);
+// ============================================================================================
+// INIT THE PAGE
 
 // Initial check disable start button
 updateDisableStart();
