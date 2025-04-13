@@ -12,13 +12,16 @@
     />
 
     <!-- STYLES -->
-    <link rel="stylesheet" href="css/common.css" />    
+    <link rel="stylesheet" href="css/common.css" />
     <link rel="stylesheet" href="css/anim.css" />
     <link rel="stylesheet" href="css/crt.css" />
     <link rel="stylesheet" href="css/dev.css" />
 
     <!-- JS -->
     <script type="module" src="js/common.js"></script>
+
+    <!---ui (lu)-->
+    <link rel="stylesheet" href="gameplay/gameplay.css" />
     
     <!---game classes (lu)-->
     <link rel="stylesheet" href="gameplay/game-view/gameview.css" />
@@ -27,38 +30,22 @@
     <link rel="stylesheet" href="gameplay/enemy/enemy.css" />
     <link rel="stylesheet" href="gameplay/firewall/firewall.css" />
 
+
     <!--keyboard (jas)--->
     <link rel="stylesheet" href="gameplay/keyboard/keyboard.css" />
-    <link rel="stylesheet" href="gameplay/gameplay.css" />
 
-    <!---js-->
-    <script type="module" src="gameplay/keyboard/keyboard.js" defer></script>
+    <!---js-->    
     <script type="module" src="gameplay/game/game.js" defer></script>
     <script type="module" src="gameplay/gameplay.js" defer></script>
   </head>
 
   <body>
-    <!-- Game Buttons -->
-    <span id="pause-display">Press ESC to toggle pause</span>
+    <div id="gameplay_page_wrapper">
+      
+      <div id="pause-display">Press ESC to toggle pause</div>
 
-    <div
-      style="
-        margin-top: 10%;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 100;
-      "
-    >
-      <!-- <button id="start" style="width: 100px; height: 50px">Start</button> -->
-      <!-- <button id="pause" style="display: none; width: 100px; height: 50px">
-        Pause
-      </button> -->
-    </div>
-
-    <!-- Game Screen -->
-    <div id="game_screen"></div>
+      <!-- Game Screen -->
+      <div id="game_screen"></div>
 
       <!-- ============================= KEYBOARD ========================================== -->
       <div class="keyboard">
@@ -254,13 +241,13 @@
     <footer id="footer" class="border_pixel horiz_flex">
       &copy; 20XX lujabo <span class="cursor"></span>
 
-      <button id="butt_credits">Credits</button>
-
+      <a href="index.html">Home</a>
+      
       <a href="#">lu</a>
       <a href="#">ja</a>
       <a href="#">bo</a>
 
       <a href="#top">Top</a>
-    </footer>   
+    </footer>
   </body>
 </html>
