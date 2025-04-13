@@ -138,42 +138,62 @@ export async function initializeGameLogic(gameInstance) {
   });
 }
 
-function add_keyboard_presskey_active() {
-  document.addEventListener("keydown", (event) => {
-    // GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
-    const el = document.getElementById(event.code);
-    if (el) {
-      el.classList.add("active");
-    } else {
-      console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
-    }
-  });
+// ======================================================================================
+// KEY PRESS ANIM
 
-  document.addEventListener("keyup", (event) => {
-    // GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
-    const el = document.getElementById(event.code);
-    if (el) {
-      el.classList.remove("active");
-    } else {
-      console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
-    }
-  });
+// CACHE JUST THE KEY SPANS FOR FASTER LOOKUP
+let key_span_dict;
+
+function get_key_spans() {
+	key_span_dict = {};
+
+	document.querySelectorAll('.os_key').forEach((el) => {
+		key_span_dict[el.id] = el;
+	});
+
+	// console.log(key_span_dict);
+}
+
+function add_keyboard_presskey_active() {
+	document.addEventListener('keydown', (event) => {
+		// GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
+
+		//const el = key_span_arr.getElementById(event.code);
+		const el = key_span_dict[event.code];
+
+		if (el) {
+			el.classList.add('active');
+		} else {
+			console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
+		}
+	});
+
+	document.addEventListener('keyup', (event) => {
+		// GET AND THEN CHECK FOR WIP DEBUGGING AND PREVENTING CONSOLE ERROR SPAM IN PROD
+		// const el = key_span_arr.getElementById(event.code);
+		const el = key_span_dict[event.code];
+
+		if (el) {
+			el.classList.remove('active');
+		} else {
+			console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
+		}
+	});
 }
 
 // ==========================================================================
 // HANDLER FOR KEY SOUND PLAYER FEEDBACK
 
 function play_key_sound() {
-  const key_idx = Math.floor(Math.random() * 10)
-    .toString()
-    .padStart(2, "0");
-  const key_url = `gameplay/audio/keys/key_${key_idx}.wav`;
+	const key_idx = Math.floor(Math.random() * 10)
+		.toString()
+		.padStart(2, '0');
+	const key_url = `gameplay/audio/keys/key_${key_idx}.wav`;
 
-  console.log(`[GAMEPLAY][KEY] PLAY KEY SFX [${key_url}]`);
+	console.log(`[GAMEPLAY][KEY] PLAY KEY SFX [${key_url}]`);
 
-  gameAudio.play(key_url);
+	gameAudio.play(key_url);
 }
-
 
 // ===================================================================
 // RUN THESE FUNCS ON SCRIPT LOAD
