@@ -1,17 +1,13 @@
 // Background
 const bgMusic = [
-  "gameplay/audio/music/1_Phat_Phrog_Studio_Cyber_Attack_Steel_Shadows_LOOP.mp3",
-  "gameplay/audio/music/1_Phat_Phrog_Studio_Phantom_Samurai_Ronin_Resurgence_LOOPED.mp3",
-  "gameplay/audio/music/2_Phat_Phrog_Studio_Binary_Bushido_Ronin_Maelstrom_LOOP.mp3",
-  "gameplay/audio/music/2_Phat_Phrog_Studio_Replicant_Rebellion_Fractured_Galaxy_LOOP.mp3",
-  "gameplay/audio/music/3_Phat_Phrog_Studio_Binary_Bushido_Mecha_Maiden_LOOP.mp3",
-  "gameplay/audio/music/5_Phat_Phrog_Studio_Binary_Bushido_Shogun_Struggle_LOOP.mp3",
-  "gameplay/audio/music/5_Phat_Phrog_Studio_Cyber_Attack_Shattered_Circuits_LOOP.mp3",
-  "gameplay/audio/music/5_Phat_Phrog_Studio_Replicant_Rebellion_Binary_Abyss_LOOP.mp3",
-  "gameplay/audio/music/6_Phat_Phrog_Studio_Phantom_Samurai_Steel_Ronin_LOOPED.mp3",
-  "gameplay/audio/music/6_Phat_Phrog_Studio_Replicant_Rebellion_Machine_Soul_LOOP.mp3",
-  "gameplay/audio/music/7_Phat_Phrog_Studio_Binary_Bushido_Bionic_Bound_LOOP.mp3",
-  "gameplay/audio/music/7_Phat_Phrog_Studio_Phantom_Samurai_Katana_Clash_LOOPED.mp3",
+  "gameplay/audio/music/Phat_Phrog_Studio_Binary_Bushido_Bionic_Bound_LOOP.mp3",
+  "gameplay/audio/music/Phat_Phrog_Studio_Binary_Bushido_Mecha_Maiden_LOOP.mp3",
+  "gameplay/audio/music/Phat_Phrog_Studio_Binary_Bushido_Ronin_Maelstrom_LOOP.mp3",
+  "gameplay/audio/music/Phat_Phrog_Studio_Binary_Bushido_Shogun_Struggle_LOOP.mp3",  
+  "gameplay/audio/music/Phat_Phrog_Studio_Phantom_Samurai_Katana_Clash_LOOP.mp3",
+  "gameplay/audio/music/Phat_Phrog_Studio_Phantom_Samurai_Ronin_Resurgence_LOOP.mp3",
+  "gameplay/audio/music/Phat_Phrog_Studio_Phantom_Samurai_Steel_Ronin_LOOP.mp3",  
+  "gameplay/audio/music/Phat_Phrog_Studio_Replicant_Rebellion_Machine_Soul_LOOP.mp3",
 ];
 
 // win / lose

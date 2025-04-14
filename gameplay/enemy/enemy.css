@@ -1,71 +1,154 @@
-/* outer div */
-.enemy {
-  position: absolute;
-  top: 100px;
-  width: 16px; /* override with js */
-  height: 16px; /* override with js */
-  animation-timing-function: linear;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-  animation-duration: 10s; /* override with js */
-  /* border: 1px solid red; */
-  z-index: 5;
+:root {
+	--enemy_size_x: 32px;
+	--enemy_size_y: 32px;
 }
 
-/* inner div */
-.enemy-sprit {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+/* ========================================================================================= */
+/* ENEMY COMMON */
+
+.enemy {
+	width: var(--enemy_size_x);
+	height: var(--enemy_size_x);
+	padding: 0;
+	margin: 0;
+}
+
+/* ========================================================================================= */
+/* ENEMY OUTER DIV FOR PLACEMENT & MOVE ACROSS GAME VIEW */
+
+.enemy_outer {
+	position: absolute;
+	bottom: 80px; /* override with js */
+
+	/* ANIM ACROSS THE GAME VIEW */
+	animation-timing-function: linear;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+	animation-duration: 10s; /* override with js */
+
+	/* DEBUG */
+	/* border: 1px solid white; */
 }
 
 .enemy.move {
-  animation-name: moveLeft;
-}
-
-.hit::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: white;
-  opacity: 0;
-  animation: strong-flash 0.1s;
-  animation-fill-mode: none;
+	animation-name: moveLeft;
 }
 
 .enemy.move.stop {
-  animation-play-state: paused;
-}
-
-.enemy-info {
-  position: relative;
-  top: -30px;
-  width: 50px;
-  color: white;
-  font-size: 0.5rem;
+	animation-play-state: paused;
 }
 
 @keyframes moveLeft {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-460px); /* 360px screen + max 100px width buffer */
-  }
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-460px); /* 360px screen + max 100px width buffer */
+	}
+}
+
+/* ========================================================================================= */
+/* ENEMY INNER DIV FOR VIZ & STATE ANIMS */
+
+.enemy_inner {
+	/* POS */
+	position: absolute;
+	top: 0;
+	left: 0;
+
+	/* ENEMY SPRITE */
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 32px 32px;
+
+	/* DEBUG */
+	/* border: 1px solid blueviolet; */
+}
+
+.hit::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: white;
+	opacity: 0;
+	animation: strong-flash 0.1s;
+	animation-fill-mode: none;
 }
 
 @keyframes strong-flash {
-  0% {
-    opacity: 0;
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-  }
-  100% {
-    opacity: 0.9;
-    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7);
-  }
+	0% {
+		opacity: 0;
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+	}
+	100% {
+		opacity: 0.9;
+		box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.7);
+	}
+}
+
+/* ============================================================================= */
+/* COMMON ENEMY ANIMS */
+/* NOTE - SOME OF THESE SHOULD JUST BE ANIMAEAD IN THE GIF FOR PERFORMANCE */
+
+.enemy_hover_slow {
+	animation: hover_anim 7s ease-in-out forwards infinite;
+}
+
+.enemy_hover_fast {
+	animation: hover_anim 3.5s ease-in-out forwards infinite;
+}
+
+@keyframes hover_anim {
+	0% {
+		top: 0px;
+	}
+	50% {
+		top: 8px;
+	}
+	100% {
+		top: 0px;
+	}
+}
+
+.enemy_pulsate_slow {
+	animation: pulse_anim 1.4s ease-in-out forwards infinite;
+}
+
+.enemy_pulsate_fast {
+	animation: pulse_anim 0.7s ease-in-out forwards infinite;
+}
+
+@keyframes pulse_anim {
+	0% {
+		background-size: 32px 32px;
+	}
+	50% {
+		background-size: 16px 16px;
+	}	
+	100% {
+		background-size: 32px 32px;
+	}
+}
+
+/* ============================================================================= */
+/* SPECIFIC ENEMY CLASSES */
+
+.enemy-infinite-loop {
+	/* V2DO - USE ANIMATE.CSS VIA ENEMYDATA */
+	background-color: red;
+	border: 3px solid green;
+}
+
+/* ============================================================================= */
+/* DEBUG */
+
+.enemy-info {
+	position: relative;
+	top: -30px;
+	width: 50px;
+	color: white;
+	font-size: 0.5rem;
 }
