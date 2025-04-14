@@ -16,23 +16,40 @@ export async function initializeGameLogic(gameInstance) {
 		try {
 			const response = await fetch('./gameplay/words.json');
 			const data = await response.json();
+			console.log('LOAD B');
 			return data.words;
 		} catch (error) {
 			console.error(error);
 			throw error;
 		}
 	}
-	const wordList = await importWords();
 
-	// ENSURE AT LEAST ONE VALID LANGUAGE IS PICKED
+	// GET WORD LIST
+	console.log('LOAD A');
+	const wordList = await importWords();
+	console.log('LOAD C');
+	const lang_key_arr = Object.keys(wordList);
+	console.log(`[GAMEPLAY][INITIALIZEGAMELOGIC] GOT WORD LISTS(${lang_key_arr.length}) KEYS[${lang_key_arr}]`);
+	console.log(wordList);
+
+	// BUILD PICKED WORDS
+	// AND ENSURE AT LEAST ONE VALID LANGUAGE IS PICKED
+	let picked_words = [];
 	let has_valid_lang_list = false;
 
-	// GET ARR OF LANG KEYS
-	let allowedLanguages = Object.keys(wordList);
-
 	for (const language of pickedLanguages) {
-		if (allowedLanguages.includes(language)) {
+		console.log(`[GAMEPLAY][INITIALIZEGAMELOGIC] EVAL PICKED LANG[${language}]`);
+
+		if (lang_key_arr.includes(language)) {
 			has_valid_lang_list = true;
+
+			var lang_words = wordList[language];
+			picked_words = [...picked_words, ...lang_words];
+
+			// STRIP OUT TOO LONG WORDS
+			picked_words = picked_words.filter((word) => word.length < 30);
+
+			console.log(`[GAMEPLAY][INITIALIZEGAMELOGIC] GOT LANG[${language}] WORDS(${lang_words.length}) CUR PICKED WORD LEN(${picked_words.length})`);
 		}
 	}
 
@@ -49,23 +66,53 @@ export async function initializeGameLogic(gameInstance) {
 		return;
 	}
 
+	// RESET SHUFF VARS
+	let shuff_word_idx = 1;
+	let shuff_words = [];
 
-	// TODO - MAKE HUGE SHUFFLED LIST W/INDEX
+	function pick_new_word() {
+		if (shuff_word_idx >= shuff_words.length) {
+			// RE-CREATE IT
+			shuff_words = [...picked_words];
 
+			console.log(`[GAMEPLAY][WORD] SHUFF_IDX(${shuff_word_idx}) SHUFFLING WORDS(${shuff_words.length})`);
 
+			// Shuffle using Fisher-Yates algorithm
+			for (let i = shuff_words.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[shuff_words[i], shuff_words[j]] = [shuff_words[j], shuff_words[i]];
+				// Reset index
+				shuff_word_idx = 0;
+			}
+		}
 
+		// GET NEXT WORD
+		var ret_word = shuff_words[shuff_word_idx];
 
+		console.log(`[GAMEPLAY][WORD] PICK_WORD RETURNING WORD[${ret_word}]`);
+
+		// INC IDX FOR NEXT PICK
+		shuff_word_idx++;
+
+		return ret_word;
+	}
 
 	// INIT Variables for word-to-type
+	let displayedWord = pick_new_word();
 	let letterToTypeIndex = 0;
-	let displayedWord = '';
+
+	console.log(`[GAMEPLAY][WORD] INIT DISPLAYEDWORD[${displayedWord}]`);
 
 	// GET REF TO WORD CONTAINER DOM EL
 	const wordLetters = gameInstance.gameView.wordContainer;
 
 	// Display word function
 	function displayWord(word) {
-		for (let char of word) {
+		console.log(`[GAMEPLAY][WORD] DISPLAYING WORD[${word}]`);
+
+		let word_str = '' + word;
+
+		for (let char of word_str) {
 			const span = document.createElement('span');
 			span.textContent = char;
 			wordLetters.appendChild(span);
@@ -80,30 +127,32 @@ export async function initializeGameLogic(gameInstance) {
 
 	// Generate new word
 	function generateWord() {
-		const randomLang = pickedLanguages[Math.floor(Math.random() * pickedLanguages.length)];
-		const languageWords = wordList[randomLang];
-		displayedWord = languageWords[Math.floor(Math.random() * languageWords.length)];
+		displayedWord = pick_new_word();
 		displayWord(displayedWord);
 	}
 
 	// Typing attack
 	function attack(key) {
+		console.log(`[GAMEPLAY][ATTACK] WITH KEY[${key}]`);
+
+		// V2DO - STORE AS ARRAY INSTEAD OF DOING A DOM LOOKING
 		const letterSpan = wordLetters.getElementsByTagName('span')[letterToTypeIndex];
-		if (key === letterSpan.innerHTML) {
+
+		// HANDLE IF CORRECT
+		// V2DO - TESTING OUT CASE INSENSITIVE
+		// if (key === letterSpan.innerHTML) {
+		if (key.toLowerCase() === letterSpan.innerHTML.toLowerCase()) {
 			letterSpan.style.color = 'green';
 			letterToTypeIndex += 1;
 			gameInstance.onPlayerAttack();
+
+			// CHECK FOR COMPLETION
+			if (letterToTypeIndex === displayedWord.length) {
+				clearWordDisplay();
+				generateWord();
+			}
 		} else {
 			gameInstance.onPlayerAttack(false);
-		}
-		checkForCompletion();
-	}
-
-	// Check if word is complete
-	function checkForCompletion() {
-		if (letterToTypeIndex === displayedWord.length) {
-			clearWordDisplay();
-			generateWord();
 		}
 	}
 
@@ -141,8 +190,9 @@ export async function initializeGameLogic(gameInstance) {
 				play_key_sound();
 				attack(event.key);
 			}
+		} else {
+			console.log(`[GAMEPLAY][KEYUP] UNHANDLED KEYUP[${event.key}]`);
 		}
-		console.log(event);
 	});
 
 	// Stop scrolling with spacebar
@@ -181,7 +231,7 @@ function add_keyboard_presskey_active() {
 		if (el) {
 			el.classList.add('active');
 		} else {
-			console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
+			// console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
 		}
 	});
 
@@ -193,7 +243,7 @@ function add_keyboard_presskey_active() {
 		if (el) {
 			el.classList.remove('active');
 		} else {
-			console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
+			// console.log(`[GAME][KEYBOARD] NO ELEMENT FOUND FOR [${event.code}]`);
 		}
 	});
 }
@@ -234,3 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	startNewGame(gameScreen, level, difficulty);
 });
+
+function RandInt(int_max) {
+	return Math.floor(Math.random() * int_max);
+}
