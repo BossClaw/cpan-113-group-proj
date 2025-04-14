@@ -11,8 +11,7 @@ export class Enemy {
 		// base info
 		this.gameScreen = gameScreen;
 		this.enemyData = enemyDictionary[enemyKey] || enemyDictionary['lv1'];
-		console.log(`[ENEMY] ENEMYKEY[${enemyKey}] DATA IS [${this.enemyData}]`);
-
+		
 		// RESET THE DIVS
 		this.outerDiv = null;
 		this.innerDiv = null;
@@ -49,7 +48,7 @@ export class Enemy {
 		let y = this.enemyData.yMin + yPos;
 		// V2DO - 'DIVIDE THEN MULTIPLY BY 2(?)' TO VERTICALLY 'SPACE OUT'
 		y = Math.floor(y / 4) * 4;
-		console.log(`[ENEMY][SPAWN][${this.enemyData.name}] yMin(${this.enemyData.yMin}) yMax(${this.enemyData.yMax}) yRange(${yRange}) yPos(${yPos}) y(${y})`);
+		// console.log(`[ENEMY][SPAWN][${this.enemyData.name}] yMin(${this.enemyData.yMin}) yMax(${this.enemyData.yMax}) yRange(${yRange}) yPos(${yPos}) y(${y})`);
 
 		// Create outer div
 		this.outerDiv = document.createElement('div');
@@ -65,7 +64,7 @@ export class Enemy {
 		// DYN z-index FOR DEPTH LAYERING
 		let z_val = 160;
 		z_val = z_val - y;
-		console.log(`[ENEMY][SPAWN][${this.enemyData.name}] z_val(${z_val})`);
+		// console.log(`[ENEMY][SPAWN][${this.enemyData.name}] z_val(${z_val})`);
 		this.outerDiv.style.zIndex = '' + z_val;
 
 		// APPLY DATA TO OUTER DIV
@@ -81,7 +80,7 @@ export class Enemy {
 		// ADD EXTRA CLASSES IF PROVIDED
 		if (this.enemyData.classes_arr) {
 			this.innerDiv.classList.add(...this.enemyData.classes_arr);
-			console.log(`[ENEMY][SPAWN][${this.enemyData.name}] CLASSES_ARR[${this.enemyData.classes_arr}] NEW CLASS_LIST[${this.innerDiv.classList}]`);
+			// console.log(`[ENEMY][SPAWN][${this.enemyData.name}] CLASSES_ARR[${this.enemyData.classes_arr}] NEW CLASS_LIST[${this.innerDiv.classList}]`);
 		}
 
 		// ADD BG SPRITE VIZ CLASS
@@ -92,7 +91,7 @@ export class Enemy {
 		// TBD - DUR IS LONGEST, BUT NOT TOO IMPORTANT SINCE IT'S ALL LOOPING
 		const duration = 3.5;
 		const randomOffset = `${(Math.random() * duration * -1.0).toFixed(1)}s`;
-		console.log(`[ENEMY][SPAWN][${this.enemyData.name}] RANDOM ANIM OFFSET[${randomOffset}]`);
+		// console.log(`[ENEMY][SPAWN][${this.enemyData.name}] RANDOM ANIM OFFSET[${randomOffset}]`);
 		this.innerDiv.style.animationDelay = randomOffset;
 
 		// put it on screen
