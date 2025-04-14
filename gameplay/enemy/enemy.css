@@ -43,7 +43,7 @@
 		transform: translateX(0);
 	}
 	to {
-		transform: translateX(-460px); /* 360px screen + max 100px width buffer */
+		transform: translateX(-452px); /* 352px screen + max 100px width buffer */
 	}
 }
 
@@ -127,7 +127,7 @@
 	}
 	50% {
 		background-size: 16px 16px;
-	}	
+	}
 	100% {
 		background-size: 32px 32px;
 	}

@@ -93,7 +93,7 @@ export class GameView {
 
 		// Name input
 		this.nameInputDiv = document.createElement('div');
-		this.nameInputDiv.classList.add('namn-input-div');
+		this.nameInputDiv.classList.add('name-input-div');
 		this.gameScreenOverlay.appendChild(this.nameInputDiv);
 
 		this.nameInputTitle = document.createElement('div');
@@ -131,7 +131,7 @@ export class GameView {
 	}
 
 	showStartMessage(level, difficulty) {
-		this.startingDisplay.style.display = 'felx';
+		this.startingDisplay.style.display = 'flex';
 		this.startingDisplayLevel.innerText = `LVL: ${level}`;
 		this.startingDisplayDiff.innerText = `DIFF: ${difficulty}`;
 	}
@@ -173,8 +173,10 @@ export class GameView {
 	displayPause(_highscroe = 0) {
 		// hide name input
 		this.nameInputDiv.style.display = 'none';
+
 		// hide buttons
 		this.buttonsDiv.style.display = 'none';
+		
 		// show pause
 		this.gameScreenOverlay.classList.add('pause');
 		this.title.innerText = 'Pause';
@@ -182,7 +184,7 @@ export class GameView {
 		this.gameScreenOverlay.style.display = 'flex';
 		this.overlay = true;
 
-		// add back quite button
+		// add back quit button
 		this.buttonsDiv.style.display = 'flex';
 	}
 

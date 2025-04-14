@@ -82,11 +82,11 @@ class GameAudio {
   }
 
   play_ui_set() {
-    this.play("../audio/sfx/menu_set.wav");
+    this.play("gameplay/audio/sfx/menu_set.wav");
   }
 
   play_ui_unset() {
-    this.play("../audio/sfx/menu_unset.wav");
+    this.play("gameplay/audio/sfx/menu_unset.wav");
   }
 
   setMusicPaused(be_paused) {

@@ -11,10 +11,10 @@ export function set_background_glitch(_level, _gameScreen) {
   bg_idx = bg_idx.padStart(2, "0");
 
   // HACK - TEST SPECIFIC
-  // bg_idx = "05";
+  // bg_idx = "00";
 
   // TODO - FIX URL FOR LOCAL AND GITHUB
-  const bg_url = `url("../gameplay/background/bg_${bg_idx}_glitch.gif")`;
+  const bg_url = `url("gameplay/background/bg_${bg_idx}_glitch.gif")`;
   console.log(
     `[GAMEVIEW][BG] MADE RAND BG[${bg_url}] FOR[${_gameScreen}] ID[${_gameScreen.id}]`
   );
@@ -26,8 +26,8 @@ export function set_background_win(_gameScreen) {
 
   // JUST RENAME THE STYLE
   let bg_url_glitch = _gameScreen.style.backgroundImage;
-  let bg_url_won = bg_url_glitch.replace("_glitch.gif", "_won.png");
+  let bg_url_win = bg_url_glitch.replace("_glitch.gif", "_win.png");
 
-  console.log(`[GAMEVIEW][BG] GLITCH BG[${bg_url_glitch}] MADE WIN[${bg_url_won}]`);
-  _gameScreen.style.backgroundImage = bg_url_won;
+  console.log(`[GAMEVIEW][BG] GLITCH BG[${bg_url_glitch}] MADE WIN[${bg_url_win}]`);
+  _gameScreen.style.backgroundImage = bg_url_win;
 }
