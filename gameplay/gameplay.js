@@ -1,5 +1,5 @@
-import { startNewGame } from './game/game.js';
-import { gameAudio } from './game-audio/gameAudio.js';
+import { startNewGame } from './game.js';
+import { gameAudio } from './audio/gameAudio.js';
 import { get_difficulty, get_languages, get_level } from '../game_settings.js';
 
 // =========================================================================================
@@ -14,9 +14,9 @@ export async function initializeGameLogic(gameInstance) {
 	// GET LIST OF ALL LANGUAGES & ALL WORDS from words.json
 	async function importWords() {
 		try {
-			const response = await fetch('./gameplay/words.json');
+			const response = await fetch('./gameplay/words/words.json');
 			const data = await response.json();
-			console.log('LOAD B');
+			console.log('[GAMEPLAY][INIT] WORD DATA LOAD STAGE 2/3');
 			return data.words;
 		} catch (error) {
 			console.error(error);
@@ -25,12 +25,14 @@ export async function initializeGameLogic(gameInstance) {
 	}
 
 	// GET WORD LIST
-	console.log('LOAD A');
+	console.log('[GAMEPLAY][INIT] WORD DATA LOAD STAGE 1/3');
 	const wordList = await importWords();
-	console.log('LOAD C');
+	console.log('[GAMEPLAY][INIT] WORD DATA LOAD STAGE 3/3');
+
+	// GET LANG ARR & WORDLIST
 	const lang_key_arr = Object.keys(wordList);
 	console.log(`[GAMEPLAY][INITIALIZEGAMELOGIC] GOT WORD LISTS(${lang_key_arr.length}) KEYS[${lang_key_arr}]`);
-	console.log(wordList);
+	// console.log(wordList);
 
 	// BUILD PICKED WORDS
 	// AND ENSURE AT LEAST ONE VALID LANGUAGE IS PICKED
@@ -47,9 +49,11 @@ export async function initializeGameLogic(gameInstance) {
 			picked_words = [...picked_words, ...lang_words];
 
 			// STRIP OUT TOO LONG WORDS
+			// V2DO - LIST THE WORDS
+			let prev_count = picked_words.length
 			picked_words = picked_words.filter((word) => word.length < 30);
 
-			console.log(`[GAMEPLAY][INITIALIZEGAMELOGIC] GOT LANG[${language}] WORDS(${lang_words.length}) CUR PICKED WORD LEN(${picked_words.length})`);
+			console.log(`[GAMEPLAY][INITIALIZEGAMELOGIC] GOT LANG[${language}] WORDS(${lang_words.length}) CUR PICKED WORD LEN(${picked_words.length}) REMOVED(${(prev_count - picked_words.length)})`);
 		}
 	}
 
@@ -60,7 +64,7 @@ export async function initializeGameLogic(gameInstance) {
 		localStorage.setItem('settings_languages', '[]');
 
 		// REDIRECT
-		window.location.href = 'index.html#mission_control';
+		// window.location.href = 'index.html#mission_control';
 
 		// RETURN TO AVOID ANY FUTHER PROC
 		return;
@@ -133,7 +137,7 @@ export async function initializeGameLogic(gameInstance) {
 
 	// Typing attack
 	function attack(key) {
-		console.log(`[GAMEPLAY][ATTACK] WITH KEY[${key}]`);
+		// console.log(`[GAMEPLAY][ATTACK] WITH KEY[${key}]`);
 
 		// V2DO - STORE AS ARRAY INSTEAD OF DOING A DOM LOOKING
 		const letterSpan = wordLetters.getElementsByTagName('span')[letterToTypeIndex];
@@ -142,7 +146,7 @@ export async function initializeGameLogic(gameInstance) {
 		// V2DO - TESTING OUT CASE INSENSITIVE
 		// if (key === letterSpan.innerHTML) {
 		if (key.toLowerCase() === letterSpan.innerHTML.toLowerCase()) {
-			letterSpan.style.color = 'green';
+			letterSpan.style.color = 'cyan';
 			letterToTypeIndex += 1;
 			gameInstance.onPlayerAttack();
 
@@ -169,7 +173,7 @@ export async function initializeGameLogic(gameInstance) {
 	const startingDisplay = gameInstance.gameView.startingDisplay;
 
 	document.addEventListener('keyup', (event) => {
-		console.log(`[GAMEPLAY][KEYUP] GOT KEY[${event.key}]`);
+		// console.log(`[GAMEPLAY][KEYUP] GOT KEY[${event.key}]`);
 
 		if (event.key === 'Enter' && !gameInstance.gameView.overlay && !gameInstance.isGame) {
 			event.preventDefault();
@@ -257,7 +261,7 @@ function play_key_sound() {
 		.padStart(2, '0');
 	const key_url = `gameplay/audio/keys/key_${key_idx}.wav`;
 
-	console.log(`[GAMEPLAY][KEY] PLAY KEY SFX [${key_url}]`);
+	// console.log(`[GAMEPLAY][KEY] PLAY KEY SFX [${key_url}]`);
 
 	gameAudio.play(key_url);
 }
