@@ -1,0 +1,151 @@
+/* =============================================================================================== */
+/* GAMEPLAY RESPONSIVE */
+
+#game_screen_wrapper {
+	padding: 0;
+	margin: 0;
+	/* align-content: center;
+	justify-items: center; */
+}
+
+#game_screen {
+	transform-origin: top left;
+	margin: 0;
+	padding: 0;
+}
+
+@media (min-width: 1060px) {
+	footer {
+		width: 960px !important;
+	}
+
+	#gameplay_page_wrapper {
+		width: 960px;
+	}
+
+	.keyboard {
+		width: 940px;
+	}
+
+	#game_screen_wrapper {
+		width: 940px;
+		height: 432px;
+	}
+
+	#game_screen {
+		transform: scale(2.7, 2.7);
+	}
+
+	.keyboard {
+		margin-block: 20px 10px;
+	}
+
+	.keys img {
+		width: 40px;
+		height: 40px;
+		padding: 3px;
+	}
+}
+
+@media (min-width: 840px) and (max-width: 1059px) {
+	footer {
+		width: 720px !important;
+	}
+
+	#gameplay_page_wrapper {
+		width: 720px;
+	}
+
+	.keyboard {
+		width: 700px;
+	}
+
+	#game_screen_wrapper {
+		width: 700px;
+		height: 330px;
+	}
+
+	#game_screen {
+		transform: scale(2, 2);
+	}
+
+	.keyboard {
+		margin-block: 20px 10px;
+	}
+
+	.keys img {
+		width: 32px;
+		height: 32px;
+		padding: 1px;
+	}
+}
+
+@media (min-width: 580px) and (max-width: 839px) {
+	footer {
+		width: 420px !important;
+		min-width: 420px !important;
+		font-size: small;
+	}
+
+	#gameplay_page_wrapper {
+		width: 420px;
+	}
+
+	.keyboard {
+		width: 400px;
+	}
+
+	#game_screen_wrapper {
+		width: 400px;
+		height: 200px;
+	}
+
+	#game_screen {
+		transform: scale(1.2, 1.2);
+	}
+
+	.keyboard {
+		margin-block: 20px 10px;
+	}
+
+	.keys img {
+		width: 24px;
+		height: 24px;
+		padding: 1px;
+	}
+}
+
+@media (max-width: 579px) {
+	footer {
+		width: 380px !important;
+		min-width: 380px !important;
+		font-size: x-small;
+	}
+
+	#gameplay_page_wrapper {
+		width: 380px;
+	}
+
+	.keyboard {
+		width: 370px;
+	}
+
+	#game_screen_wrapper {
+		width: 370px;
+		height: 180px;
+	}
+
+	#game_screen {
+		transform: scale(1, 1);
+	}
+
+	.keyboard {
+		margin-block: 10px 10px;
+	}
+
+	.keys img {
+		width: 16px;
+		height: 16px;
+		padding: 1px;
+	}
+}

@@ -1,22 +1,23 @@
 /* ============================================================================== */
 /* PAGE / RESP */
-
-/* TODO - GAMEPLAY BG */
+:root {
+	--page_text: rgb(35, 112, 163);
+}
 
 body {
-	background-color: black;
+	padding: 0;
+	margin: 0;
 }
 
 /* ============================================================================== */
 /* GAME VIEW WRAPPER  */
 
 #gameplay_page_wrapper {
-	min-width: 480px;
-	width: 60%;
-	margin-block: 0;
+	margin-block: 16px;
 	margin-inline: auto;
-	padding: 0;
-	border: 1px solid yellow;
+	padding: 8px;
+
+	background-color: black;
 }
 
 /* ============================================================================== */
@@ -26,9 +27,9 @@ body {
 	width: 100%;
 	text-align: center;
 	padding-block: 10px;
-	color: rgb(255, 0, 43);
+	color: var(--page_text);
 	font-size: 16px;
-	border: 1px solid green;
+	/* border: 1px solid green; */
 }
 
 #starting-display {
@@ -38,7 +39,8 @@ body {
 	top: 50%;
 	transform: translate(-50%, -50%);
 	visibility: visible;
-	border: 1px solid orange;
+	background-color: black;
+	/* border: 1px solid orange; */
 }
 
 /* =============================================================================================== */

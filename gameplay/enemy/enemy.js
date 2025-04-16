@@ -1,4 +1,4 @@
-import { gameAudio } from '../game-audio/gameAudio.js';
+import { gameAudio } from '../audio/gameAudio.js';
 import { enemyDictionary } from './enemyDictionary.js';
 
 // gameScreen is the #game_screen div
