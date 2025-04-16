@@ -1,223 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TYPE DEFENDER - Mission</title>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TYPE DEFENDER - Mission</title>
 
-    <!-- 3RD PARTY -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
+		<!-- 3RD PARTY -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <!-- STYLES -->
-    <link rel="stylesheet" href="css/common.css" />
-    <link rel="stylesheet" href="css/anim.css" />
-    <link rel="stylesheet" href="css/crt.css" />
-    <link rel="stylesheet" href="css/dev.css" />
+		<!-- STYLES -->
+		<link rel="stylesheet" href="css/bg.css" />
+		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/anim.css" />
+		<link rel="stylesheet" href="css/crt.css" />
+		<link rel="stylesheet" href="css/dev.css" />
 
-    <!-- JS -->
-    <script type="module" src="js/common.js"></script>
+		<!-- JS -->
+		<script type="module" src="js/common.js"></script>
 
-    <!---ui (lu)-->
-    <link rel="stylesheet" href="gameplay/gameplay.css" />
-    <link rel="stylesheet" href="gameplay/game-view/gameoverlay.css" />
-    
-    <!---game classes (lu)-->
-    <link rel="stylesheet" href="gameplay/game-view/gameview.css" />
-    <link rel="stylesheet" href="gameplay/mainframe/mainframe.css" />
-    <link rel="stylesheet" href="gameplay/player/player.css" />
-    <link rel="stylesheet" href="gameplay/enemy/enemy.css" />
-    <link rel="stylesheet" href="gameplay/firewall/firewall.css" />
+		<!---ui (lu)-->
+		<link rel="stylesheet" href="gameplay/gameplay.css" />
+		<link rel="stylesheet" href="gameplay/game_responsive.css" />
+		<link rel="stylesheet" href="gameplay/overlay/gameoverlay.css" />
 
+		<!---game classes (lu)-->
+		<link rel="stylesheet" href="gameplay/gameview.css" />
+		<link rel="stylesheet" href="gameplay/player/player.css" />
+		<link rel="stylesheet" href="gameplay/mainframe/mainframe.css" />
+		<link rel="stylesheet" href="gameplay/firewall/firewall.css" />
+		<link rel="stylesheet" href="gameplay/enemy/enemy.css" />
 
-    <!--keyboard (jas)--->
-    <link rel="stylesheet" href="gameplay/keyboard/keyboard.css" />
+		<!--keyboard (jas)--->
+		<link rel="stylesheet" href="gameplay/keyboard/keyboard.css" />
 
-    <!---js-->    
-    <script type="module" src="gameplay/game/game.js" defer></script>
-    <script type="module" src="gameplay/gameplay.js" defer></script>
-  </head>
+		<!---js-->
+		<script type="module" src="gameplay/game.js" defer></script>
+		<script type="module" src="gameplay/gameplay.js" defer></script>
+	</head>
 
-  <body>
-    <div id="gameplay_page_wrapper">
-      
-      <div id="pause-display">Press ESC to toggle pause</div>
+	<body>
+		<div id="gameplay_page_wrapper" class="border_pixel">
+			<div id="pause-display">Press ESC to toggle pause</div>
 
-      <!-- Game Screen -->
-      <div id="game_screen"></div>
+			<!-- Game Screen -->
+			<div id="game_screen_wrapper">
+				<div id="game_screen"></div>
+			</div>
 
-      <!-- ============================= KEYBOARD ========================================== -->
-      <div class="keyboard">
-        <div class="keys">
-          <!-- <span class='os_key' id="Backquote">
+			<!-- ============================= KEYBOARD ========================================== -->
+			<div class="keyboard">
+				<div class="keys">
+					<!-- <span class='os_key' id="Backquote">
             <img src="gameplay/keyboard/keyboard-images/key_0.png" />
           </span> -->
-          <span class='os_key' id="Digit1">
-            <img src="gameplay/keyboard/keyboard-images/key_1.png" />
-          </span>
-          <span class='os_key' id="Digit2">
-            <img src="gameplay/keyboard/keyboard-images/key_2.png" />
-          </span>
-          <span class='os_key' id="Digit3">
-            <img src="gameplay/keyboard/keyboard-images/key_3.png" />
-          </span>
-          <span class='os_key' id="Digit4">
-            <img src="gameplay/keyboard/keyboard-images/key_4.png" />
-          </span>
-          <span class='os_key' id="Digit5">
-            <img src="gameplay/keyboard/keyboard-images/key_5.png" />
-          </span>
-          <span class='os_key' id="Digit6">
-            <img src="gameplay/keyboard/keyboard-images/key_6.png" />
-          </span>
-          <span class='os_key' id="Digit7">
-            <img src="gameplay/keyboard/keyboard-images/key_7.png" />
-          </span>
-          <span class='os_key' id="Digit8">
-            <img src="gameplay/keyboard/keyboard-images/key_8.png" />
-          </span>
-          <span class='os_key' id="Digit9">
-            <img src="gameplay/keyboard/keyboard-images/key_9.png" />
-          </span>
-          <span class='os_key' id="Digit0">
-            <img src="gameplay/keyboard/keyboard-images/key_10.png" />
-          </span>
-          <span class='os_key' id="Minus">
-            <img src="gameplay/keyboard/keyboard-images/key_11.png" />
-          </span>
-          <span class='os_key' id="Equal">
-            <img src="gameplay/keyboard/keyboard-images/key_12.png" />
-          </span>
-          <!-- <span class='os_key' id="Backspace">
+					<span class="os_key" id="Digit1">
+						<img src="gameplay/keyboard/keyboard-images/key_1.png" />
+					</span>
+					<span class="os_key" id="Digit2">
+						<img src="gameplay/keyboard/keyboard-images/key_2.png" />
+					</span>
+					<span class="os_key" id="Digit3">
+						<img src="gameplay/keyboard/keyboard-images/key_3.png" />
+					</span>
+					<span class="os_key" id="Digit4">
+						<img src="gameplay/keyboard/keyboard-images/key_4.png" />
+					</span>
+					<span class="os_key" id="Digit5">
+						<img src="gameplay/keyboard/keyboard-images/key_5.png" />
+					</span>
+					<span class="os_key" id="Digit6">
+						<img src="gameplay/keyboard/keyboard-images/key_6.png" />
+					</span>
+					<span class="os_key" id="Digit7">
+						<img src="gameplay/keyboard/keyboard-images/key_7.png" />
+					</span>
+					<span class="os_key" id="Digit8">
+						<img src="gameplay/keyboard/keyboard-images/key_8.png" />
+					</span>
+					<span class="os_key" id="Digit9">
+						<img src="gameplay/keyboard/keyboard-images/key_9.png" />
+					</span>
+					<span class="os_key" id="Digit0">
+						<img src="gameplay/keyboard/keyboard-images/key_10.png" />
+					</span>
+					<span class="os_key" id="Minus">
+						<img src="gameplay/keyboard/keyboard-images/key_11.png" />
+					</span>
+					<span class="os_key" id="Equal">
+						<img src="gameplay/keyboard/keyboard-images/key_12.png" />
+					</span>
+					<!-- <span class='os_key' id="Backspace">
             <img src="gameplay/keyboard/keyboard-images/key_14.png" />
           </span> -->
-        </div>
-        <div class="keys">
-          <!-- <span class='os_key' id="Tab">
+				</div>
+				<div class="keys">
+					<!-- <span class='os_key' id="Tab">
             <img src="gameplay/keyboard/keyboard-images/key_15.png" />
           </span> -->
-          <span class='os_key' id="KeyQ">
-            <img src="gameplay/keyboard/keyboard-images/key_16.png" />
-          </span>
-          <span class='os_key' id="KeyW">
-            <img src="gameplay/keyboard/keyboard-images/key_17.png" />
-          </span>
-          <span class='os_key' id="KeyE">
-            <img src="gameplay/keyboard/keyboard-images/key_18.png" />
-          </span>
-          <span class='os_key' id="KeyR">
-            <img src="gameplay/keyboard/keyboard-images/key_19.png" />
-          </span>
-          <span class='os_key' id="KeyT">
-            <img src="gameplay/keyboard/keyboard-images/key_20.png" />
-          </span>
-          <span class='os_key' id="KeyY">
-            <img src="gameplay/keyboard/keyboard-images/key_21.png" />
-          </span>
-          <span class='os_key' id="KeyU">
-            <img src="gameplay/keyboard/keyboard-images/key_22.png" />
-          </span>
-          <span class='os_key' id="KeyI">
-            <img src="gameplay/keyboard/keyboard-images/key_23.png" />
-          </span>
-          <span class='os_key' id="KeyO">
-            <img src="gameplay/keyboard/keyboard-images/key_24.png" />
-          </span>
-          <span class='os_key' id="KeyP">
-            <img src="gameplay/keyboard/keyboard-images/key_25.png" />
-          </span>
-          <span class='os_key' id="BracketLeft">
-            <img src="gameplay/keyboard/keyboard-images/key_26.png" />
-          </span>
-          <span class='os_key' id="BracketRight">
-            <img src="gameplay/keyboard/keyboard-images/key_27.png" />
-          </span>
-          <span class='os_key' id="Backslash">
-            <img src="gameplay/keyboard/keyboard-images/key_13.png" />
-          </span>
-        </div>
-        <div class="keys">
-          <!-- <span class='os_key' id="CapsLock" class="caps">
+					<span class="os_key" id="KeyQ">
+						<img src="gameplay/keyboard/keyboard-images/key_16.png" />
+					</span>
+					<span class="os_key" id="KeyW">
+						<img src="gameplay/keyboard/keyboard-images/key_17.png" />
+					</span>
+					<span class="os_key" id="KeyE">
+						<img src="gameplay/keyboard/keyboard-images/key_18.png" />
+					</span>
+					<span class="os_key" id="KeyR">
+						<img src="gameplay/keyboard/keyboard-images/key_19.png" />
+					</span>
+					<span class="os_key" id="KeyT">
+						<img src="gameplay/keyboard/keyboard-images/key_20.png" />
+					</span>
+					<span class="os_key" id="KeyY">
+						<img src="gameplay/keyboard/keyboard-images/key_21.png" />
+					</span>
+					<span class="os_key" id="KeyU">
+						<img src="gameplay/keyboard/keyboard-images/key_22.png" />
+					</span>
+					<span class="os_key" id="KeyI">
+						<img src="gameplay/keyboard/keyboard-images/key_23.png" />
+					</span>
+					<span class="os_key" id="KeyO">
+						<img src="gameplay/keyboard/keyboard-images/key_24.png" />
+					</span>
+					<span class="os_key" id="KeyP">
+						<img src="gameplay/keyboard/keyboard-images/key_25.png" />
+					</span>
+					<span class="os_key" id="BracketLeft">
+						<img src="gameplay/keyboard/keyboard-images/key_26.png" />
+					</span>
+					<span class="os_key" id="BracketRight">
+						<img src="gameplay/keyboard/keyboard-images/key_27.png" />
+					</span>
+					<span class="os_key" id="Backslash">
+						<img src="gameplay/keyboard/keyboard-images/key_13.png" />
+					</span>
+				</div>
+				<div class="keys">
+					<!-- <span class='os_key' id="CapsLock" class="caps">
             <img src="gameplay/keyboard/keyboard-images/key_29.png" />
           </span> -->
-          <span class='os_key' id="KeyA">
-            <img src="gameplay/keyboard/keyboard-images/key_30.png" />
-          </span>
-          <span class='os_key' id="KeyS">
-            <img src="gameplay/keyboard/keyboard-images/key_31.png" />
-          </span>
-          <span class='os_key' id="KeyD">
-            <img src="gameplay/keyboard/keyboard-images/key_32.png" />
-          </span>
-          <span class='os_key' id="KeyF">
-            <img src="gameplay/keyboard/keyboard-images/key_33.png" />
-          </span>
-          <span class='os_key' id="KeyG">
-            <img src="gameplay/keyboard/keyboard-images/key_34.png" />
-          </span>
-          <span class='os_key' id="KeyH">
-            <img src="gameplay/keyboard/keyboard-images/key_35.png" />
-          </span>
-          <span class='os_key' id="KeyJ">
-            <img src="gameplay/keyboard/keyboard-images/key_36.png" />
-          </span>
-          <span class='os_key' id="KeyK">
-            <img src="gameplay/keyboard/keyboard-images/key_37.png" />
-          </span>
-          <span class='os_key' id="KeyL">
-            <img src="gameplay/keyboard/keyboard-images/key_38.png" />
-          </span>
-          <span class='os_key' id="Semicolon">
-            <img src="gameplay/keyboard/keyboard-images/key_39.png" />
-          </span>
-          <span class='os_key' id="Quote">
-            <img src="gameplay/keyboard/keyboard-images/key_40.png" />
-          </span>
-          <!-- <span class='os_key' id="Enter" class="enter">
+					<span class="os_key" id="KeyA">
+						<img src="gameplay/keyboard/keyboard-images/key_30.png" />
+					</span>
+					<span class="os_key" id="KeyS">
+						<img src="gameplay/keyboard/keyboard-images/key_31.png" />
+					</span>
+					<span class="os_key" id="KeyD">
+						<img src="gameplay/keyboard/keyboard-images/key_32.png" />
+					</span>
+					<span class="os_key" id="KeyF">
+						<img src="gameplay/keyboard/keyboard-images/key_33.png" />
+					</span>
+					<span class="os_key" id="KeyG">
+						<img src="gameplay/keyboard/keyboard-images/key_34.png" />
+					</span>
+					<span class="os_key" id="KeyH">
+						<img src="gameplay/keyboard/keyboard-images/key_35.png" />
+					</span>
+					<span class="os_key" id="KeyJ">
+						<img src="gameplay/keyboard/keyboard-images/key_36.png" />
+					</span>
+					<span class="os_key" id="KeyK">
+						<img src="gameplay/keyboard/keyboard-images/key_37.png" />
+					</span>
+					<span class="os_key" id="KeyL">
+						<img src="gameplay/keyboard/keyboard-images/key_38.png" />
+					</span>
+					<span class="os_key" id="Semicolon">
+						<img src="gameplay/keyboard/keyboard-images/key_39.png" />
+					</span>
+					<span class="os_key" id="Quote">
+						<img src="gameplay/keyboard/keyboard-images/key_40.png" />
+					</span>
+					<!-- <span class='os_key' id="Enter" class="enter">
             <img src="gameplay/keyboard/keyboard-images/enter.png" />
           </span> -->
-        </div>
-        <div class="keys">
-          <!-- <span class='os_key' id="ShiftLeft" class="Shift">
+				</div>
+				<div class="keys">
+					<!-- <span class='os_key' id="ShiftLeft" class="Shift">
             <img src="gameplay/keyboard/keyboard-images/key_41.png" />
           </span> -->
-          <span class='os_key' id="KeyZ">
-            <img src="gameplay/keyboard/keyboard-images/key_42.png" />
-          </span>
-          <span class='os_key' id="KeyX">
-            <img src="gameplay/keyboard/keyboard-images/key_43.png" />
-          </span>
-          <span class='os_key' id="KeyC">
-            <img src="gameplay/keyboard/keyboard-images/key_44.png" />
-          </span>
-          <span class='os_key' id="KeyV">
-            <img src="gameplay/keyboard/keyboard-images/key_45.png" />
-          </span>
-          <span class='os_key' id="KeyB">
-            <img src="gameplay/keyboard/keyboard-images/key_46.png" />
-          </span>
-          <span class='os_key' id="KeyN">
-            <img src="gameplay/keyboard/keyboard-images/key_47.png" />
-          </span>
-          <span class='os_key' id="KeyM">
-            <img src="gameplay/keyboard/keyboard-images/key_48.png" />
-          </span>
-          <span class='os_key' id="Comma">
-            <img src="gameplay/keyboard/keyboard-images/key_49.png" />
-          </span>
-          <span class='os_key' id="Period">
-            <img src="gameplay/keyboard/keyboard-images/key_50.png" />
-          </span>
-          <span class='os_key' id="Slash">
-            <img src="gameplay/keyboard/keyboard-images/key_51.png" />
-          </span>
-          <!-- <span class='os_key' id="ShiftRight" class="Shift">
+					<span class="os_key" id="KeyZ">
+						<img src="gameplay/keyboard/keyboard-images/key_42.png" />
+					</span>
+					<span class="os_key" id="KeyX">
+						<img src="gameplay/keyboard/keyboard-images/key_43.png" />
+					</span>
+					<span class="os_key" id="KeyC">
+						<img src="gameplay/keyboard/keyboard-images/key_44.png" />
+					</span>
+					<span class="os_key" id="KeyV">
+						<img src="gameplay/keyboard/keyboard-images/key_45.png" />
+					</span>
+					<span class="os_key" id="KeyB">
+						<img src="gameplay/keyboard/keyboard-images/key_46.png" />
+					</span>
+					<span class="os_key" id="KeyN">
+						<img src="gameplay/keyboard/keyboard-images/key_47.png" />
+					</span>
+					<span class="os_key" id="KeyM">
+						<img src="gameplay/keyboard/keyboard-images/key_48.png" />
+					</span>
+					<span class="os_key" id="Comma">
+						<img src="gameplay/keyboard/keyboard-images/key_49.png" />
+					</span>
+					<span class="os_key" id="Period">
+						<img src="gameplay/keyboard/keyboard-images/key_50.png" />
+					</span>
+					<span class="os_key" id="Slash">
+						<img src="gameplay/keyboard/keyboard-images/key_51.png" />
+					</span>
+					<!-- <span class='os_key' id="ShiftRight" class="Shift">
             <img src="gameplay/keyboard/keyboard-images/key_41.png" />
           </span> -->
-        </div>
-        <!-- <div class="keys">
+				</div>
+				<!-- <div class="keys">
           <span class='os_key' id="ControlLeft" class="med">
             <img src="gameplay/keyboard/keyboard-images/key_55.png" />
           </span>
@@ -234,21 +233,17 @@
             <img src="gameplay/keyboard/keyboard-images/key_55.png" />
           </span>
         </div> -->
-      </div>
-    </div>
+			</div>
+		</div>
 
-    <!-- ============================= COMMON PAGE STUFF ========================================== -->
-    <!-- FOOTER -->
-    <footer id="footer" class="border_pixel horiz_flex">
-      &copy; 20XX lujabo <span class="cursor"></span>
+		<!-- ============================= COMMON PAGE STUFF ========================================== -->
+		<!-- FOOTER -->
+		<footer id="footer" class="border_pixel horiz_flex">
+			&copy; 20XX lujabo <span class="cursor"></span>
 
-      <a href="index.html">Home</a>
-      
-      <a href="#">lu</a>
-      <a href="#">ja</a>
-      <a href="#">bo</a>
-
-      <a href="#top">Top</a>
-    </footer>
-  </body>
+			<a href="#">lu</a>
+			<a href="#">ja</a>
+			<a href="#">bo</a>
+		</footer>
+	</body>
 </html>

@@ -1,4 +1,4 @@
-import { gameAudio } from '../game-audio/gameAudio.js';
+import { gameAudio } from '../audio/gameAudio.js';
 
 export class Mainframe {
 	constructor(gameScreen) {
@@ -12,10 +12,10 @@ export class Mainframe {
 		this.innerDiv = null;
 
 		// stats
-		this.hp = 10;
+		this.hp = 8;
 
 		// DEV TESTING
-		this.hp = 1000;
+		this.hp = 16;
 		this.isAlive = true;
 	}
 
@@ -60,6 +60,13 @@ export class Mainframe {
 	}
 
 	takeDamage(damage = 1) {
+		
+		// SKIP ANY FURTHER DAMAGE
+		if (this.is_dead)
+		{
+			return;
+		}
+
 		this.hp -= damage;
 		// dmage stage
 		if (this.hp > 8) {
@@ -72,8 +79,15 @@ export class Mainframe {
 			this.changeDamageStage(3);
 		}
 
+		// HANDLE DEATH INTERRUPT
+		if (this.hp <= 0) {
+			this.is_dead = true;
+			this.destroy();
+			return;
+		}
+
 		// SFX
-		gameAudio.playBaseHit();
+		gameAudio.playMainframeHit();
 
 		// change sprit image / color based on damage taken
 		// .... logic here ...
@@ -82,10 +96,6 @@ export class Mainframe {
 		void this.innerDiv.offsetWidth; // Trigger reflow
 
 		this.innerDiv.classList.add('hit');
-
-		if (this.hp <= 0) {
-			this.destroy();
-		}
 	}
 
 	changeDamageStage(stage = 0) {
