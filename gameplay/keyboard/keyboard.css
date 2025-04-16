@@ -1,21 +1,16 @@
-.keyboard {
-	margin-block: 120px 60px;
-	border: 1px solid peru;
-}
+/* .keyboard {
+	border: 1px solid peru; 
+} */
 
 .keys {
 	display: flex;
-	list-style: none;
 	justify-content: center;
 	margin: 0px;
 }
 
-.keys img {
-	width: 40px;
-	height: 40px;
-	padding: 1px;
+/* .keys img {
 	transition: 0.1s;
-}
+} */
 
 .caps img {
 	width: 70px;
@@ -40,11 +35,3 @@
 .active {
 	scale: 0.85;
 }
-
-/* MOVE KEYBOARD TEMP */
-/* .keyboard{
-  position: fixed;
-  bottom: 0px;
-  left: 50%;
-  transform: translate(-50%, -20%);
-} */
