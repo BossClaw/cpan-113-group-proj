@@ -1,5 +1,5 @@
 import { get_languages, get_difficulty, get_level } from "../game_settings.js";
-import { gameAudio } from "../gameplay/game-audio/gameAudio.js";
+import { gameAudio } from "../gameplay/audio/gameAudio.js";
 
 // ===================================================================================
 // DUMP VALS ON SCRIPT START
