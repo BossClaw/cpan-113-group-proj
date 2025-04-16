@@ -3,7 +3,7 @@
 
 import { dev_log_mesg } from './dev.js';
 import { viz_init_bg } from './bg.js';
-import { gameAudio } from '../gameplay/game-audio/gameAudio.js';
+import { gameAudio } from '../gameplay/audio/gameAudio.js';
 
 // =================================================================
 // HANDLE THE LOGGED IN CHECK
