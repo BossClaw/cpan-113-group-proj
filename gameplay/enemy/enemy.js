@@ -5,13 +5,14 @@ import { enemyDictionary } from './enemyDictionary.js';
 // speed is calculated by game's difficult, game's level and enemy's own speed
 export class Enemy {
 	static nextId = 1;
+
 	constructor(gameScreen, enemyKey = 'lv1', gameSpeed = 1) {
 		this.id = Enemy.nextId++;
 
 		// base info
 		this.gameScreen = gameScreen;
 		this.enemyData = enemyDictionary[enemyKey] || enemyDictionary['lv1'];
-		
+
 		// RESET THE DIVS
 		this.outerDiv = null;
 		this.innerDiv = null;
@@ -45,9 +46,10 @@ export class Enemy {
 		const x = this.gameScreen.offsetWidth;
 		const yRange = this.enemyData.yMax - this.enemyData.yMin;
 		const yPos = Math.floor(Math.random() * yRange);
-		let y = this.enemyData.yMin + yPos;
+
+		this.y = this.enemyData.yMin + yPos;
 		// V2DO - 'DIVIDE THEN MULTIPLY BY 2(?)' TO VERTICALLY 'SPACE OUT'
-		y = Math.floor(y / 4) * 4;
+		this.y = Math.floor(this.y / 4) * 4;
 		// console.log(`[ENEMY][SPAWN][${this.enemyData.name}] yMin(${this.enemyData.yMin}) yMax(${this.enemyData.yMax}) yRange(${yRange}) yPos(${yPos}) y(${y})`);
 
 		// Create outer div
@@ -56,14 +58,14 @@ export class Enemy {
 		this.outerDiv.classList.add('enemy_outer');
 
 		this.outerDiv.style.left = `${x}px`;
-		this.outerDiv.style.bottom = `${y}px`;
+		this.outerDiv.style.bottom = `${this.y}px`;
 
 		// css animaiton speed to move across game view
 		this.outerDiv.style.animationDuration = this.defaultMovementDuration / this.speed + 's';
 
 		// DYN z-index FOR DEPTH LAYERING
 		let z_val = 160;
-		z_val = z_val - y;
+		z_val = z_val - this.y;
 		// console.log(`[ENEMY][SPAWN][${this.enemyData.name}] z_val(${z_val})`);
 		this.outerDiv.style.zIndex = '' + z_val;
 
@@ -119,9 +121,16 @@ export class Enemy {
 	resume() {
 		this.outerDiv.classList.remove('stop');
 	}
+
 	getLocationX() {
 		return this.outerDiv.getBoundingClientRect().left;
 	}
+
+	getLocationY() {
+		// STORED ON SPAWN
+		return this.y;
+	}
+
 	takeDamage(amount) {
 		this.hp -= amount;
 		this.innerDiv.classList.remove('hit');
@@ -133,9 +142,15 @@ export class Enemy {
 
 		// die
 		if (this.hp <= 0) {
-			this.destroy();
+			this.doEnemyDie('TAKE DAMAGE');
 		}
 	}
+
+	doEnemyDie(from_str) {
+		console.log(`[ENEMY][${this.name}] DIES FROM[${from_str}]!`);
+		this.destroy();
+	}
+
 	attack() {
 		this.takeDamage(this.damage);
 		return this.damage;

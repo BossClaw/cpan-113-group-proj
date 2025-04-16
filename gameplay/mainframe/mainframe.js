@@ -12,16 +12,16 @@ export class Mainframe {
 		this.innerDiv = null;
 
 		// stats
-		this.hp = 8;
-
+		this.max_hp = 16.0;
 		// DEV TESTING
-		this.hp = 16;
+		//this.max_hp = 1600;
+		this.hp = this.max_hp;
 		this.isAlive = true;
 	}
 
 	spawn() {
 		if (!this.gameScreen) {
-			console.warn('missing game screen');
+			console.warn('[MAINFRAME] missing game screen');
 			return;
 		}
 
@@ -55,41 +55,32 @@ export class Mainframe {
 		this.hpDisplay.innerText = this.hp;
 	}
 
-	getLocationX() {
-		return this.outerDiv.getBoundingClientRect().right;
-	}
+	// HANDLE COLLISION
+	takeDamage(damage = 1, enemy) {
+		// SKIP ANY FURTHER DAMAGE CALCS, BUT STILL SHOW HIT/ABSORB
+		if (!this.is_dead) {
+			// SUBTRACT DAMAGE
+			this.hp -= damage;
 
-	takeDamage(damage = 1) {
-		
-		// SKIP ANY FURTHER DAMAGE
-		if (this.is_dead)
-		{
-			return;
+			// UPDATE VIZ BASED ON DAMAGE
+			this.changeDamageStage();
+
+			// SFX
+			gameAudio.playMainframeHit();
+
+			// HANDLE DEATH/CORRUPTION VIZ/ANIM
+			if (this.hp <= 0) {
+				this.is_dead = true;
+				return;
+			}
 		}
 
-		this.hp -= damage;
-		// dmage stage
-		if (this.hp > 8) {
-			this.changeDamageStage(0);
-		} else if (this.hp > 6) {
-			this.changeDamageStage(1);
-		} else if (this.hp > 3) {
-			this.changeDamageStage(2);
-		} else {
-			this.changeDamageStage(3);
+		// DESTROY ENEMY ON HIT
+		if (enemy) {
+			enemy.doEnemyDie('mainframe');
 		}
 
-		// HANDLE DEATH INTERRUPT
-		if (this.hp <= 0) {
-			this.is_dead = true;
-			this.destroy();
-			return;
-		}
-
-		// SFX
-		gameAudio.playMainframeHit();
-
-		// change sprit image / color based on damage taken
+		// change sprite image / color based on damage taken
 		// .... logic here ...
 		this.innerDiv.classList.remove('hit');
 
@@ -98,28 +89,31 @@ export class Mainframe {
 		this.innerDiv.classList.add('hit');
 	}
 
-	changeDamageStage(stage = 0) {
-		// 0 = default, increase stage as damaged
-		const maxStage = 3;
-		const damageStage = Math.min(maxStage, Math.max(0, stage));
+	changeDamageStage() {
+		// DAMAGE IS NOW A PERC 0.0..1.0
+		let corruption_perc = 1.0 - (this.hp / this.max_hp);
 
-		let color = '#FFFFFF';
+		let anim = 'mainframe_000.gif';
 
-		switch (damageStage) {
-			case 0:
-				color = '#FFFFFF';
-				break;
-			case 1:
-				color = '#FFCCCC';
-				break;
-			case 2:
-				color = '#FF6666';
-				break;
-			case 3:
-				color = '#FF3333';
-				break;
+		if (corruption_perc < 0.25) {
+			anim = 'mainframe_000.gif';
+		} else if (corruption_perc < 0.5) {
+			anim = 'mainframe_025.gif';
+		} else if (corruption_perc < 0.75) {
+			anim = 'mainframe_050.gif';
+		} else if (corruption_perc < 1.0) {
+			anim = 'mainframe_075.gif';
+		} else {
+			anim = 'mainframe_100.gif';
 		}
-		this.innerDiv.style.backgroundColor = color;
+
+		console.log(`[MAINFRAME] CORRUPTION(${corruption_perc}) ANIM[${anim}]`);
+
+		// APPLY
+		// this.innerDiv.style.backgroundColor = color;
+
+		// url('mainframe_000.gif');
+		this.innerDiv.style.backgroundImage = `url('./gameplay/mainframe/${anim}')`;
 	}
 
 	destroy() {

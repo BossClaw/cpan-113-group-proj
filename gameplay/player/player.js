@@ -62,7 +62,7 @@ export class Player {
     this.sprites = {
       porting: {
         image: 'gameplay/player/player_intro.gif',
-        duration: 100, // ms
+        duration: 2100, // ms
       },
       idle: {
         image: 'gameplay/player/player_idle.gif',
@@ -74,7 +74,7 @@ export class Player {
       },
       exit: {
         image: 'gameplay/player/player_outro.gif',
-        duration: 100,
+        duration: 2100,
       }
     }
 

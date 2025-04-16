@@ -11,7 +11,7 @@ export function set_background_glitch(_level, _gameScreen) {
   bg_idx = bg_idx.padStart(2, "0");
 
   // HACK - TEST SPECIFIC
-  // bg_idx = "00";
+  bg_idx = "00";
 
   // TODO - FIX URL FOR LOCAL AND GITHUB
   const bg_url = `url("gameplay/background/bg_${bg_idx}_glitch.gif")`;
