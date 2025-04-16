@@ -24,12 +24,10 @@ const mainframeDie = ['gameplay/audio/sfx/mainframe_collapse.wav'];
 const firewallHit = ['gameplay/audio/sfx/enemy_disintegrate_md.wav', 'gameplay/audio/sfx/enemy_hit_md.wav'];
 const firewallDie = ['gameplay/audio/sfx/mainframe_hit_a.wav'];
 
-
 // enemy
 // V2DO - UNIQUE ENEMY HIT / DIE SOUNDS IN ENEMY DICTIONARY
 const enemyHit = ['gameplay/audio/sfx/enemy_distintegrate_lo.wav', 'gameplay/audio/sfx/enemy_disintegrate_md.wav', 'gameplay/audio/sfx/enemy_hit_md.wav'];
 const enemyDie = ['gameplay/audio/sfx/mainframe_hit_a.wav'];
-
 
 // player
 // V2DO SPECIFIC PLAYER AUDIO
@@ -79,14 +77,18 @@ class GameAudio {
 	// MUSIC HANDLING
 
 	stopMusic() {
-		if (!this.currentMusic) return;
+		if (!this.currentMusic) {
+			return;
+		}
 		this.currentMusic.pause();
 		this.currentMusic.currentTime = 0;
 		this.currentMusic = null;
 	}
 
 	toggleMusic() {
-		if (!this.currentMusic) return;
+		if (!this.currentMusic) {
+			return;
+		}
 
 		if (this.currentMusic.paused) {
 			this.currentMusic.play().catch(console.warn);
@@ -192,12 +194,12 @@ class GameAudio {
 		this.playFromList(bgMusic, isRandom, true, true);
 	}
 
-	playWinMusic(isRandom) {
-		this.playFromList(winMusic, isRandom, true);
+	playWinMusic() {
+		this.playFromList(winMusic, true, true);
 	}
 
-	playLoseMusic(isRandom) {
-		this.playFromList(loseMusic, isRandom, true);
+	playLoseMusic() {
+		this.playFromList(loseMusic, true, true);
 	}
 
 	// --------- SFX ----------
