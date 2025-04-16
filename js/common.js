@@ -1,9 +1,11 @@
 // COMMON JS TO EVERY PAGE IN THE PROJECT
 // TBD - SPLIT .JS UP INTO FOCUSED FILES : backend.js, audio.js, video.js, etc...
 
+console.log(`[COMMON] JS SCRIPT BEGINS`);
+
 import { dev_log_mesg } from './dev.js';
 import { viz_init_bg } from './bg.js';
-import { gameAudio } from '../gameplay/game-audio/gameAudio.js';
+import { gameAudio } from '../gameplay/audio/gameAudio.js';
 
 // =================================================================
 // HANDLE THE LOGGED IN CHECK
@@ -316,6 +318,7 @@ function common_page_unload() {
 // DYN ADD THE DIV TO BODY TO BE CONSISTENT WITH ALL PAGES
 
 function osc_init() {
+	console.log(`[COMMON][OSC] CREATE AND ADD CONTROL`);
 	const osc_div = document.createElement('div');
 
 	osc_div.id = 'os_controls';
