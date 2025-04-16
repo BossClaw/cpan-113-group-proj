@@ -1,82 +1,86 @@
 .player {
-  position: absolute;
-  top: 100px; /* override with js */
-  right: 30; /* override with js */
-  width: 32px;
-  height: 32px;
-  z-index: 4;
+	position: absolute;
+	top: 100px; /* override with js */
+	right: 30; /* override with js */
+	width: 64px;
+	height: 32px;
+  padding: 0;
+  margin: 0;
+	z-index: 4;
 }
 
 .player-sprite {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+	width: 64px;
+	height: 32px;
+  padding: 0;
+  margin: 0;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 .player-sprite.shoot {
-  animation: shoot 0.2s ease-in-out;
-  animation-fill-mode: none;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 0, 0.5))
-    drop-shadow(0 0 10px rgba(255, 255, 0, 0.3))
-    drop-shadow(0 0 20px rgba(255, 255, 0, 0.1));
+	animation: shoot 0.2s ease-in-out;
+	animation-fill-mode: none;
+	filter: drop-shadow(0 0 4px rgba(255, 255, 0, 0.5)) drop-shadow(0 0 10px rgba(255, 255, 0, 0.3)) drop-shadow(0 0 20px rgba(255, 255, 0, 0.1));
 }
 
 .player-sprite img {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+	width: 64px;
+	height: 32px;
+  padding: 0;
+  margin: 0;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 .player-info {
-  color: white;
-  font-size: 0.5rem;
+	color: white;
+	font-size: 0.5rem;
 }
 
 .missed-div {
-  position: relative;
-  top: -40px;
-  width: 50px;
-  font-size: 0.5rem;
+	position: relative;
+	top: -40px;
+	width: 50px;
+	font-size: 0.5rem;
 }
 
 .missed {
-  position: absolute;
-  color: white;
-  animation: missed 0.7s forwards;
+	position: absolute;
+	color: white;
+	animation: missed 0.7s forwards;
 }
 
 @keyframes missed {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-15px);
-    opacity: 0;
-  }
+	0% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(-15px);
+		opacity: 0;
+	}
 }
 
 @keyframes shoot {
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  20% {
-    transform: translate(-2px, -1px) rotate(-1deg);
-  }
-  40% {
-    transform: translate(2px, 1px) rotate(1deg);
-  }
-  60% {
-    transform: translate(-1px, 2px) rotate(0deg);
-  }
-  80% {
-    transform: translate(1px, -2px) rotate(1deg);
-  }
-  100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
+	0% {
+		transform: translate(0, 0) rotate(0deg);
+	}
+	20% {
+		transform: translate(-2px, -1px) rotate(-1deg);
+	}
+	40% {
+		transform: translate(2px, 1px) rotate(1deg);
+	}
+	60% {
+		transform: translate(-1px, 2px) rotate(0deg);
+	}
+	80% {
+		transform: translate(1px, -2px) rotate(1deg);
+	}
+	100% {
+		transform: translate(0, 0) rotate(0deg);
+	}
 }

@@ -1,4 +1,4 @@
-import { gameAudio } from "../game-audio/gameAudio.js";
+import { gameAudio } from "../audio/gameAudio.js";
 
 const hatList = [];
 
