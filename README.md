@@ -13,6 +13,7 @@
 - [Tech Stack](#tech-stack)
 - [Credits](#credits)
 - [Special Thanks](#special-thanks)
+- [Feature Demo Gifs](#feature-demos)
 
 ## How to Play
 
@@ -114,7 +115,8 @@
 
 - Project Manager
 - Pixel Art
-- Borks
+- 8 bit sound effects
+- Discord channel spawner
 
 ## Tech Stack
 
@@ -137,5 +139,17 @@
 - **Little One, Moo Moo & Christopher Kitten**
 - **Lu Crew**
 - **Jaz Pizazz**
+
+## FEATURE DEMOS
+
+Audio user consent.
+<img src="assets/demo_audio_user_consent.gif" alt="Audio Prompt">
+
+Configure Mission
+<img src="assets/demo_configure_mission.gif" alt="Configure Mission">
+
+Intense GamePlay
+<img src="assets/demo_play_lose.gif" alt="Play & Lose">
+
 
 ---
