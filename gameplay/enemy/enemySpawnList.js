@@ -4,18 +4,25 @@ import { enemyDictionary } from "./enemyDictionary.js";
 
 export function enemySpawnList(spawnCount, level = 1, difficult = "normal") {
   const spawnDistribution = {};
-  let addOnLevels = 2; // more enemies sooner
+  let addOnLevels = 1;
+
+  // Higher level enemy (level > 1)
+  // Higher level enemy appears only when game level is at least (enemy level × this value)
+  const ENEMY_LEVEL_GATE = 2
+
+  // Higher level enemy spawn divided by
+  const ENEMY_SPAWN_DIVIDE = 2
 
   // check difficulty
   switch (difficult) {
     case "easy":
-      addOnLevels = 1;
+      addOnLevels = 0;
       break;
     case "normal":
-      addOnLevels = 2;
+      addOnLevels = 1;
       break;
     case "hard":
-      addOnLevels = 3;
+      addOnLevels = 2;
       break;
     case "hardcore":
       addOnLevels = 3;
@@ -24,7 +31,7 @@ export function enemySpawnList(spawnCount, level = 1, difficult = "normal") {
       console.log(
         `[GAMEPLAY][ENEMIES] UNKNOWN DIFFICULTY PASSED TO SPAWN [${difficult}]`
       );
-      addOnLevels = 2;
+      addOnLevels = 1;
   }
 
   for (const [key, enemy] of Object.entries(enemyDictionary)) {
@@ -32,20 +39,23 @@ export function enemySpawnList(spawnCount, level = 1, difficult = "normal") {
     const currentLevel = level + addOnLevels;
 
     // Skip level 0 (spawn or player mis-typed)
-    if (enemyLevel == 0) {
-      continue;
-    }
+    if (enemyLevel == 0) continue
 
     // Skip level 1 (fill in later)
-    // TODO - CONFIRM/SPECIFY FILL IN LATER
-    if (enemyLevel == 1) {
-      continue;
-    }
+    if (enemyLevel == 1) continue
 
-    // All level 2 and above enemy
-    spawnDistribution[enemyLevel] = Math.floor(
+    // Skip enemy that is too high level
+    if (currentLevel < enemyLevel * ENEMY_LEVEL_GATE) continue
+
+    // Higher level enemy count
+    const spawnCount = Math.floor(
       (currentLevel * Math.log2(currentLevel)) / enemyLevel
-    );
+    )
+    // Reduce enemy count
+    const dividedSpawnCount = Math.floor(spawnCount / ENEMY_SPAWN_DIVIDE)
+
+    // Set enemy count
+    spawnDistribution[enemyLevel] = dividedSpawnCount
   }
 
   // calcuate higher level enemies count
