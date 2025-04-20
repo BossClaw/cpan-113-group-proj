@@ -63,6 +63,8 @@ export class Mainframe {
 
 	// HANDLE COLLISION
 	takeDamage(damage = 1, enemy) {
+		// [TEST]
+
 		// SKIP ANY FURTHER DAMAGE CALCS, BUT STILL SHOW HIT/ABSORB
 		if (!this.is_dead) {
 			// SUBTRACT DAMAGE

@@ -62,11 +62,15 @@ export class Game {
 
 		// MAKE THE GAME DATA, LOGIC, DOM
 
+		// [TEST DEVELOPER STUFF - FOR TESTING - IMPORTANT - DO NOT TOUCH]
+		this.GOD_MODE = true
+
 		// #game_screen div
 		this.gameScreen = gameScreen;
 		this.gameScreen.innerHTML = '';
 
 		// game status
+		this.MAX_LEVEL = 30
 		this.level = level;
 		this.difficulty = difficulty;
 		this.languages = [];
@@ -102,7 +106,7 @@ export class Game {
 		// firewall related
 		this.firewall = new Firewall(this.gameScreen);
 		this.firewallDiv = null;
-		
+
 		// enemy related
 		this.enemyCount = getEnemyStates(level).count;
 		this.enemyLeft = getEnemyStates(level).count;
@@ -151,7 +155,6 @@ export class Game {
 	// =============================================================================
 	// HANDLE DEBUG INFO CREATE
 	// TODO - CREATE ONCE, CACHE DIV REF, UPDATE JUST DIV INNER
-
 	updateDebugInfo() {
 		this.debugDiv.innerHTML = '';
 		const levelInfo = document.createElement('p');
@@ -226,8 +229,12 @@ export class Game {
 	// HANDLE MAINFRAME ATTACK
 
 	onMainframeAttacked(enemy) {
-		// mainframe
-		this.mainframe.takeDamage(enemy.attack(), enemy);
+		// [TEST GOD_MODE]
+		if (this.GOD_MODE) {
+			this.mainframe.takeDamage(0, enemy);
+		} else {
+			this.mainframe.takeDamage(enemy.attack(), enemy);
+		}
 		this.mainframe.updateHpDisplay();
 
 		this.gameScreen.classList.remove('player-attack');
@@ -359,6 +366,7 @@ export class Game {
 		if (this.isGame || !this.isWon) return;
 		if (this.isEnterName) return; // ignore if entering name
 		if (e?.key && e.key !== 'c') return;
+		if (this.level >= this.MAX_LEVEL) return // ignore at max level
 		document.removeEventListener('keydown', this.onContinueBtnPress);
 
 		// start a new game, to the next level
@@ -367,11 +375,8 @@ export class Game {
 
 	onRetryBtnPress(e) {
 		if (this.isGame || this.isWon) return;
-
 		if (this.isEnterName) return; // ignore if entering name
-
 		if (e?.key && e.key !== 'r') return;
-
 		document.removeEventListener('keydown', this.onRetryBtnPress);
 
 		// start a new game with currnet level
@@ -380,9 +385,7 @@ export class Game {
 
 	onQuitBtnPress(e) {
 		if (this.isGame && !this.isPaused) return;
-
 		if (this.isEnterName) return; // ignore if entering name
-
 		if (e?.key && e.key !== 'q') {
 			return;
 		} else {
@@ -510,7 +513,7 @@ export class Game {
 		// console.log(`[GAME][HIT EVAL] MAINFRAME RECTX(${mainframeRectX})`);
 
 		const firewall_x_thresh = (this.firewallDiv.getBoundingClientRect().left + this.firewallDiv.getBoundingClientRect().right) * 0.5;
-		
+
 		// EVAL X POS TO check for enemey collision
 		for (let i = 0; i < this.enemyArray.length; i++) {
 			// GET ENEMY TO EVAL
@@ -682,8 +685,10 @@ export class Game {
 				// enable keypress
 				this.canKeyboardPress = true;
 
-				// display win screen
-				this.gameView.displayWin(this.highScore);
+				// display win 
+				const isMaxLevel = this.level >= this.MAX_LEVEL
+				this.gameView.displayWin(this.highScore, isMaxLevel);
+
 			}, 1400);
 			return;
 		}
@@ -789,6 +794,9 @@ export class Game {
 
 		// Run game
 		requestAnimationFrame(this.update);
+	}
+	setGODMODE(isGOD = false) {
+		this.GOD_MODE = isGOD
 	}
 }
 
