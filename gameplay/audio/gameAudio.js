@@ -1,3 +1,6 @@
+// COMMON
+const commonMusic = ['audio/music/Phat_Phrog_Studios_Retro_Fragments.mp3'];
+
 // Background
 const bgMusic = [
 	'gameplay/audio/music/Phat_Phrog_Studio_Binary_Bushido_Bionic_Bound_LOOP.mp3',
@@ -39,12 +42,8 @@ const playerMissed = ['gameplay/audio/sfx/player_reload.wav'];
 
 class GameAudio {
 	constructor() {
-		// user need to click on something to consent play audio
-		// this will be the start game "Enter" button
-		// Game class will trigger it, and let GameAudio know
-		// ***** interaction NEED to trigger Audio.play() at least 1 time
-		this.playerConsent = false;
-
+		// UPDATE - POP-UP HELPER FORCES INTERACTION WHICH MEETS THE CONSENT REQUIREMENT OF BROWSER
+		
 		// V2DO - ENABLE MUSIC/SFX VOLUME SETTINGS
 		this.musicVolume = 0.3;
 		this.sfxVolume = 0.5;
@@ -58,11 +57,6 @@ class GameAudio {
 
 		// bin
 		this.toggleMusic = this.toggleMusic.bind(this);
-	}
-
-	setConsent(consent = true) {
-		// call in class  game "Enter" game button
-		this.playerConsent = consent;
 	}
 
 	setMusicVolume(volume = 0.5) {
@@ -122,10 +116,7 @@ class GameAudio {
 	// PLAY THAT HANDLES ALL PLAY REQUESTS
 
 	play(path, isMusic = false, loop = false) {
-		if (!this.playerConsent) {
-			return;
-		}
-
+				
 		// check localstorage audio muted
 		// V2DO - USE ABSTRACT game_settings.js
 		const isMuted = localStorage.getItem('aud_muted');
@@ -168,7 +159,9 @@ class GameAudio {
 	}
 
 	playFromList(list, isRandom = false, isMusic = false, loop = false) {
-		if (!this.playerConsent || !list.length) {
+		
+		if (list.length < 1) {
+			console.log(`[GAMEAUDIO] NO AUDIO IN THE LIST[${list}]`);
 			return;
 		}
 
@@ -184,13 +177,22 @@ class GameAudio {
 			path = list[index];
 			this.audioIndexMap.set(list, (index + 1) % list.length); // loop
 		}
+
+		console.log(`[GAMEAUDIO] PLAYING rand(${isRandom}) music(${isMusic}) loop(${loop}) PATH[${path}]`);
+
 		this.play(path, isMusic, loop); // call play method
 	}
 
 	//--------- sound method for other classes -------
 	// -------- Music----------
 
+	playCommonMusic() {
+		console.log(`[GAMEAUDIO] playCommonMusic`);
+		this.playFromList(commonMusic, false, true, true);
+	}
+
 	playBackgroundMusic(isRandom) {
+		console.log(`[GAMEAUDIO] playBackgroundMusic`);
 		this.playFromList(bgMusic, isRandom, true, true);
 	}
 
@@ -238,12 +240,16 @@ class GameAudio {
 	// ==========================================================================
 	// UI
 
-	play_ui_set() {
+	playUiSet() {
 		this.play('gameplay/audio/ui/menu_set.wav');
 	}
 
-	play_ui_unset() {
+	playUiUnset() {
 		this.play('gameplay/audio/ui/menu_unset.wav');
+	}
+
+	playUiStartGame() {
+		this.play('gameplay/audio/ui/game_start.wav');
 	}
 }
 
