@@ -107,7 +107,6 @@ export const enemyDictionary = {
 		speed: 0.07,
 
 		yMin: 32,
-		yMax: 80,
-		classes_arr: ['enemy_pulsate_slow'],
+		yMax: 80,	
 	},
 };

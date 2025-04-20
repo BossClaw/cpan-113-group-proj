@@ -67,19 +67,16 @@ export class GameView {
 
 		// Continue button
 		this.continueBtn = document.createElement('button');
-		this.continueBtn.classList.add('crt');
 		this.continueBtn.id = 'continue-btn';
 		this.continueBtn.innerText = 'Continue(C)';
 
 		// retry button
 		this.retryBtn = document.createElement('button');
-		this.retryBtn.classList.add('crt');
 		this.retryBtn.id = 'retry-btn';
 		this.retryBtn.innerText = 'Retry(R)';
 
 		// quit button
 		this.quitBtn = document.createElement('button');
-		this.quitBtn.classList.add('crt');
 		this.quitBtn.id = 'quit-btn';
 		this.quitBtn.innerText = 'Quit(Q)';
 
@@ -176,7 +173,7 @@ export class GameView {
 
 		// hide buttons
 		this.buttonsDiv.style.display = 'none';
-		
+
 		// show pause
 		this.gameScreenOverlay.classList.add('pause');
 		this.title.innerText = 'Pause';
@@ -200,9 +197,9 @@ export class GameView {
 	// WORD CONTAINER
 
 	hideWordContainer() {
-		this.wordContainer.style.visibilty = 'visible';
+		this.wordContainer.style.display = 'none';
 	}
 	showWordContainer() {
-		this.wordContainer.style.visibilty = 'hidden';
+		this.wordContainer.style.display = 'flex';
 	}
 }

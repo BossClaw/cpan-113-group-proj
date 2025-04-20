@@ -6,14 +6,18 @@ export class Firewall {
 		// location/styles
 		this.outerClass = 'firewall';
 		this.innerClass = 'firewall-sprit';
+
+		// POSITION
 		this.locationX = 100;
+		this.locationY = 0;
 
 		// divs
 		this.outerDiv = null;
 		this.innerDiv = null;
 
 		// stats
-		this.hp = 3;
+		this.max_hp = 4.0;
+		this.hp = this.max_hp;
 		this.isAlive = true;
 	}
 	spawn() {
@@ -21,12 +25,14 @@ export class Firewall {
 			console.warn('missing game screen');
 			return;
 		}
+
 		// Create outer div
 		this.outerDiv = document.createElement('div');
 		this.outerDiv.classList.add(this.outerClass);
+
 		this.outerDiv.style.position = 'absolute';
 		this.outerDiv.style.left = `${this.locationX}px`;
-		this.outerDiv.style.height = this.gameScreen.offsetHeight + 'px';
+		this.outerDiv.style.top = `${this.locationY}px`;
 
 		// Create inner div
 		this.innerDiv = document.createElement('div');
@@ -37,77 +43,89 @@ export class Firewall {
 		this.gameScreen.appendChild(this.outerDiv);
 
 		// (testing) show hp
-		// this.hpDisplay = document.createElement("div");
-		// this.hpDisplay.classList.add("mainframe-hp");
-		// this.innerDiv.appendChild(this.hpDisplay);
-		// this.hpDisplay.innerText = this.hp;
+		this.show_hp = false;
+
+		if (this.show_hp) {
+			this.hpDisplay = document.createElement('div');
+			this.hpDisplay.classList.add('mainframe-hp');
+			this.innerDiv.appendChild(this.hpDisplay);
+			this.hpDisplay.innerText = this.hp;
+		}
+
+		// UPDATE VIZ
+		this.updateViz();
 
 		return this.outerDiv;
 	}
 
 	// (testing)
 	updateHpDisplay() {
-		//this.hpDisplay.innerText = this.hp
+		if (this.show_hp) {
+			this.hpDisplay.innerText = this.hp;
+		}
 	}
 
 	getLocationX() {
+		// TODO - CACHE THIS
 		return this.outerDiv.getBoundingClientRect().right;
 	}
 
-	takeDamage(damage = 1) {
-		this.hp -= damage;
-		// dmage stage
-		if (this.hp == 3) {
-			this.changeDamageStage(0);
-		} else if (this.hp == 2) {
-			this.changeDamageStage(1);
-		} else {
-			this.changeDamageStage(2);
-		}
-
-
-    // HANDLE DESTROY VIZ/AUD
-    if (this.hp <= 0) {
-			console.log(`[FIREWALL] DESTROYED!!!`);
-			// TODO - DESTROY NOISE / VIZ
-			this.destroy();
+	takeDamage(from_str) {
+		// TODO - ENSURE NOT TOO MANY ENEMIES 'STACK'
+		// EARLY IN CASE ALREAD DEAD BY NOT DESTROYED
+		if (this.hp <= 0.0) {
 			return;
 		}
 
+		// SUBTRACT 1 HIT
+		// 1 ENEMY = 1 DAMAGE
+		this.hp -= 1.0;
+
+		console.warn(`[FIREWALL] DAMAGED HP(${this.hp}) FROM[${from_str}] TIME[${Date.now()}]`);
+
+		// UPDATE DAMAGE VIZ
+		this.updateViz();
+
 		// SFX
 		gameAudio.playFirewallHit(true);
+		
+		// ADD HIT
+		this.doHitViz();
 
-		// change sprit image / color based on damage taken
-		// .... logic here ...
-		console.log(`[FIREWALL] ADD SPRITE FOR HP(${this.hp})`);
-
-		this.innerDiv.classList.remove('hit');
-    
-    // V2DO - CONFIRM THIS
-		void this.innerDiv.offsetWidth; // Trigger reflow
-    
-		this.innerDiv.classList.add('hit');
-	}
-
-	changeDamageStage(stage = 0) {
-		// 0 = default, increase stage as damaged
-		const maxStage = 2;
-		const damageStage = Math.min(maxStage, Math.max(0, stage));
-		let color = '#FFFFFF';
-
-		switch (damageStage) {
-			case 0:
-				color = '#FFFFFF';
-				break;
-			case 1:
-				color = '#FFCCCC';
-				break;
-			case 2:
-				color = '#FF6666';
-				break;
+		// HANDLE DESTROY VIZ/AUD
+		if (this.hp <= 0) {
+			console.log(`[FIREWALL] DESTROYED!!!`);
+			// TODO - UNIQUE DESTROY NOISE / VIZ
+			this.destroy();
+			return;
 		}
-		this.innerDiv.style.backgroundColor = color;
 	}
+
+	updateViz() {
+		// DYNAMICALLY ALTER HP, SO USE MAX LIKE THE MAINFRAME
+		// 2.0 / 4.0 = 0.5
+		let hp_progress = this.hp / this.max_hp;
+
+		let firewall_img = 'firewall_100.png';
+
+		if (hp_progress >= 1.0) {
+			firewall_img = 'firewall_100.png';
+		} else if (hp_progress >= 0.75) {
+			firewall_img = 'firewall_075.png';
+		} else if (hp_progress >= 0.5) {
+			firewall_img = 'firewall_050.png';
+		} else if (hp_progress >= 0.25) {
+			firewall_img = 'firewall_025.png';
+		} else {
+			firewall_img = 'firewall_000.png';
+		}
+
+		console.warn(`[FIREWALL] CUR HP(${this.hp}) PROGRESS(${hp_progress}) MADE URL[${firewall_img}]`);
+
+		// APPLY IT
+		this.innerDiv.style.backgroundImage = `url('gameplay/firewall/${firewall_img}')`;
+	}
+
 	destroy() {
 		// SFX
 		gameAudio.playFirewallDie();
@@ -116,5 +134,15 @@ export class Firewall {
 		setTimeout(() => {
 			this.outerDiv.remove();
 		}, 600);
+	}
+
+	doHitViz() {
+		// V2DO - MOVE A HIT DIV FROM A POOL OF HITS TO THE LOCATION ON SCREEN WITH +1 z-index
+
+		this.innerDiv.classList.add('hit');
+
+		setTimeout(() => {
+			this.innerDiv.classList.remove('hit');
+		}, 700);
 	}
 }
