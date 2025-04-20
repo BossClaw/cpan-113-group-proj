@@ -239,11 +239,11 @@ class GameAudio {
 	// UI
 
 	play_ui_set() {
-		this.play('../audio/sfx/menu_set.wav');
+		this.play('gameplay/audio/ui/menu_set.wav');
 	}
 
 	play_ui_unset() {
-		this.play('../audio/sfx/menu_unset.wav');
+		this.play('gameplay/audio/ui/menu_unset.wav');
 	}
 }
 
