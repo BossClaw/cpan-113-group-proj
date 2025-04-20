@@ -5,11 +5,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>TYPE DEFENDER</title>
 
+		<!-- <link rel="stylesheet" href="css/dev.css" /> -->
+
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/bg.css" />
 		<link rel="stylesheet" href="css/anim.css" />
 		<link rel="stylesheet" href="css/crt.css" />
-		<link rel="stylesheet" href="css/dev.css" />
 		<link rel="stylesheet" href="css/leaderboard.css" />
 
 		<!-- TBD - MODULES -->
@@ -54,59 +55,66 @@
 
 					<!-- MISSION CONTROL !-->
 					<a name="mission_control"></a>
-					<section class="border_pixel mb_md">
-						<div class="tc">
-							<div>
-								<h2>Pick languages</h2>
-								<!-- V2DO - UPDATE THESE DYNAMICALLY BY READING LOCAL FILES ON PAGE LOAD -->
-								<button class="language" id="JS">JavaScript</button>
-								<button class="language" id="Python">Python</button>
-								<button class="language" id="CSS">CSS</button>
-								<button class="language" id="HTML">HTML</button>
-								<button class="language" id="C#">C#</button>
-								<button class="language" id="C++">C++</button>
-								<br />
-								<button class="language" id="GDScript">GDScript</button>
-								<button class="language" id="PHP">PHP</button>
-								<button class="language" id="Unity C#">Unity C#</button>
-								<button class="language" id=".NET">.NET</button>
-								<button class="language" id="NES 6502">NES 6502</button>
-								<button class="language" id="DOS">DOS</button>
-							</div>
+					<section id="mission_control_config" class="border_pixel mb_md tc">
+						<h2 class="mc_block">Choose your languages</h2>
 
-							<div>
-								<h2>Pick Difficulty</h2>
-								<input type="range" min="1" max="4" id="difficulty" name="Difficulty" value="1" />
-								<div id="difficulty-display"></div>
-							</div>
-
-							<div>
-								<h2>Pick Level</h2>
-								<input type="range" min="1" max="100" id="level" name="Level" value="1" />
-								<div id="level-display"></div>
-							</div>
-
-							<button id="start_game_butt">START GAME</button>
+						<div class="mc_block lang_butt_box">
+							<!-- V2DO - UPDATE THESE DYNAMICALLY BY READING LOCAL FILES ON PAGE LOAD -->
+							<button class="language" id="JS">JavaScript</button>
+							<button class="language" id="Python">Python</button>
+							<button class="language" id="CSS">CSS</button>
+							<button class="language" id="HTML">HTML</button>
+							<button class="language" id="C#">C#</button>
+							<button class="language" id="C++">C++</button>
+							<button class="language" id="GDScript">GDScript</button>
+							<button class="language" id="PHP">PHP</button>
+							<button class="language" id="Unity C#">Unity C#</button>
+							<button class="language" id=".NET">.NET</button>
+							<button class="language" id="NES 6502">NES 6502</button>
+							<button class="language" id="DOS">DOS</button>
 						</div>
+
+						<div class="mc_block">
+							<h2>Pick Difficulty</h2>
+							<input type="range" min="1" max="4" id="difficulty" name="Difficulty" value="1" />
+							<div id="difficulty-display"></div>
+						</div>
+
+						<div class="mc_block">
+							<h2>Pick Level</h2>
+							<input type="range" min="1" max="100" id="level" name="Level" value="1" />
+							<div id="level-display"></div>
+						</div>
+
+						<button id="start_game_butt">START GAME</button>
 					</section>
 
 					<!-- LEADERBOARD / HIGH SCORE -->
 					<a name="leaderboard"></a>
 
-					<section class="border_pixel mb_md">
-						<div class="tc">
-							<h2>LEADERBOARD</h2>
-							<div id="leaderboard">
-								<h5>BUT - 2048</h5>
-								<h5>WHY - 1024</h5>
-								<h5>DOU - 512</h5>
-								<h5>BOM - 256</h5>
-								<h5>DEZ - 128</h5>
-								<h5>NUT - 64</h5>
-								<h5>BGZ - 32</h5>
-								<h5>THO - 16</h5>
-							</div>
-						</div>
+					<section class="border_pixel mb_md tc">
+						<h2>LEADERBOARD</h2>
+						<table id="leaderboard">
+							<thead>
+								<tr>
+									<td>PLACE</td>
+									<td>LVL</td>
+									<td>DIF</td>
+									<td class="prSco">SCORE</td>
+									<td>WHO</td>
+								</tr>
+							</thead>
+
+							<tbody id="leaderboardTableBody">
+								<tr>
+									<td>1</td>
+									<td>21</td>
+									<td>EZ</td>
+									<td>1000</td>
+									<td>BO</td>
+								</tr>
+							</tbody>
+						</table>
 					</section>
 				</main>
 
@@ -122,6 +130,12 @@
 
 					<a href="#top">Top</a>
 				</footer>
+
+				<!-- ON SCREEN CONTROLS -->
+				<div id="os_controls">
+					<button id="butt_aud_mute" class="osc_butt">&nbsp;</button>
+					<button id="butt_crt_mode" class="osc_butt">&nbsp;</button>
+				</div>
 			</div>
 		</div>
 
@@ -149,9 +163,9 @@
 				<li>Lead Gamelay Dev</li>
 				<li>Lead Backend Dev</li>
 				<li>Lead Audio Dev</li>
-				<li>Lead 'Sneaky Creepy Things in' Dev</li>
+				<li>Lead 'Sneaking Creepy Things in' Dev</li>
 			</ul>
-			
+
 			<p>JA</p>
 			<ul>
 				<li>Lead Keyboard Dev</li>
@@ -164,15 +178,16 @@
 			<ul>
 				<li>Project Manager</li>
 				<li>Pixel Art</li>
-				<li>Borks</li>
+				<li>SFxr Sounds</li>
+				<li>Discord Channel Maker</li>
 			</ul>
 
 			<h5>LIBRARIES</h5>
-			<a target="_blank" href="https://animate.style/"">Animate.CSS</a><br />
+			<a target="_blank" href="https://animate.style/">Animate.CSS</a><br />
 			<a target="_blank" href="https://aleclownes.com/2017/02/01/crt-display.html">CRT.CSS CC0</a><br />
 
 			<h5>Assets</h5>
-			<a target="_blank" href="./audio/music/Phat_Phrog_License.pdf">Phat Phrog Music</a><br />			
+			<a target="_blank" href="./audio/music/Phat_Phrog_License.pdf">Phat Phrog Music</a><br />
 			<a target="_blank" href="https://freesound.org/people/KENOPSIAImperfectSounds/sounds/525037/">KENOPSIAImperfectSounds CC BY-NC 4.0</a><br /><br />
 
 			<a target="_lbank" href="./fonts/LICENSE.txt" target="_blank">PressStart2P SIL Open Font License</a><br />
@@ -189,10 +204,10 @@
 
 		<!-- AUDIO CONSENT & ENABLE DIALOG -->
 		<dialog id="dialog_aud" class="border_pixel tc">
-			<p>Enable Music and Sound effects?</p>
+			<p>Toggle Audio and Visual filter?</p>
 			<p>
-				Audio can be toggled with<br />
-				the button in the top right of the screen.
+				Music & SFX and CRT Visual filter can be toggled<br />
+				with the buttons in the top right of the screen.
 			</p>
 			<img src="./img/help/help_on_screen_control.gif" />
 

@@ -15,6 +15,7 @@
 	--pad_sm: 8px;
 	--pad_md: 16px;
 	--pad_lg: 32px;
+	--pad_xl: 36px;
 }
 
 /* RETRO FONT */
@@ -40,8 +41,7 @@ input,
 button,
 select,
 textarea,
-a,
-.osc_butt {
+a {
 	cursor: url('../img/ui/cursor_hvr.gif') 17 17, auto;
 }
 
@@ -75,6 +75,18 @@ footer {
 
 	margin-inline: auto;
 	padding: var(--pad_sm);
+}
+
+.lang_butt_box {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.lang_butt_box button {
+	flex: 1 0 auto;
+	min-width: 200px;
+	margin: 0 !important;
 }
 
 /* BUTTON & A HREFS  */
@@ -164,19 +176,23 @@ section {
 }
 
 .tl {
-	text-align: left;
+	text-align: left !important;
 }
 
 .tc {
-	text-align: center;
+	text-align: center !important;
 }
 
 .tr {
-	text-align: right;
+	text-align: right !important;
 }
 
 .m_block {
 	margin-block: var(--pad_sm);
+}
+
+.mc_block {
+	margin-block: var(--pad_sm) var(--pad_xl);
 }
 
 /* FOOTER CONTENT */
@@ -188,23 +204,42 @@ footer {
 /* ON-SCREEN CONTROLS ON ALL PAGES, CRT & VOLUME*/
 #os_controls {
 	position: fixed;
-	right: 0;
-	top: 0;
+	right: 8px;
+	top: 8px;
 	z-index: 9999;
+	padding: 4px;
+}
+
+.osc_butt_img {
+	width: 48px;
+	height: 48px;
+	margin: 0;
+	border: 0;
 }
 
 .osc_butt {
-	height: 24px;
+	/* height: 24px;
+	width: 48px; */
+	padding: 0;
 	width: 48px;
+	height: 48px;
+
+	cursor: url('../img/ui/cursor_ref.gif') 17 17, auto;
 
 	margin: 0 4px 0 0 !important;
 	background-position: center center;
 	background-repeat: no-repeat no-repeat;
+	background-size: cover;
 
-	border: 2px solid white;
-	border-radius: 4px;
+	/* border: 2px solid white;
+	border-radius: 4px; */
 
 	background-color: black;
+}
+
+.osc_butt:hover {
+	cursor: url('../img/ui/cursor_hvr.gif') 17 17, auto;
+	background-color: darkorchid;
 }
 
 .aud_icon_muted {
@@ -216,11 +251,11 @@ footer {
 }
 
 .viz_icon_fx_on {
-	background-image: url('../img/ui/viz_icon_fx_on.png');
+	background-image: url('../img/ui/crt_on.png');
 }
 
 .viz_icon_fx_off {
-	background-image: url('../img/ui/viz_icon_fx_off.png');
+	background-image: url('../img/ui/crt_off.png');
 }
 
 /* DYNAMIC PAGE VIEWS / MODALS */
