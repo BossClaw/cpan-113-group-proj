@@ -102,7 +102,7 @@ export class Game {
 		// firewall related
 		this.firewall = new Firewall(this.gameScreen);
 		this.firewallDiv = null;
-
+		
 		// enemy related
 		this.enemyCount = getEnemyStates(level).count;
 		this.enemyLeft = getEnemyStates(level).count;
@@ -216,21 +216,23 @@ export class Game {
 	// =============================================================================
 	// HANDLE FIREWALL ATTACK
 
-	onFirewallAttacked(damage) {
-		this.firewall.takeDamage(damage);
+	onFirewallAttacked(from_str) {
+		// NOTE - FIREWALL IS 1 MONSTER = 1 DAMAGE
+		this.firewall.takeDamage(from_str);
 		this.firewall.updateHpDisplay();
 	}
 
 	// =============================================================================
 	// HANDLE MAINFRAME ATTACK
 
-	onMainframeAttacked(damage) {
+	onMainframeAttacked(enemy) {
 		// mainframe
-		this.mainframe.takeDamage(damage);
+		this.mainframe.takeDamage(enemy.attack(), enemy);
 		this.mainframe.updateHpDisplay();
 
 		this.gameScreen.classList.remove('player-attack');
 		this.gameScreen.classList.remove('on-hit');
+
 		// force reflow
 		void this.gameScreen.offsetWidth;
 		this.gameScreen.classList.add('on-hit');
@@ -343,6 +345,7 @@ export class Game {
 		// continue btn
 		buttons.continue.addEventListener('click', this.onContinueBtnPress);
 		document.addEventListener('keydown', this.onContinueBtnPress);
+
 		// retry btn
 		buttons.retry.addEventListener('click', this.onRetryBtnPress);
 		document.addEventListener('keydown', this.onRetryBtnPress);
@@ -351,6 +354,7 @@ export class Game {
 		buttons.quit.addEventListener('click', this.onQuitBtnPress);
 		document.addEventListener('keydown', this.onQuitBtnPress);
 	}
+
 	onContinueBtnPress(e) {
 		if (this.isGame || !this.isWon) return;
 		if (this.isEnterName) return; // ignore if entering name
@@ -360,29 +364,37 @@ export class Game {
 		// start a new game, to the next level
 		startNewGame(this.gameScreen, Number(this.level) + 1, this.difficulty, this.playerObject);
 	}
+
 	onRetryBtnPress(e) {
 		if (this.isGame || this.isWon) return;
+
 		if (this.isEnterName) return; // ignore if entering name
+
 		if (e?.key && e.key !== 'r') return;
+
 		document.removeEventListener('keydown', this.onRetryBtnPress);
 
 		// start a new game with currnet level
 		startNewGame(this.gameScreen, this.level, this.difficulty, this.playerObject);
 	}
+
 	onQuitBtnPress(e) {
 		if (this.isGame && !this.isPaused) return;
+
 		if (this.isEnterName) return; // ignore if entering name
+
 		if (e?.key && e.key !== 'q') {
 			return;
 		} else {
 			e.preventDefault();
 		}
+
 		// if no score, leave game
 		if (this.highScore <= 0) {
 			// back to home page
 			setTimeout(() => {
 				window.location.href = 'index.html#leaderboard';
-			}, 1000);
+			}, 700);
 			return;
 		}
 
@@ -442,10 +454,13 @@ export class Game {
 			}
 		});
 	}
+
 	// Main game loop
 	update(timestamp) {
 		// check is game running
-		if (!this.isGame || this.isPaused) return;
+		if (!this.isGame || this.isPaused) {
+			return;
+		}
 
 		// check is game over
 		this.checkGameOver();
@@ -467,8 +482,11 @@ export class Game {
 				this.gameView.showWordContainer();
 			}
 		}
+
 		// Check delta time
-		if (!this.lastTimestamp) this.lastTimestamp = timestamp;
+		if (!this.lastTimestamp) {
+			this.lastTimestamp = timestamp;
+		}
 		const delta = timestamp - this.lastTimestamp;
 		this.lastTimestamp = timestamp;
 
@@ -483,24 +501,136 @@ export class Game {
 			this.spawnTimer = 0; // reset spawn timer
 		}
 
-		// check for enemey collision
+		// DO IT ONCE BEFORE ALL ENEMY UPDATES
+		const gameScreenRect = this.gameScreen.getBoundingClientRect();
+		const gameScreenScale = (gameScreenRect.width / 352.0).toFixed(1);
+		// console.log(`[GAME][HIT EVAL] GAME SCREEN SCALE(${gameScreenScale})`);
+
+		const mainframeRectX = Math.floor(this.mainframeDiv.getBoundingClientRect().right);
+		// console.log(`[GAME][HIT EVAL] MAINFRAME RECTX(${mainframeRectX})`);
+
+		const firewall_x_thresh = (this.firewallDiv.getBoundingClientRect().left + this.firewallDiv.getBoundingClientRect().right) * 0.5;
+		
+		// EVAL X POS TO check for enemey collision
 		for (let i = 0; i < this.enemyArray.length; i++) {
+			// GET ENEMY TO EVAL
 			const enemy = this.enemyArray[i];
 
-			if (!enemy.isAlive) continue;
+			// SKIP DEAD ENEMIES
+			if (!enemy.isAlive) {
+				continue;
+			}
+
+			// GET SCALED SCREEN ENEMY X
+			// NOTE - THIS IS SCREEN X AFTER THE SCALING TRANSFORM
+			// THUS - IT DOESN'T MATCH THE PIXEL COORDS
 			const enemyLocationX = enemy.getLocationX();
 
-			// enemy reaching firewall
+			// GET PIXEL COORDS
+			const enemyPixelX = Math.floor(enemyLocationX / gameScreenScale);
+			const enemyPixelY = enemy.getLocationY();
+			// console.log(`[MAINFRAME][HIT EVAL] ENEMY PIXEL X,Y(${enemyPixelX}, ${enemyPixelY})`);
+
+			// WIP OPTIMIZATION - DON'T EVEN CHECK IF X ISN'T PAST HALF SCREEN
+			// 352 / 2 = 176
+			// NOTE - WON'T WORK IF SCREEN COORDS AFFECTED BY SCALE
+			// if (enemyPixelX > 216) {
+			//				continue;
+			//			}
+
+			// EVAL enemy reaching firewall
+			// V2DO - CALC AND CACHE THE FIREWALL BOUNDS LIKE THE MAINFRAME
 			if (this.firewallDiv && this.firewall.isAlive) {
-				if (enemyLocationX - this.firewallDiv.getBoundingClientRect().left <= 0) {
-					this.onFirewallAttacked(enemy.attack());
+				if (enemyLocationX - firewall_x_thresh <= 0) {
+					this.onFirewallAttacked(enemy.name);
+
+					// MURDER THE ENEMY
+					enemy.doEnemyDie('firewall');
 					continue;
 				}
 			}
-			// enemy reaching mainframe
-			if (this.mainframeDiv && this.mainframe.isAlive && enemyLocationX - this.mainframeDiv.getBoundingClientRect().right <= 0) {
-				this.onMainframeAttacked(enemy.attack());
-				continue;
+
+			// EVAL enemy reaching mainframe
+			// V2DO - ENEMIES CONTINUE TO 'DIE & ABSORB INTO THE MAINFRAME'
+			if (this.mainframeDiv) {
+				// V2DO - FINISH THE PIXEL SLANT CALCS
+				let use_pixel_calcs = false;
+
+				if (use_pixel_calcs) {
+					// GET SCALED DIFF
+					// console.log(`[MAINFRAME][HIT EVAL] PIXEL CALCS`);
+
+					let hit_x_diff = enemyLocationX - mainframeRectX;
+					// console.log(`[MAINFRAME][HIT EVAL] hit_x_diff(${hit_x_diff})`);
+
+					// !!!! INSTEAD OF SCALING DOWN, SCALE THE OFFSET UP!
+					if (enemyPixelY < 72) {
+						// NOTE - ADJUSTS 'INSET' CALC BASED ON ENEMY Y
+						// RISE/RUN 1:2 THUS, FOR EVERY
+						// FURTHEST 'Z VALUE' IS 0 ADJ OFFSET  MF Y 72
+						// CLOSED 'Z VALUE' IS -24 ADJ OFFSET  MF Y 120
+
+						// CALC IF ENEMYPIXELX HAS PASSED INTO THE MAINFRAME SPRITE
+
+						// ADJUST IF ENEMY IS LOW ENOUGH FOR SLANT
+						// SET LOCATION Y
+						//   72 GOAL IS -0
+						//   80 GOAL IS -8
+						//   96 GOAL IS -12
+						//  112 GOAL IS -20
+						// console.log(`[MAINFRAME][HIT EVAL] ENEMY PIXEL Y ADJ (${enemyPixelY})`);
+
+						// EG: enemy 96
+						let rise_run_x_adj = enemyPixelY;
+						//console.log(`[MAINFRAME][HIT EVAL] rise_run_x_adj(${rise_run_x_adj})`);
+
+						// DIVIDE IN HALF TO GET VERTICAL RISE:RUN 1:2 0.5
+						// EG: enemy 24 /2 = 12
+						rise_run_x_adj /= 2;
+						//console.log(`[MAINFRAME][HIT EVAL] rise_run_x_adj(${rise_run_x_adj})`);
+
+						// SCALE IT
+						rise_run_x_adj *= gameScreenScale;
+						//console.log(`[MAINFRAME][HIT EVAL] rise_run_x_adj(${rise_run_x_adj})`);
+
+						// ADD THE ADJ
+						hit_x_diff += rise_run_x_adj;
+						//console.log(`[MAINFRAME][HIT EVAL] hit_x_diff ADJ(${hit_x_diff})`);
+					}
+
+					// FINALLY, EVAL IF ENEMY HIT MAINFRAME
+					if (hit_x_diff <= 0) {
+						//console.log(`[MAINFRAME][HIT EVAL][${enemy.name}] COLLIDED WITH MAINFRAME PIX`);
+						this.onMainframeAttacked(enemy);
+					}
+				} else {
+					// USE LU's RELIABLE BOUNDING BOX CALCS
+					let hit_x_diff = enemyLocationX - mainframeRectX;
+					const offset_add = 12 * gameScreenScale;
+
+					// JUST CAN'T STOP THIS DANG SLANT LOGIC!!
+					if (enemyPixelY < 32) {
+						hit_x_diff += offset_add;
+					}
+
+					if (enemyPixelY < 48) {
+						hit_x_diff += offset_add;
+					}
+
+					if (enemyPixelY < 64) {
+						hit_x_diff += offset_add;
+					}
+
+					if (enemyPixelY < 72) {
+						hit_x_diff += offset_add;
+					}
+
+					// FINALLY, EVAL IF ENEMY HIT MAINFRAME
+					if (hit_x_diff <= 0) {
+						console.log(`[MAINFRAME][HIT EVAL][${enemy.name}] COLLIDED WITH MAINFRAME LU`);
+						this.onMainframeAttacked(enemy);
+					}
+				}
 			}
 		}
 
@@ -521,14 +651,14 @@ export class Game {
 			this.enemyLeft = count;
 		}
 	}
+
 	checkGameOver() {
 		this.checkEnemyLeftCount();
+
 		// win
 		if (this.enemyLeft === 0) {
 			// store current points
 			this.saveToLocalStorage();
-
-			// V2DO - 'PROGRESSION MODE' WHERE HIGHER LEVELS NEED UNLOCKING
 
 			// set game state
 			this.isGame = false;
@@ -544,18 +674,17 @@ export class Game {
 			gameAudio.stopMusic();
 
 			// WIN MUSIC
-			gameAudio.playWinMusic(true);
+			gameAudio.playWinMusic();
 
-			// player exit animation
-			this.player.exit(true);
-
-			// player is out, display win screen
+			// V2DO - PLAY CELEBRATE LOOP
+			// WAIT A MOMENT FOR MUSIC AND TO PREVENT TYPING FROM MOVING FORWARD WITH NEXT LEVEL
 			setTimeout(() => {
 				// enable keypress
 				this.canKeyboardPress = true;
+
 				// display win screen
 				this.gameView.displayWin(this.highScore);
-			}, this.player.sprites.exit.duration);
+			}, 1400);
 			return;
 		}
 
@@ -567,6 +696,14 @@ export class Game {
 			// prevent keypress
 			this.canKeyboardPress = false;
 
+			// Cancel the current animation frame
+			cancelAnimationFrame(this.animatedFrameId);
+
+			// Pause all enemies
+			this.enemyArray.forEach((e) => {
+				if (e.isAlive) e.pause();
+			});
+
 			// hide words container
 			this.gameView.hideWordContainer();
 
@@ -574,9 +711,10 @@ export class Game {
 			gameAudio.stopMusic();
 
 			// LOSE MUSIC
-			gameAudio.playLoseMusic(true);
+			gameAudio.playLoseMusic();
 
 			// player exit animation
+			// V2DO - MOVE VERTICALLY, TALLER SPRITE
 			this.player.exit(false);
 
 			// player is out, display win screen
@@ -589,7 +727,7 @@ export class Game {
 
 				// display lose screen
 				this.gameView.displayLose(this.highScore);
-			}, this.player.sprites.exit.duration);
+			}, this.player.sprites.exit.duration + 1000);
 			return;
 		}
 	}
