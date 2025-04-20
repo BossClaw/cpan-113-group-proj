@@ -87,7 +87,7 @@ export class Game {
 		// MAKE THE GAME DATA, LOGIC, DOM
 
 		// [TEST DEVELOPER STUFF - FOR TESTING - IMPORTANT - DO NOT TOUCH]
-		this.GOD_MODE = true
+		this.GOD_MODE = false
 
 		// #game_screen div
 		this.gameScreen = gameScreen;
