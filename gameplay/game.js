@@ -54,14 +54,14 @@ function getEnemyStates(_level = 1, difficulty = 'normal') {
 			speedModifier = 1
 			break;
 		case "hard":
-			countModifier = 1;
+			countModifier = 1.5;
 			spawnTimeModifier = 1;
-			speedModifier = 2
+			speedModifier = 1.2
 			break;
 		case "hardcore":
-			countModifier = 1;
-			spawnTimeModifier = 0.5;
-			speedModifier = 2
+			countModifier = 3;
+			spawnTimeModifier = 1;
+			speedModifier = 1.5
 			break;
 		default:
 			spawnTimeModifier = 1;

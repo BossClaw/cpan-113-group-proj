@@ -8,24 +8,32 @@ export function enemySpawnList(spawnCount, level = 1, difficult = "normal") {
 
   // Higher level enemy (level > 1)
   // Higher level enemy appears only when game level is at least (enemy level × this value)
-  const ENEMY_LEVEL_GATE = 2
+  let enemy_level_gate = 2
 
   // Higher level enemy spawn divided by
-  const ENEMY_SPAWN_DIVIDE = 3
+  let enemy_spawn_divide = 3
 
   // check difficulty
   switch (difficult) {
     case "easy":
       addOnLevels = 0;
+      enemy_level_gate = 2
+      enemy_spawn_divide = 3
       break;
     case "normal":
       addOnLevels = 1;
+      enemy_level_gate = 1
+      enemy_spawn_divide = 3
       break;
     case "hard":
       addOnLevels = 2;
+      enemy_level_gate = 1
+      enemy_spawn_divide = 2
       break;
     case "hardcore":
       addOnLevels = 3;
+      enemy_level_gate = 0
+      enemy_spawn_divide = 1
       break;
     default:
       console.log(
@@ -45,14 +53,14 @@ export function enemySpawnList(spawnCount, level = 1, difficult = "normal") {
     if (enemyLevel == 1) continue
 
     // Skip enemy that is too high level
-    if (currentLevel < enemyLevel * ENEMY_LEVEL_GATE) continue
+    if (currentLevel < enemyLevel * enemy_level_gate) continue
 
     // Higher level enemy count
     const spawnCount = Math.floor(
       (currentLevel * Math.log2(currentLevel)) / enemyLevel
     )
     // Reduce enemy count
-    const dividedSpawnCount = Math.floor(spawnCount / ENEMY_SPAWN_DIVIDE)
+    const dividedSpawnCount = Math.floor(spawnCount / enemy_spawn_divide)
 
     // Set enemy count
     spawnDistribution[enemyLevel] = dividedSpawnCount
