@@ -11,7 +11,7 @@ export function enemySpawnList(spawnCount, level = 1, difficult = "normal") {
   const ENEMY_LEVEL_GATE = 2
 
   // Higher level enemy spawn divided by
-  const ENEMY_SPAWN_DIVIDE = 2
+  const ENEMY_SPAWN_DIVIDE = 3
 
   // check difficulty
   switch (difficult) {

@@ -63,7 +63,7 @@ export const enemyDictionary = {
 		level: 4,
 		hp: 4,
 		damage: 4,
-		speed: 0.2,
+		speed: 0.4,
 
 		yMin: 64,
 		yMax: 128,
@@ -78,7 +78,7 @@ export const enemyDictionary = {
 		level: 5,
 		hp: 5,
 		damage: 2,
-		speed: 0.1,
+		speed: 0.2,
 
 		yMin: 64,
 		yMax: 128,
@@ -92,7 +92,7 @@ export const enemyDictionary = {
 		level: 6,
 		hp: 6,
 		damage: 1,
-		speed: 0.1,
+		speed: 0.15,
 
 		yMin: 32,
 		yMax: 80,
@@ -104,9 +104,9 @@ export const enemyDictionary = {
 		level: 7,
 		hp: 2,
 		damage: 7,
-		speed: 0.07,
+		speed: 0.1,
 
 		yMin: 32,
-		yMax: 80,	
+		yMax: 80,
 	},
 };

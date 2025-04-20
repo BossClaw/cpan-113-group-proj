@@ -18,20 +18,21 @@ function getEnemyStates(_level = 1, difficulty = 'normal') {
 	let level = Math.max(1, _level);
 
 	// count
-	const baseCount = 80;
-	const countIncrase = 15;
+	const MAX_COUNT = 140
+	const baseCount = 60;
+	const countIncrase = 20;
 
 	// spawn time
-	const baseSpawnTime = 400;
+	const baseSpawnTime = 500;
 	const spawnTimeDecrase = 20;
-	const minSpawnTime = 100;
+	const minSpawnTime = 200;
 
 	// speed
 	const baseSpeed = 0.5;
 	const speedIncrase = 0.02;
 
 	// Calculate enemy count
-	const count = Math.floor(baseCount + countIncrase * Math.log2(level));
+	const count = Math.floor(Math.min(MAX_COUNT, baseCount + countIncrase * Math.log2(level)));
 
 	// Calculate enemy spawn time
 	const spawnTime = Math.max(minSpawnTime, baseSpawnTime - spawnTimeDecrase * Math.log2(level));
@@ -39,21 +40,28 @@ function getEnemyStates(_level = 1, difficulty = 'normal') {
 
 	// Difficulty modification 
 	let countModifier = 1
-	let spawnTimeModifier = 1
+	let spawnTimeModifier = 1 // ( -> increase spawn time)
 	let speedModifier = 1
 	switch (difficulty) {
 		case "easy":
 			countModifier = 0.5
 			spawnTimeModifier = 2;
+			speedModifier = 0.3
 			break;
 		case "normal":
-			spawnTimeModifier = 1;
+			countModifier = 1;
+			spawnTimeModifier = 1.5;
+			speedModifier = 1
 			break;
 		case "hard":
+			countModifier = 1;
 			spawnTimeModifier = 1;
+			speedModifier = 2
 			break;
 		case "hardcore":
-			spawnTimeModifier = 1;
+			countModifier = 1;
+			spawnTimeModifier = 0.5;
+			speedModifier = 2
 			break;
 		default:
 			spawnTimeModifier = 1;
@@ -68,17 +76,6 @@ function getEnemyStates(_level = 1, difficulty = 'normal') {
 		spawnTime: updatedSpawnTime,
 	};
 }
-
-// ==========================================================================================================
-// DIFF SPEED MODIFIER
-
-const difficultySpeedModifier = {
-	easy: 0.3,
-	normal: 0.7,
-	hard: 1,
-	hardcore: 1.5,
-};
-
 // ==========================================================================================================
 // GAME CLASS
 
@@ -138,7 +135,7 @@ export class Game {
 		const { count, speed, spawnTime } = getEnemyStates(this.level, this.difficulty)
 		this.enemyCount = count
 		this.enemyLeft = count
-		this.levelEnemySpeed = speed * difficultySpeedModifier[difficulty];
+		this.levelEnemySpeed = speed
 		this.enemySpawnTime = spawnTime;
 
 		// array of enemy level (number)
