@@ -29,7 +29,7 @@ function ui_init_events() {
 
 	// ADD CRT TOGGLE
 	crt_target_dom = document.querySelector('body');
-	crt_toggle_button = document.querySelector('#ui_crt_toggle');
+	crt_toggle_button = document.querySelector('#butt_crt_mode');
 	crt_toggle_button.addEventListener('click', () => {
 		crt_toggle();
 	});
@@ -109,6 +109,7 @@ function aud_init() {
 	}
 
 	aud_mute.addEventListener('click', () => {
+		gameAudio.setConsent(true);
 		gameAudio.play_ui_set();
 		aud_mute_toggle();
 	});
@@ -167,11 +168,11 @@ function aud_update_dom() {
 	if (aud_is_muted) {
 		target.classList.add('aud_icon_muted');
 		target.classList.remove('aud_icon_loud');
+
 		gameAudio.setMusicPaused(true);
 	} else {
 		target.classList.remove('aud_icon_muted');
 		target.classList.add('aud_icon_loud');
-
 		gameAudio.setMusicPaused(false);
 	}
 }
@@ -279,6 +280,7 @@ function common_page_init() {
 
 			// ADD UPDATE ON CLOSE
 			aud_dialog.addEventListener('close', () => {
+				gameAudio.setConsent(true);
 				console.log('[AUD] USER CONSENT DIALOG CLOSED');
 			});
 
@@ -315,31 +317,11 @@ function common_page_unload() {
 // =============================================================================
 // ON SCREEN CONTROLS
 
-// DYN ADD THE DIV TO BODY TO BE CONSISTENT WITH ALL PAGES
+// NOTE - FORMERLY DYN ADD THE DIV TO BODY TO BE CONSISTENT WITH ALL PAGES,
+// BUT TOO PROBLEMATIC AND HASTLE FOR ONLY TWO PAGES
 
 function osc_init() {
-	console.log(`[COMMON][OSC] CREATE AND ADD CONTROL`);
-	const osc_div = document.createElement('div');
-
-	osc_div.id = 'os_controls';
-
-	const butt_mute = document.createElement('button');
-	butt_mute.id = 'butt_aud_mute';
-	butt_mute.classList.add('osc_butt');
-	butt_mute.textContent = '    ';
-	osc_div.appendChild(butt_mute);
-
-	// SPACE IT?
-	osc_div.appendChild(document.createElement('span'));
-
-	const butt_crt = document.createElement('button');
-	butt_crt.id = 'ui_crt_toggle';
-	butt_crt.classList.add('osc_butt');
-	butt_crt.textContent = '    ';
-	osc_div.appendChild(butt_crt);
-
-	// ADD TO BODY
-	document.body.appendChild(osc_div);
+	//console.log(`[COMMON][OSC] CREATE AND ADD CONTROL`);
 }
 
 // =============================================================================
