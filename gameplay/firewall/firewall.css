@@ -1,35 +1,3 @@
-.firewall {
-	position: relative;
-	width: 5px;
-	z-index: 1;
-}
-
-.firewall-sprit {
-	width: 100%;
-	height: 128px;
-	background-color: #ffffff;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center;
-}
-
-.firewall.hit {
-}
-
-.firewall.hit::after {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 128px;
-	background: red;
-	opacity: 0;
-	animation: on-firewall-hit 0.2s linear;
-	animation-iteration-count: 2;
-	animation-fill-mode: none;
-}
-
 /* debug div  */
 .debug {
 	position: fixed;
@@ -37,6 +5,41 @@
 	left: 5%;
 	background-color: rgba(0, 0, 0, 0.7);
 	z-index: 100;
+}
+
+/* ===================================================== */
+/* FIREWALL SPRITE */
+
+.firewall {
+	position: relative;
+	width: 32px;
+	height: 128px;
+	z-index: 1;
+}
+
+.firewall-sprit {
+	width: 48x;
+	height: 128px;
+
+	/* background-color: #ffffff; */
+	background: url('firewall/firewall_000.png');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.firewall.hit::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 32px;
+	height: 128px;
+	background: red;
+	opacity: 0;
+	animation: on-firewall-hit 0.2s linear;
+	animation-iteration-count: 1;
+	animation-fill-mode: none;
 }
 
 @keyframes on-firewall-hit {
