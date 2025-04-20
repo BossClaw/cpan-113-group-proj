@@ -76,12 +76,14 @@
 
 						<div class="mc_block">
 							<h2>Pick Difficulty</h2>
+							<p class="note">Bugs move faster with higher difficulty.</p>
 							<input type="range" min="1" max="4" id="difficulty" name="Difficulty" value="1" />
 							<div id="difficulty-display"></div>
 						</div>
 
 						<div class="mc_block">
 							<h2>Pick Level</h2>
+							<p class="note">More bugs spawn with higher levels.</p>
 							<input type="range" min="1" max="30" id="level" name="Level" value="1" />
 							<div id="level-display"></div>
 						</div>
@@ -202,20 +204,18 @@
 			<button class="butt_dialog">Close</button>
 		</dialog>
 
-		<!-- AUDIO CONSENT & ENABLE DIALOG -->
+		<!-- ON SCREEN CONTROL HELP DIALOG -->
 		<dialog id="dialog_aud" class="border_pixel tc">
 			<p>Toggle Audio and Visual filter?</p>
 			<p>
-				Music & SFX and CRT Visual filter can be toggled<br />
+				Audio and CRT Visual filter can be toggled<br />
 				with the buttons in the top right of the screen.
 			</p>
-			<img src="./img/help/help_on_screen_control.gif" />
 
-			<div id="horiz_flex">
-				<button id="butt_aud_yes">Yes</button>
-				<button id="butt_aud_no">No</button>
-			</div>
+			<img src="./img/help/help_on_screen_control.gif" /><br />
 
+			<br />
+			<p class="note">Note : For the best experience<br />The 'Extra Animation' must be enabled in your OS.</p>
 			<button class="butt_dialog">Close</button>
 		</dialog>
 	</body>

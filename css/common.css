@@ -36,6 +36,11 @@
 	cursor: url('../img/ui/cursor_ref.gif') 17 17, auto;
 }
 
+p.note{
+	font-size: calc(var(--text_size) - 4px);
+	color:#3399aa;
+}
+
 /* CURSOR HOVER OVER INTERACTABLES */
 input,
 button,

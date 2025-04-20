@@ -45,6 +45,8 @@ function ui_init_events() {
 			});
 		}
 
+		// NOTE - START_GAME_BUTT EVENT IN MISSIONCONFIUGRE
+
 		// ADD 'CLOSE PARENT' TO ALL DIALOGUES
 		document.querySelectorAll('.butt_dialog').forEach((el) => {
 			el.addEventListener('click', () => {
@@ -81,18 +83,7 @@ function update_aud_dom() {
 }
 
 // =================================================================
-// AUD WRAPPER
-
-function play_common_bg_music() {
-	if (is_gameplay_page) {
-		console.log('[COMMON][AUD] NO BG MUSIC ON GAMEPLAY PAGE');
-		return;
-	}
-
-	console.log('[COMMON][AUD] PLAYING BG MUSIC');
-	gameAudio.setConsent(true);
-	gameAudio.play('audio/music/Phat_Phrog_Studios_Retro_Fragments.mp3', true, true);
-}
+// AUD ON SCREEN CONTROL
 
 function aud_init() {
 	console.log('[COMMON][PAGE][AUD] INIT');
@@ -101,16 +92,15 @@ function aud_init() {
 	aud_update_dom();
 
 	// ADD EVENT TO MUTE BUTTON
-	var aud_mute = document.querySelector('#butt_aud_mute');
+	var aud_mute_toggle_butt = document.querySelector('#butt_aud_mute');
 
-	if (!aud_mute) {
+	if (!aud_mute_toggle_butt) {
 		console.error("[COMMON][AUD] CAN'T GET FIND 'butt_aud_mute'.");
 		return;
 	}
 
-	aud_mute.addEventListener('click', () => {
-		gameAudio.setConsent(true);
-		gameAudio.play_ui_set();
+	aud_mute_toggle_butt.addEventListener('click', () => {
+		gameAudio.playUiSet();
 		aud_mute_toggle();
 	});
 }
@@ -123,31 +113,39 @@ function aud_get_muted() {
 	return cur_aud_val;
 }
 
-function aud_set_muted(aud_muted) {
-	// TODO - ALIGN ALL THESE VALUES PROPERLY
-	console.log(`[COMMON][AUD] set_muted(${aud_muted})`);
-	localStorage.setItem(VIZ_AUD_MUTED_KEY, aud_muted);
-
-	// UPDATE THE CONSENT
-	gameAudio.setConsent(true);
-
-	// SET THE VALUE EXPLICITLY
-	gameAudio.setMusicPaused(aud_muted);
-
-	// PLAY NOISE
-	// UPDATE THE ICON
-	aud_update_dom();
-}
-
 function aud_mute_toggle() {
 	console.log('[COMMON][AUD] TOGGLE MUTED CLICKED');
 
 	// CALC INVERSE
-	const mute_inverse = !aud_get_muted();
-	console.log(`[COMMON][AUD] CUR(${aud_get_muted()}) TOGGLING TO(${mute_inverse})`);
+	const cur_mute = aud_get_muted();
+	const mute_inverse = !cur_mute;
+	console.log(`[COMMON][AUD] CUR(${cur_mute}) TOGGLING TO(${mute_inverse})`);
 
 	// STORE & APPLY INVERSE
 	aud_set_muted(mute_inverse);
+}
+
+function aud_set_muted(aud_muted) {
+	// WIP - ALIGN ALL THESE VALUES PROPERLY
+	console.log(`[COMMON][AUD] set_muted(${aud_muted})`);
+	localStorage.setItem(VIZ_AUD_MUTED_KEY, aud_muted);
+
+	// HANDLE ACTUAL PAUSING / UNPAUSING AND PLAYING WITH STORED VALUE
+	gameAudio.setMusicPaused(aud_muted);
+
+	// IF NOT, ENSURE MUSIC IS PLAYING
+	if (!aud_muted) {
+		if (is_gameplay_page) {
+			console.log(`[COMMON][AUD] PLAYING GAMEPLAY BACKGROUND MUSIC`);
+			gameAudio.playBackgroundMusic();
+		} else {
+			console.log(`[COMMON][AUD] PLAYING COMMON INTRO MUSIC`);
+			gameAudio.playCommonMusic();
+		}
+	}
+
+	// UPDATE THE ICON
+	aud_update_dom();
 }
 
 // UPDATE THE DOM BASED ON VAL
@@ -168,12 +166,9 @@ function aud_update_dom() {
 	if (aud_is_muted) {
 		target.classList.add('aud_icon_muted');
 		target.classList.remove('aud_icon_loud');
-
-		gameAudio.setMusicPaused(true);
 	} else {
 		target.classList.remove('aud_icon_muted');
 		target.classList.add('aud_icon_loud');
-		gameAudio.setMusicPaused(false);
 	}
 }
 
@@ -229,12 +224,10 @@ function crt_update_dom() {
 
 	if (crt_is_enabled) {
 		crt_toggle_button.classList.add('viz_icon_fx_on');
-		crt_toggle_button.classList.remove('viz_icon_fx_off');
-		gameAudio.play_ui_set();
+		crt_toggle_button.classList.remove('viz_icon_fx_off');		
 	} else {
 		crt_toggle_button.classList.remove('viz_icon_fx_on');
-		crt_toggle_button.classList.add('viz_icon_fx_off');
-		gameAudio.play_ui_unset();
+		crt_toggle_button.classList.add('viz_icon_fx_off');		
 	}
 
 	// ADD TO BODY
@@ -280,29 +273,14 @@ function common_page_init() {
 
 			// ADD UPDATE ON CLOSE
 			aud_dialog.addEventListener('close', () => {
-				gameAudio.setConsent(true);
-				console.log('[AUD] USER CONSENT DIALOG CLOSED');
-			});
-
-			// ENSURE LOGIC EXISTS ON AUD MODAL BUTTS
-			aud_dialog.querySelector('#butt_aud_yes').addEventListener('click', () => {
-				gameAudio.setConsent(true);
-				aud_set_muted(false);
-				gameAudio.play_ui_set();
-				play_common_bg_music();
-			});
-
-			aud_dialog.querySelector('#butt_aud_no').addEventListener('click', () => {
-				gameAudio.play_ui_unset();
-				gameAudio.setConsent(true);
-				aud_set_muted(true);
-				gameAudio.setMusicPaused(true);
+				console.log('[AUD] HOW TO DIALOG CLOSING');
+				gameAudio.playCommonMusic();
 			});
 
 			// FINALLY, SHOW MODAL
 			aud_dialog.showModal();
 		} else {
-			play_common_bg_music();
+			gameAudio.playCommonMusic();
 		}
 	}
 }
