@@ -4,27 +4,42 @@ import { enemyDictionary } from "./enemyDictionary.js";
 
 export function enemySpawnList(spawnCount, level = 1, difficult = "normal") {
   const spawnDistribution = {};
-  let addOnLevels = 2; // more enemies sooner
+  let addOnLevels = 1;
+
+  // Higher level enemy (level > 1)
+  // Higher level enemy appears only when game level is at least (enemy level × this value)
+  let enemy_level_gate = 2
+
+  // Higher level enemy spawn divided by
+  let enemy_spawn_divide = 3
 
   // check difficulty
   switch (difficult) {
     case "easy":
-      addOnLevels = 1;
+      addOnLevels = 0;
+      enemy_level_gate = 2
+      enemy_spawn_divide = 3
       break;
     case "normal":
-      addOnLevels = 2;
+      addOnLevels = 1;
+      enemy_level_gate = 1
+      enemy_spawn_divide = 3
       break;
     case "hard":
-      addOnLevels = 3;
+      addOnLevels = 2;
+      enemy_level_gate = 1
+      enemy_spawn_divide = 2
       break;
     case "hardcore":
       addOnLevels = 3;
+      enemy_level_gate = 0
+      enemy_spawn_divide = 1
       break;
     default:
       console.log(
         `[GAMEPLAY][ENEMIES] UNKNOWN DIFFICULTY PASSED TO SPAWN [${difficult}]`
       );
-      addOnLevels = 2;
+      addOnLevels = 1;
   }
 
   for (const [key, enemy] of Object.entries(enemyDictionary)) {
@@ -32,20 +47,23 @@ export function enemySpawnList(spawnCount, level = 1, difficult = "normal") {
     const currentLevel = level + addOnLevels;
 
     // Skip level 0 (spawn or player mis-typed)
-    if (enemyLevel == 0) {
-      continue;
-    }
+    if (enemyLevel == 0) continue
 
     // Skip level 1 (fill in later)
-    // TODO - CONFIRM/SPECIFY FILL IN LATER
-    if (enemyLevel == 1) {
-      continue;
-    }
+    if (enemyLevel == 1) continue
 
-    // All level 2 and above enemy
-    spawnDistribution[enemyLevel] = Math.floor(
+    // Skip enemy that is too high level
+    if (currentLevel < enemyLevel * enemy_level_gate) continue
+
+    // Higher level enemy count
+    const spawnCount = Math.floor(
       (currentLevel * Math.log2(currentLevel)) / enemyLevel
-    );
+    )
+    // Reduce enemy count
+    const dividedSpawnCount = Math.floor(spawnCount / enemy_spawn_divide)
+
+    // Set enemy count
+    spawnDistribution[enemyLevel] = dividedSpawnCount
   }
 
   // calcuate higher level enemies count

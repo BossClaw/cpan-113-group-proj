@@ -61,6 +61,12 @@ export class GameView {
 		this.highScore.innerText = '00000';
 		this.highScoreDiv.appendChild(this.highScore);
 
+		// Max level win message
+		this.maxLevelMessageDiv = document.createElement('div')
+		this.maxLevelMessageDiv.classList.add('max-level-message-div')
+		this.maxLevelMessageDiv.innerHTML = `Congratulation!<br>You reached the max level!`;
+		this.gameScreenOverlay.appendChild(this.maxLevelMessageDiv)
+
 		// buttons div
 		this.buttonsDiv = document.createElement('div');
 		this.buttonsDiv.classList.add('screen-overlay-buttons-div');
@@ -139,8 +145,8 @@ export class GameView {
 		// remove pause
 		this.gameScreenOverlay.classList.remove('pause');
 	}
-
-	displayWin(_highscroe = 0) {
+	displayWin(_highscroe = 0, isMaxLevel = false) {
+		console.log("DisplayWin, isMaxLeveL:", isMaxLevel)
 		// hide name input
 		this.nameInputDiv.style.display = 'none';
 		// show win
@@ -150,6 +156,11 @@ export class GameView {
 		this.highScore.innerText = _highscroe;
 		this.gameScreenOverlay.style.display = 'flex';
 		this.overlay = true;
+
+		// MAX LEVEL WIN
+		if (isMaxLevel) {
+			this.gameScreenOverlay.classList.add('max');
+		}
 
 		// CHANGE THE BG TO WIN
 		set_background_win(this.gameScreen);
