@@ -15,6 +15,7 @@
 	--pad_sm: 8px;
 	--pad_md: 16px;
 	--pad_lg: 32px;
+	--pad_xl: 36px;
 }
 
 /* RETRO FONT */
@@ -40,8 +41,7 @@ input,
 button,
 select,
 textarea,
-a,
-.osc_butt {
+a {
 	cursor: url('../img/ui/cursor_hvr.gif') 17 17, auto;
 }
 
@@ -75,6 +75,18 @@ footer {
 
 	margin-inline: auto;
 	padding: var(--pad_sm);
+}
+
+.lang_butt_box {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.lang_butt_box button {
+	flex: 1 0 auto;
+	min-width: 200px;
+	margin: 0 !important;
 }
 
 /* BUTTON & A HREFS  */
@@ -164,19 +176,23 @@ section {
 }
 
 .tl {
-	text-align: left;
+	text-align: left !important;
 }
 
 .tc {
-	text-align: center;
+	text-align: center !important;
 }
 
 .tr {
-	text-align: right;
+	text-align: right !important;
 }
 
 .m_block {
 	margin-block: var(--pad_sm);
+}
+
+.mc_block {
+	margin-block: var(--pad_sm) var(--pad_xl);
 }
 
 /* FOOTER CONTENT */
@@ -188,8 +204,8 @@ footer {
 /* ON-SCREEN CONTROLS ON ALL PAGES, CRT & VOLUME*/
 #os_controls {
 	position: fixed;
-	right: 0;
-	top: 0;
+	right: 8px;
+	top: 8px;
 	z-index: 9999;
 	padding: 4px;
 }
