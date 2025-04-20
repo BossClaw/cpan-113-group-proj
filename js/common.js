@@ -3,7 +3,7 @@
 
 console.log(`[COMMON] JS SCRIPT BEGINS`);
 
-import { dev_log_mesg } from './dev.js';
+// import { dev_log_mesg } from './dev.js';
 import { viz_init_bg } from './bg.js';
 import { gameAudio } from '../gameplay/audio/gameAudio.js';
 
