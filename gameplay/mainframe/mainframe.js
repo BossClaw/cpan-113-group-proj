@@ -17,6 +17,9 @@ export class Mainframe {
 		//this.max_hp = 1600;
 		this.hp = this.max_hp;
 		this.isAlive = true;
+
+		// TESTING
+		this.show_hp = false;
 	}
 
 	spawn() {
@@ -42,17 +45,20 @@ export class Mainframe {
 		this.gameScreen.appendChild(this.outerDiv);
 
 		// (testing) show hp
-		this.hpDisplay = document.createElement('div');
-		this.hpDisplay.classList.add('mainframe-hp');
-		this.innerDiv.appendChild(this.hpDisplay);
-		this.hpDisplay.innerText = this.hp;
-
+		if (this.show_hp) {
+			this.hpDisplay = document.createElement('div');
+			this.hpDisplay.classList.add('mainframe-hp');
+			this.innerDiv.appendChild(this.hpDisplay);
+			this.hpDisplay.innerText = this.hp;
+		}
 		return this.outerDiv;
 	}
 
 	// (testing)
 	updateHpDisplay() {
-		this.hpDisplay.innerText = this.hp;
+		if (this.show_hp) {
+			this.hpDisplay.innerText = this.hp;
+		}
 	}
 
 	// HANDLE COLLISION
@@ -80,18 +86,12 @@ export class Mainframe {
 			enemy.doEnemyDie('mainframe');
 		}
 
-		// change sprite image / color based on damage taken
-		// .... logic here ...
-		this.innerDiv.classList.remove('hit');
-
-		void this.innerDiv.offsetWidth; // Trigger reflow
-
-		this.innerDiv.classList.add('hit');
+		this.doHitViz();
 	}
 
 	changeDamageStage() {
 		// DAMAGE IS NOW A PERC 0.0..1.0
-		let corruption_perc = 1.0 - (this.hp / this.max_hp);
+		let corruption_perc = 1.0 - this.hp / this.max_hp;
 
 		let anim = 'mainframe_000.gif';
 
@@ -119,12 +119,18 @@ export class Mainframe {
 	destroy() {
 		this.isAlive = false;
 
-		// change sprit image / color to destroyed
-		// .... logic here ...
+		// NOTE - FULL CORRUPTION DISPLAY IS HANDLED IN HIT
 
 		this.innerDiv.classList.remove('hit');
-		this.innerDiv.classList.add('destroyed');
 
 		void this.innerDiv.offsetWidth;
+	}
+
+	doHitViz() {
+		// V2DO - MOVE A HIT DIV FROM A POOL OF HITS TO THE LOCATION ON SCREEN WITH +1 z-index
+		this.innerDiv.classList.add('hit');
+		setTimeout(() => {
+			this.innerDiv.classList.remove('hit');
+		}, 700);
 	}
 }
