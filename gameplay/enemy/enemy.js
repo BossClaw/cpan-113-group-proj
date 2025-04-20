@@ -133,9 +133,8 @@ export class Enemy {
 
 	takeDamage(amount) {
 		this.hp -= amount;
-		this.innerDiv.classList.remove('hit');
-		void this.innerDiv.offsetWidth; // Trigger reflow
-		this.innerDiv.classList.add('hit');
+
+		this.doHitViz();
 
 		// play SFX
 		gameAudio.playEnemyHit();
@@ -155,19 +154,31 @@ export class Enemy {
 		this.takeDamage(this.damage);
 		return this.damage;
 	}
+
 	destroy() {
 		// removing 'move' will make the enemy get back to original location, so we need to keep this location
 		this.outerDiv.classList.add('stop');
-		this.innerDiv.classList.add('animate__animated', 'animate__slideOutRight', 'animate__faster');
-		this.innerDiv.style.animationDuration = '0.2s';
-		this.innerDiv.classList.remove('hit');
-		void this.innerDiv.offsetWidth; // Trigger reflow
-		this.innerDiv.classList.add('hit');
+		this.outerDiv.classList.add('animate__animated', 'animate__slideOutRight', 'animate__faster');
+		this.outerDiv.style.animationDuration = '0.2s';
+
+		// CLEAR, ADD, WAIT, REMOVE
+		this.doHitViz();
 
 		// is dead
 		this.isAlive = false;
+
 		setTimeout(() => {
 			this.outerDiv.remove();
 		}, 600);
+	}
+
+	doHitViz() {
+		// V2DO - MOVE A HIT DIV FROM A POOL OF HITS TO THE LOCATION ON SCREEN WITH +1 z-index
+
+		this.innerDiv.classList.add('hit');
+
+		setTimeout(() => {
+			this.innerDiv.classList.remove('hit');
+		}, 700);
 	}
 }

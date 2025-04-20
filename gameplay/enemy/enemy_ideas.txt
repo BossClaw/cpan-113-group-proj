@@ -1,0 +1,23 @@
+💀 Name	🧱 Sprite Style	🎨 Color Hints	✨ Effects
+null_pointer	        Wispy ghost with a “broken arrow” pointer head	        Transparent white/blue	            Flickers in and out every few frames
+segfault	            Robotic body with sparks and open wires	                Grays, oranges, glitch green	    Frame skips, staggered motion
+deadlock	            Two interlocked enemies (like gears or claws)	        Steel and brass	                    Pulsating lock animation
+
+
+stack_overflow	        Tall, amorphous blob with stacked layers.               Overflowing shapes like stacked RAM sticks.	    Greens, purples, gooey teal	Drip animation, stack growing upward
+syntax_error	        Jagged, asymmetrical shape with “missing pixels”	    Glitched magenta/red	            Static flicker, symbols flash randomly
+infinite_loop	        Ouroboros-style 8-bit snake eating its tail	            Blue/black with flashing segments	Constant circular motion, rotates loop
+off_by_one	            Tiny, impish figure with one large eye	                Yellow, peach, neon red	            Jitters slightly to the side, always misaligned
+divide_by_zero	        Vortex spiral, math symbols orbiting	                Cosmic purple + bright white	    Implodes + explodes loop on trigger
+unhandled_exception	    Constantly morphing glitch blob	                        Rainbow/glitch effects	            Frame-by-frame sprite mutations
+race_condition	        Twin flickering sprites phasing back and forth	        Flashing red/blue	                Only one is real, swap every X frames
+memory_leak	            Ooze trail monster, half-melted RAM for arms	        Lime green + dark green	            Leaves pixel-trail on map
+type_mismatch	        Patchwork sprite: robot leg, fish tail, CRT head	    Colors, intentionally mismatched	Blinks parts randomly in/out
+timeout_error	        Ticking clock face with cracked outer shell	            Metallic gold, brown	            Countdown effect before rush attack
+undefined_behavior	    Surreal amorphous shape—legs, wings, antennae	        Eerie pastels, chromatic shift	    Morphs form every few seconds
+deprecated_call	        Retro-styled CRT monitor head, floppy disk in hand	    Beige, brown, green scanlines	    Scanline overlay, old-school flicker
+buffer_overflow	        Massive tank with item cubes spilling off the back	    Cyan, blue, red	                    Tiles “pop off” and land nearby
+name_error	            Glitched floating label ("??NAME??")	                red glitch effects	                Distorts screen text/HUD temporarily
+assertion_failed	    Judge hammer enemy with a red warning X	                Gray robe, glowing red “FAIL” text	Blasts screen with error overlay
+access_denied	        Shielded robot with “403” shield plate	                Black & red	                        Reflects player shots if hit frontally
+core_dumped	            Cracked mech leaking binary	Neon                        green goo, gray chassis	            Final explosion = data sprites + sparks
