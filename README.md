@@ -46,7 +46,7 @@
 1. **Typing-Based Combat**  
    Players eliminate monsters by typing programming keywords correctly and quickly.
    <p align="center">
-     <img src="img/assets/gameplay-2.png" alt="Typing-Based Combat">
+     <img src="img/assets/gameplay.png" alt="Typing-Based Combat">
    </p>
 
 2. **Game Settings Customization**  
@@ -150,6 +150,5 @@ Configure Mission
 
 Intense GamePlay
 <img src="assets/demo_play_lose.gif" alt="Play & Lose">
-
 
 ---
