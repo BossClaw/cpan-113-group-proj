@@ -808,8 +808,9 @@ export class Game {
 		this.isGame = true;
 		this.canKeyboardPress = false;
 		this.getGameStates(); // update game states
+		// [BUG]
 		// concent gameAudio
-		gameAudio.setConsent();
+		// gameAudio.setConsent();
 
 		// hide words container
 		this.gameView.hideWordContainer();
