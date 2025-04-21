@@ -5,6 +5,8 @@
 ## Play Now !
 
 [Demo] https://bossclaw.github.io/cpan-113-group-proj/
+[Issue Board] https://github.com/BossClaw/cpan-113-group-proj/issues
+[Feature Branches] https://github.com/BossClaw/cpan-113-group-proj/branches
 
 ## Sections
 
@@ -14,6 +16,10 @@
 - [Credits](#credits)
 - [Special Thanks](#special-thanks)
 - [Feature Demo Gifs](#feature-demos)
+
+  ## Installation
+  -Clone the Repo
+  -Open index.html in the browser
 
 ## How to Play
 
