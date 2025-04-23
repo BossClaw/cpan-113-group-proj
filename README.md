@@ -8,6 +8,11 @@
 [Issue Board] https://github.com/BossClaw/cpan-113-group-proj/issues
 [Feature Branches] https://github.com/BossClaw/cpan-113-group-proj/branches
 
+
+## Project Review
+[![Watch the video](https://img.youtube.com/vi/1b4TxSrrb9I/hqdefault.jpg)](https://www.youtube.com/watch?v=1b4TxSrrb9I)
+
+
 ## Sections
 
 - [How to Play](#how-to-play)
