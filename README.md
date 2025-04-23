@@ -9,8 +9,12 @@
 [Feature Branches] https://github.com/BossClaw/cpan-113-group-proj/branches
 
 
-## Project Review
+## Project Review Video
 [![Watch the video](https://img.youtube.com/vi/1b4TxSrrb9I/hqdefault.jpg)](https://www.youtube.com/watch?v=1b4TxSrrb9I)
+
+[Watch the Project Review Video Here](https://www.youtube.com/watch?v=1b4TxSrrb9I)
+
+
 
 
 ## Sections
