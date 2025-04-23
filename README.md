@@ -6,6 +6,11 @@
 
 [Demo] https://bossclaw.github.io/cpan-113-group-proj/
 
+
+## Project Review
+[![Watch the video](https://img.youtube.com/vi/1b4TxSrrb9I/hqdefault.jpg)](https://www.youtube.com/watch?v=1b4TxSrrb9I)
+
+
 ## Sections
 
 - [How to Play](#how-to-play)
